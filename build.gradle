@@ -40,7 +40,7 @@ dependencies {
 }
 
 jar {
-    from 'LICENSE'
+    from 'LICENSE.md'
 }
 
 tasks.withType(JavaCompile) {
