@@ -28,8 +28,7 @@ dependencies {
     DEPENDENCY
     */
     implementation 'com.google.guava:guava:30.1.1-jre'
-    implementation 'org.yaml:snakeyaml:1.28'
-
+    implementation 'org.snakeyaml:snakeyaml-engine:2.2.1'
 
     /**
      * ANNOTATION FRAMEWORK
