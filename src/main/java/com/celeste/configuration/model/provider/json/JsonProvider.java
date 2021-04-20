@@ -41,8 +41,7 @@ public final class JsonProvider implements Configuration {
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    * @throws FailedLoadException Throws when it wasn't possible to load the configuration
    */
-  public JsonProvider(@NotNull final String path, @NotNull final String resourcePath, final boolean replace)
-      throws FailedCreateException, FailedLoadException {
+  public JsonProvider(@NotNull final String path, @NotNull final String resourcePath, final boolean replace) throws FailedCreateException, FailedLoadException {
     this.json = new JsonFactory();
     this.mapper = new ObjectMapper(json);
 
@@ -126,9 +125,7 @@ public final class JsonProvider implements Configuration {
     Map<Object, Object> result = (Map<Object, Object>) config;
 
     for (final String key : split) {
-      if (!result.containsKey(key)) {
-        result.put(key, new LinkedHashMap<>());
-      }
+      if (!result.containsKey(key)) result.put(key, new LinkedHashMap<>());
 
       if (result.containsKey(lastPath)) {
         if (object == null) {
@@ -155,10 +152,7 @@ public final class JsonProvider implements Configuration {
   @Override @NotNull @SuppressWarnings("unchecked")
   public <T> T get(@NotNull final String path) {
     final Object result = getResult(path);
-
-    if (result == null) {
-      throw new FailedGetException("The path " + path + " was not found");
-    }
+    if (result == null) throw new FailedGetException("The path " + path + " was not found");
 
     return (T) result;
   }
