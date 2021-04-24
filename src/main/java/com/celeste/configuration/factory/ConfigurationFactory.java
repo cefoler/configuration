@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 
+@SuppressWarnings("unused")
 public final class ConfigurationFactory {
 
   private static final ConfigurationFactory INSTANCE = new ConfigurationFactory();
@@ -17,6 +18,7 @@ public final class ConfigurationFactory {
    *
    * @param properties Properties
    * @return Configuration
+   *
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    */
   public Configuration start(@NotNull final Properties properties) throws FailedCreateException {
@@ -39,15 +41,16 @@ public final class ConfigurationFactory {
    * @param path String
    * @param resourcePath String
    * @param replace boolean
-   *
    * @return Configuration
+   *
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    */
   public Configuration start(@NotNull final ConfigurationType configuration, @NotNull final String path,
-                             @NotNull final String resourcePath, final boolean replace)
-      throws FailedCreateException {
+                             @NotNull final String resourcePath, final boolean replace) throws FailedCreateException {
     try {
-      final Constructor<? extends Configuration> providerConstructor = configuration.getProvider().getConstructor(String.class, String.class, boolean.class);
+      final Constructor<? extends Configuration> providerConstructor =
+          configuration.getProvider().getConstructor(String.class, String.class, boolean.class);
+
       return providerConstructor.newInstance(path, resourcePath, replace);
     } catch (Throwable throwable) {
       throw new FailedCreateException(throwable);
@@ -56,6 +59,7 @@ public final class ConfigurationFactory {
 
   /**
    * Returns the ConfigurationFactory instance
+   *
    * @return ConfigurationFactory
    */
   public static ConfigurationFactory getInstance() {
