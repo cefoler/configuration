@@ -36,15 +36,15 @@ public enum ConfigurationType {
   /**
    * Gets the configuration by their type
    *
-   * @param name String
+   * @param configuration String
    * @return ConfigurationType
    */
   @NotNull
-  public static ConfigurationType getConfiguration(@NotNull final String name) {
+  public static ConfigurationType getConfiguration(@NotNull final String configuration) {
     return Arrays.stream(values())
-      .filter(type -> type.getNames().contains(name.toUpperCase()))
-      .findFirst()
-      .orElse(JSON);
+        .filter(type -> type.getNames().contains(configuration.toUpperCase()))
+        .findFirst()
+        .orElseThrow(() -> new NullPointerException("Invalid configuration type: " + configuration));
   }
 
 }

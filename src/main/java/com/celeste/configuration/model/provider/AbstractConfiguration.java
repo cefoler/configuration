@@ -4,6 +4,9 @@ import com.celeste.configuration.model.exception.FailedCreateException;
 import com.celeste.configuration.model.exception.FailedGetException;
 import com.celeste.configuration.model.exception.FailedLoadException;
 import com.celeste.configuration.model.exception.FailedSaveException;
+import com.celeste.configuration.model.provider.registry.ReplaceRegistry;
+import com.celeste.configuration.model.provider.registry.ReplaceRegistry.ReplaceValue;
+import com.celeste.configuration.model.provider.registry.type.ReplaceType;
 import com.fasterxml.jackson.core.TokenStreamFactory;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,6 +41,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   private final ObjectMapper mapper;
 
   private final File file;
+  private final ReplaceRegistry replace;
 
   private LinkedHashMap<?, ?> configuration;
 
@@ -55,6 +60,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
     this.factory = getFactory();
     this.mapper = getMapper();
     this.file = create(path, resourcePath);
+    this.replace = new ReplaceRegistry();
 
     if (!file.exists() || replace) {
       try (final InputStream resource = getResource(resourcePath)) {
@@ -149,7 +155,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
           return;
         }
 
-        result.put(lastPath, object);
+        result.put(lastPath, replace(object, ReplaceType.SET));
         return;
       }
 
@@ -434,6 +440,16 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   }
 
   /**
+   * Returns Map with contains all type of replaces
+   *
+   * @return ReplaceRegistry
+   */
+  @Override @NotNull
+  public ReplaceRegistry getReplaceRegistry() {
+    return replace;
+  }
+
+  /**
    * Gets the result from the path
    *
    * @param path String
@@ -451,7 +467,47 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
       result = ((Map<?, ?>) result).get(key);
     }
 
-    return result;
+    return replace(result, ReplaceType.GET);
+  }
+
+  /**
+   * Get the result already replaced
+   *
+   * @param replace T
+   * @param type ReplaceType
+   * @param <T> Any type
+   * @return T
+   */
+  @NotNull @SuppressWarnings("unchecked")
+  private <T> T replace(final T replace, final ReplaceType type) {
+    if (replace instanceof String) {
+      String replaced = replace.toString();
+
+      for (Entry<String, ReplaceValue> entry : getReplaceRegistry().getEntrySet(type)) {
+        replaced = replaced.replaceAll("(?i)" + entry.getKey(), entry.getValue().getValue());
+      }
+
+      return (T) replaced;
+    }
+
+
+    if (replace instanceof List) {
+      List<?> replaced = (List<?>) replace;
+
+      if (replaced.size() == 0 || !(replaced.get(0) instanceof String)) {
+        return replace;
+      }
+
+      for (Entry<String, ReplaceValue> entry : getReplaceRegistry().getEntrySet(type)) {
+        replaced = replaced.stream()
+            .map(line -> line.toString().replaceAll("(?i)" + entry.getKey(), entry.getValue().getValue()))
+            .collect(Collectors.toList());
+      }
+
+      return (T) replaced;
+    }
+
+    return replace;
   }
 
   /**

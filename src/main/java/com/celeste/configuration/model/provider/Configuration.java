@@ -3,6 +3,7 @@ package com.celeste.configuration.model.provider;
 import com.celeste.configuration.model.ConfigurationType;
 import com.celeste.configuration.model.exception.FailedLoadException;
 import com.celeste.configuration.model.exception.FailedSaveException;
+import com.celeste.configuration.model.provider.registry.ReplaceRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -252,6 +253,14 @@ public interface Configuration {
    */
   @NotNull
   Set<String> getKeys(@NotNull final String path);
+
+  /**
+   * Returns Map with contains all type of replaces
+   *
+   * @return ReplaceRegistry
+   */
+  @NotNull
+  ReplaceRegistry getReplaceRegistry();
 
   /**
    * Returns the configuration file
