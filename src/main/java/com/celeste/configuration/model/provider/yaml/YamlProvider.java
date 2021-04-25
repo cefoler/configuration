@@ -9,7 +9,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import org.jetbrains.annotations.NotNull;
 
-public final class YamlProvider extends AbstractConfiguration {
+public final class YamlProvider extends AbstractConfiguration<YAMLFactory> {
 
   private static final YAMLFactory YAML_FACTORY;
   private static final ObjectMapper OBJECT_MAPPER;
@@ -46,7 +46,7 @@ public final class YamlProvider extends AbstractConfiguration {
    *
    * @return YAMLFactory
    */
-  @Override @NotNull @SuppressWarnings("unchecked")
+  @Override @NotNull
   protected YAMLFactory getFactory() {
     return YAML_FACTORY;
   }

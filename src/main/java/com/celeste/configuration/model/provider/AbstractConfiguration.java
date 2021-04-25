@@ -31,9 +31,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-public abstract class AbstractConfiguration implements Configuration {
+public abstract class AbstractConfiguration<T extends TokenStreamFactory> implements Configuration {
 
-  private final TokenStreamFactory factory;
+  private final T factory;
   private final ObjectMapper mapper;
 
   private final File file;
@@ -517,11 +517,10 @@ public abstract class AbstractConfiguration implements Configuration {
   /**
    * Return a TokenStreamFactory
    *
-   * @param <T> Type that extends TokenStreamFactory
    * @return TokenStreamFactory
    */
   @NotNull
-  protected abstract <T extends TokenStreamFactory> T getFactory();
+  protected abstract T getFactory();
 
   /**
    * Return a ObjectMapper

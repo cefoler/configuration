@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 
-public final class JsonProvider extends AbstractConfiguration {
+public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
 
   private static final JsonFactory JSON_FACTORY;
   private static final ObjectMapper OBJECT_MAPPER;
@@ -48,7 +48,7 @@ public final class JsonProvider extends AbstractConfiguration {
    *
    * @return JsonFactory
    */
-  @Override @NotNull @SuppressWarnings("unchecked")
+  @Override @NotNull
   protected JsonFactory getFactory() {
     return JSON_FACTORY;
   }
