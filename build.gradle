@@ -41,3 +41,7 @@ tasks.withType(JavaCompile) {
 tasks.withType(Jar) {
     destinationDirectory.set(file("$rootDir/target/"))
 }
+
+shadowJar {
+    relocate 'org.yaml.snakeyaml', 'org.snakeyaml'
+}
