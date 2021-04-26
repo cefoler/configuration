@@ -1,6 +1,6 @@
-package com.celeste.configuration.model.provider.registry;
+package com.celeste.configuration.model.registry;
 
-import com.celeste.configuration.model.provider.registry.type.ReplaceType;
+import com.celeste.configuration.model.registry.type.ReplaceType;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;

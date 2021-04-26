@@ -2,7 +2,7 @@ package com.celeste.configuration.model.provider;
 
 import com.celeste.configuration.model.exception.FailedLoadException;
 import com.celeste.configuration.model.exception.FailedSaveException;
-import com.celeste.configuration.model.provider.registry.ReplaceRegistry;
+import com.celeste.configuration.model.registry.ReplaceRegistry;
 import com.celeste.configuration.model.type.ConfigurationType;
 import java.io.File;
 import java.io.FileNotFoundException;

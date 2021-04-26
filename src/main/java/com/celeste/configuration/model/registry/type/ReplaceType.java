@@ -1,4 +1,4 @@
-package com.celeste.configuration.model.provider.registry.type;
+package com.celeste.configuration.model.registry.type;
 
 import com.google.common.collect.ImmutableList;
 import java.util.Arrays;
