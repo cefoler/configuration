@@ -2,6 +2,7 @@ package com.celeste.configuration.model.type;
 
 import com.celeste.configuration.model.provider.Configuration;
 import com.celeste.configuration.model.provider.json.JsonProvider;
+import com.celeste.configuration.model.provider.properties.PropertiesProvider;
 import com.celeste.configuration.model.provider.yaml.YamlProvider;
 import com.google.common.collect.ImmutableList;
 import java.util.Arrays;
@@ -15,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public enum ConfigurationType {
 
-  JSON(JsonProvider.class, "JSON"),
-  YAML(YamlProvider.class, "YAML", "YML");
+  JSON(JsonProvider.class, "JSON", "JSN"),
+  YAML(YamlProvider.class, "YAML", "YML"),
+  PROPERTIES(PropertiesProvider.class, "PROPERTIES", "PROP");
 
   @NotNull
   private final Class<? extends Configuration> provider;
