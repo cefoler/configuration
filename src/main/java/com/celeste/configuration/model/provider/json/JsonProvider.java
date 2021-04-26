@@ -1,13 +1,16 @@
 package com.celeste.configuration.model.provider.json;
 
-import com.celeste.configuration.model.ConfigurationType;
 import com.celeste.configuration.model.exception.FailedCreateException;
 import com.celeste.configuration.model.exception.FailedLoadException;
 import com.celeste.configuration.model.provider.AbstractConfiguration;
+import com.celeste.configuration.model.type.ConfigurationType;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Responsible for instantiating and managing the Json configuration.
+ */
 public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
 
   private static final JsonFactory JSON_FACTORY;
@@ -19,46 +22,49 @@ public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
   }
 
   /**
-   * Creates a new JsonProvider
+   * Creates a new JsonProvider.
    *
-   * @param path String
+   * @param path         String
    * @param resourcePath String
-   * @param replace boolean
-   *
+   * @param replace      boolean
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
-   * @throws FailedLoadException Throws when it wasn't possible to load the configuration
+   * @throws FailedLoadException   Throws when it wasn't possible to load the configuration
    */
-  public JsonProvider(@NotNull final String path, @NotNull final String resourcePath, final boolean replace)
+  public JsonProvider(@NotNull final String path, @NotNull final String resourcePath,
+      final boolean replace)
       throws FailedCreateException, FailedLoadException {
     super(path, resourcePath, replace);
   }
 
   /**
-   * Get the type of the configuration
+   * Get the type of the configuration.
    *
    * @return ConfigurationType
    */
-  @Override @NotNull
+  @Override
+  @NotNull
   public ConfigurationType getType() {
     return ConfigurationType.JSON;
   }
 
   /**
-   * Return a JsonFactory
+   * Return a JsonFactory.
    *
    * @return JsonFactory
    */
-  @Override @NotNull
+  @Override
+  @NotNull
   protected JsonFactory getFactory() {
     return JSON_FACTORY;
   }
 
   /**
-   * Return a ObjectMapper
+   * Return a ObjectMapper.
    *
    * @return ObjectMapper
    */
-  @Override @NotNull
+  @Override
+  @NotNull
   protected ObjectMapper getMapper() {
     return OBJECT_MAPPER;
   }

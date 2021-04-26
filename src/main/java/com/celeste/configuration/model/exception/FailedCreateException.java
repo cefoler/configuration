@@ -2,9 +2,14 @@ package com.celeste.configuration.model.exception;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Thrown when a checked exception occurred when creating the configuration.
+ */
 public class FailedCreateException extends ConfigurationException {
 
   /**
+   * Creates a new ConfigurationException.
+   *
    * @param error String
    */
   public FailedCreateException(@NotNull final String error) {
@@ -12,6 +17,8 @@ public class FailedCreateException extends ConfigurationException {
   }
 
   /**
+   * Creates a new ConfigurationException.
+   *
    * @param cause Throwable
    */
   public FailedCreateException(@NotNull final Throwable cause) {
@@ -19,6 +26,8 @@ public class FailedCreateException extends ConfigurationException {
   }
 
   /**
+   * Creates a new ConfigurationException.
+   *
    * @param error String
    * @param cause Throwable
    */

@@ -1,15 +1,17 @@
-package com.celeste.configuration.model;
+package com.celeste.configuration.model.type;
 
 import com.celeste.configuration.model.provider.Configuration;
 import com.celeste.configuration.model.provider.json.JsonProvider;
 import com.celeste.configuration.model.provider.yaml.YamlProvider;
 import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.List;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * Types of configurations.
+ */
 @Getter
 public enum ConfigurationType {
 
@@ -23,18 +25,19 @@ public enum ConfigurationType {
   private final List<String> names;
 
   /**
-   * Create a new enum of ConfigurationType
+   * Create a new enum of ConfigurationType.
    *
    * @param provider Type of this class
-   * @param names List of names that can be given to this format
+   * @param names    List of names that can be given to this format
    */
-  ConfigurationType(@NotNull final Class<? extends Configuration> provider, @NotNull final String... names) {
+  ConfigurationType(@NotNull final Class<? extends Configuration> provider,
+      @NotNull final String... names) {
     this.provider = provider;
     this.names = ImmutableList.copyOf(names);
   }
 
   /**
-   * Gets the configuration by their type
+   * Gets the configuration by their type.
    *
    * @param configuration String
    * @return ConfigurationType
@@ -44,7 +47,8 @@ public enum ConfigurationType {
     return Arrays.stream(values())
         .filter(type -> type.getNames().contains(configuration.toUpperCase()))
         .findFirst()
-        .orElseThrow(() -> new NullPointerException("Invalid configuration type: " + configuration));
+        .orElseThrow(
+            () -> new NullPointerException("Invalid configuration type: " + configuration));
   }
 
 }

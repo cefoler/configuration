@@ -1,37 +1,40 @@
 package com.celeste.configuration.model.provider;
 
-import com.celeste.configuration.model.ConfigurationType;
 import com.celeste.configuration.model.exception.FailedLoadException;
 import com.celeste.configuration.model.exception.FailedSaveException;
 import com.celeste.configuration.model.provider.registry.ReplaceRegistry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import com.celeste.configuration.model.type.ConfigurationType;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * A root interface responsible for the standard of the methods regardless
+ * of the class that will implement it.
+ */
 @SuppressWarnings("unused")
 public interface Configuration {
 
   /**
-   * Loads the configuration
+   * Loads the configuration.
    *
    * @throws FileNotFoundException Throws when file was not found
-   * @throws FailedLoadException Throws when it wasn't able to load the file
+   * @throws FailedLoadException   Throws when it wasn't able to load the file
    */
   void load() throws FileNotFoundException, FailedLoadException;
 
   /**
-   * Saves the configuration
+   * Saves the configuration.
    *
    * @throws FailedSaveException Throws when file wasn't able to save
    */
   void save() throws FailedSaveException;
 
   /**
-   * Saves and update the configuration
+   * Saves and update the configuration.
    *
    * @throws FailedLoadException Throws when it fails to load
    * @throws FailedSaveException Throws when it fails to save
@@ -39,7 +42,7 @@ public interface Configuration {
   void saveAndLoad() throws FailedSaveException, FailedLoadException;
 
   /**
-   * Check if the value contains in the configuration
+   * Check if the value contains in the configuration.
    *
    * @param path String
    * @return boolean
@@ -47,36 +50,36 @@ public interface Configuration {
   boolean contains(@NotNull final String path);
 
   /**
-   * Sets a value into the configuration
+   * Sets a value into the configuration.
    *
-   * @param path String
+   * @param path   String
    * @param object Object
    */
   void set(@NotNull final String path, @Nullable final Object object);
 
   /**
-   * Gets the value from path in the configuration
+   * Gets the value from path in the configuration.
    *
    * @param path String
-   * @param <T> Object
+   * @param <T>  Object
    * @return Object
    */
   @NotNull
   <T> T get(@NotNull final String path);
 
   /**
-   * Returns a generic value from that path
+   * Returns a generic value from that path.
    *
-   * @param path String
+   * @param path   String
    * @param orElse T
-   * @param <T> T
+   * @param <T>    T
    * @return T
    */
   @NotNull
   <T> T get(@NotNull final String path, @NotNull final T orElse);
 
   /**
-   * Gets Object from path
+   * Gets Object from path.
    *
    * @param path String
    * @return Object
@@ -85,9 +88,9 @@ public interface Configuration {
   Object getObject(@NotNull final String path);
 
   /**
-   * Gets Object from path, if nulls return a value
+   * Gets Object from path, if nulls return a value.
    *
-   * @param path String
+   * @param path   String
    * @param orElse String
    * @return Object
    */
@@ -95,7 +98,7 @@ public interface Configuration {
   Object getObject(@NotNull final String path, @NotNull final String orElse);
 
   /**
-   * Gets string from path
+   * Gets string from path.
    *
    * @param path String
    * @return string
@@ -104,17 +107,17 @@ public interface Configuration {
   String getString(@NotNull final String path);
 
   /**
-   * Gets string from path, if nulls return a value
+   * Gets string from path, if nulls return a value.
    *
-   * @param path String
-   * @param orElse string
+   * @param path   String
+   * @param orElse String
    * @return string
    */
   @NotNull
   String getString(@NotNull final String path, @NotNull final String orElse);
 
   /**
-   * Gets int from path
+   * Gets int from path.
    *
    * @param path String
    * @return int
@@ -122,16 +125,16 @@ public interface Configuration {
   int getInt(@NotNull final String path);
 
   /**
-   * Gets int from path, if nulls return a value
+   * Gets int from path, if nulls return a value.
    *
-   * @param path String
+   * @param path   String
    * @param orElse int
    * @return int
    */
   int getInt(@NotNull final String path, final int orElse);
 
   /**
-   * Gets long from path
+   * Gets long from path.
    *
    * @param path String
    * @return long
@@ -139,16 +142,16 @@ public interface Configuration {
   long getLong(@NotNull final String path);
 
   /**
-   * Gets long from path, if nulls return a value
+   * Gets long from path, if nulls return a value.
    *
-   * @param path String
+   * @param path   String
    * @param orElse long
    * @return long
    */
   long getLong(@NotNull final String path, final long orElse);
 
   /**
-   * Gets double from path
+   * Gets double from path.
    *
    * @param path String
    * @return double
@@ -156,16 +159,16 @@ public interface Configuration {
   double getDouble(@NotNull final String path);
 
   /**
-   * Gets double from path, if nulls return a value
+   * Gets double from path, if nulls return a value.
    *
-   * @param path String
+   * @param path   String
    * @param orElse double
    * @return double
    */
   double getDouble(@NotNull final String path, final double orElse);
 
   /**
-   * Gets boolean from path
+   * Gets boolean from path.
    *
    * @param path String
    * @return boolean
@@ -173,16 +176,16 @@ public interface Configuration {
   boolean getBoolean(@NotNull final String path);
 
   /**
-   * Gets boolean from path, if nulls return a value
+   * Gets boolean from path, if nulls return a value.
    *
-   * @param path String
+   * @param path   String
    * @param orElse boolean
    * @return boolean
    */
   boolean getBoolean(@NotNull final String path, final boolean orElse);
 
   /**
-   * Get list from path
+   * Get list from path.
    *
    * @param path String
    * @return List
@@ -191,9 +194,9 @@ public interface Configuration {
   List<?> getList(@NotNull final String path);
 
   /**
-   * Get list from path, if nulls return a value
+   * Get list from path, if nulls return a value.
    *
-   * @param path String
+   * @param path   String
    * @param orElse List
    * @return List
    */
@@ -201,7 +204,7 @@ public interface Configuration {
   List<?> getList(@NotNull final String path, @NotNull final List<?> orElse);
 
   /**
-   * Get string list from path
+   * Get string list from path.
    *
    * @param path String
    * @return List
@@ -210,7 +213,7 @@ public interface Configuration {
   List<String> getStringList(@NotNull final String path);
 
   /**
-   * Get integer list from path
+   * Get integer list from path.
    *
    * @param path String
    * @return List
@@ -219,7 +222,7 @@ public interface Configuration {
   List<Integer> getIntegerList(@NotNull final String path);
 
   /**
-   * Get long list from path
+   * Get long list from path.
    *
    * @param path String
    * @return List
@@ -228,7 +231,7 @@ public interface Configuration {
   List<Long> getLongList(@NotNull final String path);
 
   /**
-   * Get double list from path
+   * Get double list from path.
    *
    * @param path String
    * @return List
@@ -237,7 +240,7 @@ public interface Configuration {
   List<Double> getDoubleList(@NotNull final String path);
 
   /**
-   * Get boolean list from path
+   * Get boolean list from path.
    *
    * @param path String
    * @return List
@@ -246,7 +249,7 @@ public interface Configuration {
   List<Boolean> getBooleanList(@NotNull final String path);
 
   /**
-   * Get String set from path
+   * Get String set from path.
    *
    * @param path String
    * @return Set
@@ -255,7 +258,7 @@ public interface Configuration {
   Set<String> getKeys(@NotNull final String path);
 
   /**
-   * Returns Map with contains all type of replaces
+   * Returns Map with contains all type of replaces.
    *
    * @return ReplaceRegistry
    */
@@ -263,7 +266,7 @@ public interface Configuration {
   ReplaceRegistry getReplaceRegistry();
 
   /**
-   * Returns the configuration file
+   * Returns the configuration file.
    *
    * @return File
    */
@@ -271,7 +274,7 @@ public interface Configuration {
   File getFile();
 
   /**
-   * Get the type of the configuration
+   * Get the type of the configuration.
    *
    * @return ConfigurationType
    */

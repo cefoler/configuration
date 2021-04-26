@@ -2,23 +2,33 @@ package com.celeste.configuration.factory;
 
 import com.celeste.configuration.model.exception.FailedCreateException;
 import com.celeste.configuration.model.provider.Configuration;
-import com.celeste.configuration.model.ConfigurationType;
-import org.jetbrains.annotations.NotNull;
-
+import com.celeste.configuration.model.type.ConfigurationType;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * A factory of instances of configurations.
+ */
 @SuppressWarnings("unused")
 public final class ConfigurationFactory {
 
   private static final ConfigurationFactory INSTANCE = new ConfigurationFactory();
 
   /**
-   * Starts a configuration with the properties driver, path, resourcePath and replace
+   * Returns the ConfigurationFactory instance.
+   *
+   * @return ConfigurationFactory
+   */
+  public static ConfigurationFactory getInstance() {
+    return INSTANCE;
+  }
+
+  /**
+   * Starts a configuration with the properties driver, path, resourcePath and replace.
    *
    * @param properties Properties
    * @return Configuration
-   *
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    */
   public Configuration start(@NotNull final Properties properties) throws FailedCreateException {
@@ -35,18 +45,18 @@ public final class ConfigurationFactory {
   }
 
   /**
-   * Starts a new configuration with the following credentials
+   * Starts a new configuration with the following credentials.
    *
    * @param configuration ConfigurationType
-   * @param path String
-   * @param resourcePath String
-   * @param replace boolean
+   * @param path          String
+   * @param resourcePath  String
+   * @param replace       boolean
    * @return Configuration
-   *
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    */
-  public Configuration start(@NotNull final ConfigurationType configuration, @NotNull final String path,
-                             @NotNull final String resourcePath, final boolean replace) throws FailedCreateException {
+  public Configuration start(@NotNull final ConfigurationType configuration,
+      @NotNull final String path,
+      @NotNull final String resourcePath, final boolean replace) throws FailedCreateException {
     try {
       final Constructor<? extends Configuration> providerConstructor =
           configuration.getProvider().getConstructor(String.class, String.class, boolean.class);
@@ -55,15 +65,6 @@ public final class ConfigurationFactory {
     } catch (Throwable throwable) {
       throw new FailedCreateException(throwable);
     }
-  }
-
-  /**
-   * Returns the ConfigurationFactory instance
-   *
-   * @return ConfigurationFactory
-   */
-  public static ConfigurationFactory getInstance() {
-    return INSTANCE;
   }
 
 }
