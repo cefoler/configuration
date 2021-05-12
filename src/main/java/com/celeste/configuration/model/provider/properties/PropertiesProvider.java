@@ -6,7 +6,6 @@ import com.celeste.configuration.model.provider.AbstractConfiguration;
 import com.celeste.configuration.model.type.ConfigurationType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsFactory;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Responsible for instantiating and managing the Properties configuration.
@@ -24,19 +23,18 @@ public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFac
   /**
    * Creates a new PropertiesProvider.
    *
-   * @param path         String
-   * @param resourcePath String
-   * @param replace      boolean
+   * @param path String
+   * @param resource String
+   * @param replace boolean
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    * @throws FailedLoadException   Throws when it wasn't possible to load the configuration
    */
-  public PropertiesProvider(@NotNull final String path, @NotNull final String resourcePath,
-      final boolean replace) throws FailedCreateException, FailedLoadException {
-    super(path, resourcePath, replace);
+  public PropertiesProvider(final String path, final String resource, final boolean replace)
+      throws FailedCreateException, FailedLoadException {
+    super(path, resource, replace);
   }
 
   @Override
-  @NotNull
   public ConfigurationType getType() {
     return ConfigurationType.YAML;
   }
@@ -47,7 +45,6 @@ public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFac
    * @return YAMLFactory
    */
   @Override
-  @NotNull
   protected JavaPropsFactory getFactory() {
     return PROPERTIES_FACTORY;
   }
@@ -58,7 +55,6 @@ public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFac
    * @return ObjectMapper
    */
   @Override
-  @NotNull
   protected ObjectMapper getMapper() {
     return OBJECT_MAPPER;
   }

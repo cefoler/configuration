@@ -16,7 +16,6 @@ public enum ReplaceType {
   SET("SET"),
   GET("GET");
 
-  @NotNull
   private final List<String> names;
 
   /**
@@ -24,7 +23,7 @@ public enum ReplaceType {
    *
    * @param names List of names that can be given to this format.
    */
-  ReplaceType(@NotNull final String... names) {
+  ReplaceType(final String... names) {
     this.names = ImmutableList.copyOf(names);
   }
 
@@ -34,8 +33,7 @@ public enum ReplaceType {
    * @param replace String
    * @return ReplaceType
    */
-  @NotNull
-  public static ReplaceType getReplace(@NotNull final String replace) {
+  public static ReplaceType getReplace(final String replace) {
     return Arrays.stream(values())
         .filter(type -> type.getNames().contains(replace.toUpperCase()))
         .findFirst()

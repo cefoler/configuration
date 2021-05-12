@@ -5,12 +5,10 @@ import com.celeste.configuration.model.provider.Configuration;
 import com.celeste.configuration.model.type.ConfigurationType;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A factory of instances of configurations.
  */
-@SuppressWarnings("unused")
 public final class ConfigurationFactory {
 
   private static final ConfigurationFactory INSTANCE = new ConfigurationFactory();
@@ -31,14 +29,17 @@ public final class ConfigurationFactory {
    * @return Configuration
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    */
-  public Configuration start(@NotNull final Properties properties) throws FailedCreateException {
+  public Configuration start(final Properties properties) throws FailedCreateException {
     try {
-      return start(
-          ConfigurationType.getConfiguration(properties.getProperty("driver")),
-          properties.getProperty("path"),
-          properties.getProperty("resourcePath"),
-          Boolean.parseBoolean(properties.getProperty("replace"))
-      );
+      final ConfigurationType driver = ConfigurationType
+          .getConfiguration(properties.getProperty("driver"));
+
+      final String path = properties.getProperty("path");
+      final String resource = properties.getProperty("resource");
+
+      final boolean replace = Boolean.parseBoolean(properties.getProperty("replace"));
+
+      return start(driver, path, resource, replace);
     } catch (Throwable throwable) {
       throw new FailedCreateException(throwable);
     }
@@ -48,20 +49,19 @@ public final class ConfigurationFactory {
    * Starts a new configuration with the following credentials.
    *
    * @param configuration ConfigurationType
-   * @param path          String
-   * @param resourcePath  String
-   * @param replace       boolean
+   * @param path String
+   * @param resource String
+   * @param replace boolean
    * @return Configuration
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
    */
-  public Configuration start(@NotNull final ConfigurationType configuration,
-      @NotNull final String path,
-      @NotNull final String resourcePath, final boolean replace) throws FailedCreateException {
+  public Configuration start(final ConfigurationType configuration, final String path,
+      final String resource, final boolean replace) throws FailedCreateException {
     try {
-      final Constructor<? extends Configuration> providerConstructor =
-          configuration.getProvider().getConstructor(String.class, String.class, boolean.class);
+      final Constructor<? extends Configuration> providerConstructor = configuration.getProvider()
+          .getConstructor(String.class, String.class, boolean.class);
 
-      return providerConstructor.newInstance(path, resourcePath, replace);
+      return providerConstructor.newInstance(path, resource, replace);
     } catch (Throwable throwable) {
       throw new FailedCreateException(throwable);
     }

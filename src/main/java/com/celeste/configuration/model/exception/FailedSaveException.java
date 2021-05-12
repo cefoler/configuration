@@ -1,7 +1,5 @@
 package com.celeste.configuration.model.exception;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Thrown when a checked exception occurred while saving the configuration.
  * <p></p>
@@ -14,7 +12,7 @@ public class FailedSaveException extends ConfigurationException {
    *
    * @param error String
    */
-  public FailedSaveException(@NotNull final String error) {
+  public FailedSaveException(final String error) {
     super(error);
   }
 
@@ -23,7 +21,7 @@ public class FailedSaveException extends ConfigurationException {
    *
    * @param cause Throwable
    */
-  public FailedSaveException(@NotNull final Throwable cause) {
+  public FailedSaveException(final Throwable cause) {
     super(cause);
   }
 
@@ -33,7 +31,7 @@ public class FailedSaveException extends ConfigurationException {
    * @param error String
    * @param cause Throwable
    */
-  public FailedSaveException(@NotNull final String error, @NotNull final Throwable cause) {
+  public FailedSaveException(final String error, final Throwable cause) {
     super(error, cause);
   }
 

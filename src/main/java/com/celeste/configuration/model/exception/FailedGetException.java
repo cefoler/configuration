@@ -1,7 +1,5 @@
 package com.celeste.configuration.model.exception;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Thrown when an unchecked exception occurred while getting some configuration data.
  * <p></p>
@@ -14,7 +12,7 @@ public class FailedGetException extends RuntimeException {
    *
    * @param error String
    */
-  public FailedGetException(@NotNull final String error) {
+  public FailedGetException(final String error) {
     super(error);
   }
 
@@ -23,7 +21,7 @@ public class FailedGetException extends RuntimeException {
    *
    * @param cause Throwable
    */
-  public FailedGetException(@NotNull final Throwable cause) {
+  public FailedGetException(final Throwable cause) {
     super(cause);
   }
 
@@ -33,7 +31,7 @@ public class FailedGetException extends RuntimeException {
    * @param error String
    * @param cause Throwable
    */
-  public FailedGetException(@NotNull final String error, @NotNull final Throwable cause) {
+  public FailedGetException(final String error, final Throwable cause) {
     super(error, cause);
   }
 

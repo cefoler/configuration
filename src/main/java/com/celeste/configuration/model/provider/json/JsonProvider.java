@@ -6,7 +6,6 @@ import com.celeste.configuration.model.provider.AbstractConfiguration;
 import com.celeste.configuration.model.type.ConfigurationType;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Responsible for instantiating and managing the Json configuration.
@@ -24,15 +23,15 @@ public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
   /**
    * Creates a new JsonProvider.
    *
-   * @param path         String
-   * @param resourcePath String
-   * @param replace      boolean
+   * @param path String
+   * @param resource String
+   * @param replace boolean
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
-   * @throws FailedLoadException   Throws when it wasn't possible to load the configuration
+   * @throws FailedLoadException Throws when it wasn't possible to load the configuration
    */
-  public JsonProvider(@NotNull final String path, @NotNull final String resourcePath,
-      final boolean replace) throws FailedCreateException, FailedLoadException {
-    super(path, resourcePath, replace);
+  public JsonProvider(final String path, final String resource, final boolean replace)
+      throws FailedCreateException, FailedLoadException {
+    super(path, resource, replace);
   }
 
   /**
@@ -41,7 +40,6 @@ public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
    * @return ConfigurationType
    */
   @Override
-  @NotNull
   public ConfigurationType getType() {
     return ConfigurationType.JSON;
   }
@@ -52,7 +50,6 @@ public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
    * @return JsonFactory
    */
   @Override
-  @NotNull
   protected JsonFactory getFactory() {
     return JSON_FACTORY;
   }
@@ -63,7 +60,6 @@ public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
    * @return ObjectMapper
    */
   @Override
-  @NotNull
   protected ObjectMapper getMapper() {
     return OBJECT_MAPPER;
   }

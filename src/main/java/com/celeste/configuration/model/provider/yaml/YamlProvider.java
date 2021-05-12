@@ -7,7 +7,6 @@ import com.celeste.configuration.model.type.ConfigurationType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Responsible for instantiating and managing the YAML configuration.
@@ -27,19 +26,18 @@ public final class YamlProvider extends AbstractConfiguration<YAMLFactory> {
   /**
    * Creates a new YamlProvider.
    *
-   * @param path         String
-   * @param resourcePath String
-   * @param replace      boolean
+   * @param path String
+   * @param resource String
+   * @param replace boolean
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
-   * @throws FailedLoadException   Throws when it wasn't possible to load the configuration
+   * @throws FailedLoadException Throws when it wasn't possible to load the configuration
    */
-  public YamlProvider(@NotNull final String path, @NotNull final String resourcePath,
-      final boolean replace) throws FailedCreateException, FailedLoadException {
-    super(path, resourcePath, replace);
+  public YamlProvider(final String path, final String resource, final boolean replace)
+      throws FailedCreateException, FailedLoadException {
+    super(path, resource, replace);
   }
 
   @Override
-  @NotNull
   public ConfigurationType getType() {
     return ConfigurationType.YAML;
   }
@@ -50,7 +48,6 @@ public final class YamlProvider extends AbstractConfiguration<YAMLFactory> {
    * @return YAMLFactory
    */
   @Override
-  @NotNull
   protected YAMLFactory getFactory() {
     return YAML_FACTORY;
   }
@@ -61,7 +58,6 @@ public final class YamlProvider extends AbstractConfiguration<YAMLFactory> {
    * @return ObjectMapper
    */
   @Override
-  @NotNull
   protected ObjectMapper getMapper() {
     return OBJECT_MAPPER;
   }

@@ -16,14 +16,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Registry responsible for storing and managing information on maps.
  */
 @Getter
-@SuppressWarnings("unused")
 public final class ReplaceRegistry implements Serializable, Cloneable {
 
   private final Map<String, ReplaceValue> map;
@@ -33,17 +31,16 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
   }
 
   @Nullable
-  public ReplaceValue register(@NotNull final String key, @Nullable final ReplaceValue value) {
+  public ReplaceValue register(final String key, @Nullable final ReplaceValue value) {
     return map.put(key, value);
   }
 
   @Nullable
-  public ReplaceValue registerIfAbsent(@NotNull final String key,
-      @Nullable final ReplaceValue value) {
+  public ReplaceValue registerIfAbsent(final String key, @Nullable final ReplaceValue value) {
     return map.putIfAbsent(key, value);
   }
 
-  public void registerAll(@NotNull final Map<String, ReplaceValue> newMap) {
+  public void registerAll(final Map<String, ReplaceValue> newMap) {
     map.putAll(newMap);
   }
 
@@ -52,48 +49,44 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    *
    * @param newMap Map
    */
-  public void registerAllIfAbsent(@NotNull final Map<String, ReplaceValue> newMap) {
+  public void registerAllIfAbsent(final Map<String, ReplaceValue> newMap) {
     final Map<String, ReplaceValue> newValues = newMap.entrySet().stream()
         .filter(entry -> !map.containsKey(entry.getKey()))
         .collect(Collectors.toMap(
             Map.Entry::getKey,
-            Map.Entry::getValue
-        ));
+            Map.Entry::getValue));
 
     map.putAll(newValues);
   }
 
-  @NotNull
-  public ReplaceValue compute(@NotNull final String key,
-      @NotNull final BiFunction<String, ReplaceValue, ReplaceValue> function) {
+  public ReplaceValue compute(final String key,
+      final BiFunction<String, ReplaceValue, ReplaceValue> function) {
     return map.compute(key, function);
   }
 
-  @NotNull
-  public ReplaceValue computeIfAbsent(@NotNull final String key,
-      @NotNull final Function<String, ReplaceValue> function) {
+  public ReplaceValue computeIfAbsent(final String key,
+      final Function<String, ReplaceValue> function) {
     return map.computeIfAbsent(key, function);
   }
 
   @Nullable
-  public ReplaceValue remove(@NotNull final String key) {
+  public ReplaceValue remove(final String key) {
     return map.remove(key);
   }
 
-  public void replace(@NotNull final String key, @NotNull final ReplaceValue value) {
+  public void replace(final String key, final ReplaceValue value) {
     map.replace(key, value);
   }
 
   @Nullable
-  public ReplaceValue get(@NotNull final String key) {
+  public ReplaceValue get(final String key) {
     return map.get(key);
   }
 
-  public boolean contains(@NotNull final String key) {
+  public boolean contains(final String key) {
     return map.containsKey(key);
   }
 
-  @NotNull
   public Set<Entry<String, ReplaceValue>> getEntrySet() {
     return map.entrySet();
   }
@@ -104,15 +97,13 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    * @param type ReplaceType
    * @return Set
    */
-  @NotNull
-  public Set<Entry<String, ReplaceValue>> getEntrySet(@NotNull final ReplaceType type) {
+  public Set<Entry<String, ReplaceValue>> getEntrySet(final ReplaceType type) {
     return map.entrySet().stream()
         .filter(entry -> entry.getValue().getType().equals(type) || entry.getValue().getType()
             .equals(ReplaceType.ALL))
         .collect(Collectors.toSet());
   }
 
-  @NotNull
   public Set<String> getKeys() {
     return map.keySet();
   }
@@ -123,8 +114,7 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    * @param type ReplaceType
    * @return Set
    */
-  @NotNull
-  public Set<String> getKeys(@NotNull final ReplaceType type) {
+  public Set<String> getKeys(final ReplaceType type) {
     return map.entrySet().stream()
         .filter(entry -> entry.getValue().getType().equals(type) || entry.getValue().getType()
             .equals(ReplaceType.ALL))
@@ -132,7 +122,6 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
         .collect(Collectors.toSet());
   }
 
-  @NotNull
   public Collection<ReplaceValue> getAll() {
     return map.values();
   }
@@ -143,8 +132,7 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    * @param type ReplaceType
    * @return Set
    */
-  @NotNull
-  public Set<ReplaceValue> getAll(@NotNull final ReplaceType type) {
+  public Set<ReplaceValue> getAll(final ReplaceType type) {
     return map.values().stream()
         .filter(
             replace -> replace.getType().equals(type) || replace.getType().equals(ReplaceType.ALL))
@@ -157,8 +145,7 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    * @param comparator Comparator
    * @return Set
    */
-  @NotNull
-  public Set<ReplaceValue> sort(@NotNull final Comparator<ReplaceValue> comparator) {
+  public Set<ReplaceValue> sort(final Comparator<ReplaceValue> comparator) {
     return getAll()
         .stream()
         .sorted(comparator)
@@ -178,7 +165,6 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
   }
 
   @Override
-  @NotNull
   @SneakyThrows
   public ReplaceRegistry clone() {
     return (ReplaceRegistry) super.clone();
@@ -191,10 +177,7 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
   @Builder
   public static final class ReplaceValue {
 
-    @NotNull
     private final String value;
-
-    @NotNull
     private final ReplaceType type;
 
   }

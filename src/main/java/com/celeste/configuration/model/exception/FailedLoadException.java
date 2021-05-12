@@ -1,7 +1,5 @@
 package com.celeste.configuration.model.exception;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Thrown when a checked exception occurred while loading the configuration.
  * <p></p>
@@ -14,7 +12,7 @@ public class FailedLoadException extends ConfigurationException {
    *
    * @param error String
    */
-  public FailedLoadException(@NotNull final String error) {
+  public FailedLoadException(final String error) {
     super(error);
   }
 
@@ -23,7 +21,7 @@ public class FailedLoadException extends ConfigurationException {
    *
    * @param cause Throwable
    */
-  public FailedLoadException(@NotNull final Throwable cause) {
+  public FailedLoadException(final Throwable cause) {
     super(cause);
   }
 
@@ -33,7 +31,7 @@ public class FailedLoadException extends ConfigurationException {
    * @param error String
    * @param cause Throwable
    */
-  public FailedLoadException(@NotNull final String error, @NotNull final Throwable cause) {
+  public FailedLoadException(final String error, final Throwable cause) {
     super(error, cause);
   }
 

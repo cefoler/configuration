@@ -30,7 +30,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -53,23 +52,22 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   /**
    * Creates a new YamlProvider.
    *
-   * @param path         String
-   * @param resourcePath String
-   * @param replace      boolean
+   * @param path String
+   * @param resource String
+   * @param replace boolean
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
-   * @throws FailedLoadException   Throws when it wasn't possible to load the configuration
+   * @throws FailedLoadException Throws when it wasn't possible to load the configuration
    */
-  public AbstractConfiguration(@NotNull final String path, @NotNull final String resourcePath,
-      final boolean replace)
+  public AbstractConfiguration(final String path, final String resource, final boolean replace)
       throws FailedCreateException, FailedLoadException {
     this.factory = getFactory();
     this.mapper = getMapper();
-    this.file = create(path, resourcePath);
+    this.file = create(path, resource);
     this.replace = new ReplaceRegistry();
 
     if (!file.exists() || replace) {
-      try (final InputStream resource = getResource(resourcePath)) {
-        copy(resource, file);
+      try (final InputStream input = getResource(resource)) {
+        copy(input, file);
       } catch (IOException exception) {
         throw new FailedLoadException("Some unexpected error has occurred: ", exception);
       }
@@ -132,19 +130,19 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return boolean
    */
   @Override
-  public boolean contains(@NotNull final String path) {
+  public boolean contains(final String path) {
     return getResult(path) != null;
   }
 
   /**
    * Sets a value into the configuration.
    *
-   * @param path   String
+   * @param path String
    * @param object Object
    */
   @Override
   @SuppressWarnings("unchecked")
-  public void set(@NotNull final String path, @Nullable final Object object) {
+  public void set(final String path, @Nullable final Object object) {
     final String[] split = path.split("\\.");
     final String lastPath = split[split.length - 1];
 
@@ -173,13 +171,12 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * Gets the value from path in the configuration.
    *
    * @param path String
-   * @param <T>  Object
+   * @param <T> Object
    * @return Object
    */
   @Override
-  @NotNull
   @SuppressWarnings("unchecked")
-  public <T> T get(@NotNull final String path) {
+  public <T> T get(final String path) {
     final Object result = getResult(path);
 
     if (result == null) {
@@ -192,15 +189,14 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   /**
    * Returns a generic value from that path.
    *
-   * @param path   String
+   * @param path String
    * @param orElse T
-   * @param <T>    T
+   * @param <T> T
    * @return T
    */
   @Override
-  @NotNull
   @SuppressWarnings("unchecked")
-  public <T> T get(@NotNull final String path, @NotNull final T orElse) {
+  public <T> T get(final String path, @Nullable final T orElse) {
     final Object result = getResult(path);
     return result == null ? orElse : (T) result;
   }
@@ -212,21 +208,19 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return Object
    */
   @Override
-  @NotNull
-  public Object getObject(@NotNull final String path) {
+  public Object getObject(final String path) {
     return get(path);
   }
 
   /**
    * Gets Object from path, if nulls return a value.
    *
-   * @param path   String
+   * @param path String
    * @param orElse String
    * @return Object
    */
   @Override
-  @NotNull
-  public Object getObject(@NotNull final String path, @NotNull final String orElse) {
+  public Object getObject(final String path, @Nullable final Object orElse) {
     return get(path, orElse);
   }
 
@@ -237,21 +231,19 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return string
    */
   @Override
-  @NotNull
-  public String getString(@NotNull final String path) {
+  public String getString(final String path) {
     return get(path);
   }
 
   /**
    * Gets string from path, if nulls return a value.
    *
-   * @param path   String
+   * @param path String
    * @param orElse string
    * @return string
    */
   @Override
-  @NotNull
-  public String getString(@NotNull final String path, @NotNull final String orElse) {
+  public String getString(final String path, @Nullable final String orElse) {
     return get(path, orElse);
   }
 
@@ -262,19 +254,19 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return int
    */
   @Override
-  public int getInt(@NotNull final String path) {
+  public int getInt(final String path) {
     return get(path);
   }
 
   /**
    * Gets int from path, if nulls return a value.
    *
-   * @param path   String
+   * @param path String
    * @param orElse int
    * @return int
    */
   @Override
-  public int getInt(@NotNull final String path, final int orElse) {
+  public int getInt(final String path, @Nullable final Integer orElse) {
     return get(path, orElse);
   }
 
@@ -285,19 +277,19 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return long
    */
   @Override
-  public long getLong(@NotNull final String path) {
+  public long getLong(final String path) {
     return get(path);
   }
 
   /**
    * Gets long from path, if nulls return a value.
    *
-   * @param path   String
+   * @param path String
    * @param orElse long
    * @return long
    */
   @Override
-  public long getLong(@NotNull final String path, final long orElse) {
+  public long getLong(final String path, @Nullable final Long orElse) {
     return get(path, orElse);
   }
 
@@ -308,19 +300,19 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return double
    */
   @Override
-  public double getDouble(@NotNull final String path) {
+  public double getDouble(final String path) {
     return get(path);
   }
 
   /**
    * Gets double from path, if nulls return a value.
    *
-   * @param path   String
+   * @param path String
    * @param orElse double
    * @return double
    */
   @Override
-  public double getDouble(@NotNull final String path, final double orElse) {
+  public double getDouble(final String path, @Nullable final Double orElse) {
     return get(path, orElse);
   }
 
@@ -331,19 +323,19 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return boolean
    */
   @Override
-  public boolean getBoolean(@NotNull final String path) {
+  public boolean getBoolean(final String path) {
     return get(path);
   }
 
   /**
    * Gets boolean from path, if nulls return a value.
    *
-   * @param path   String
+   * @param path String
    * @param orElse boolean
    * @return boolean
    */
   @Override
-  public boolean getBoolean(@NotNull final String path, final boolean orElse) {
+  public boolean getBoolean(final String path, @Nullable final Boolean orElse) {
     return get(path, orElse);
   }
 
@@ -354,8 +346,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return List
    */
   @Override
-  @NotNull
-  public List<?> getList(@NotNull final String path) {
+  public List<?> getList(final String path) {
     return get(path);
   }
 
@@ -366,8 +357,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return List
    */
   @Override
-  @NotNull
-  public List<?> getList(@NotNull final String path, @NotNull final List<?> orElse) {
+  public List<?> getList(final String path, @Nullable final List<?> orElse) {
     return get(path, orElse);
   }
 
@@ -378,8 +368,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return List
    */
   @Override
-  @NotNull
-  public List<String> getStringList(@NotNull final String path) {
+  public List<String> getStringList(final String path) {
     return get(path, new ArrayList<>());
   }
 
@@ -390,8 +379,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return List
    */
   @Override
-  @NotNull
-  public List<Integer> getIntegerList(@NotNull final String path) {
+  public List<Integer> getIntegerList(final String path) {
     return get(path, new ArrayList<>());
   }
 
@@ -402,8 +390,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return List
    */
   @Override
-  @NotNull
-  public List<Long> getLongList(@NotNull final String path) {
+  public List<Long> getLongList(final String path) {
     return get(path, new ArrayList<>());
   }
 
@@ -414,8 +401,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return List
    */
   @Override
-  @NotNull
-  public List<Double> getDoubleList(@NotNull final String path) {
+  public List<Double> getDoubleList(final String path) {
     return get(path, new ArrayList<>());
   }
 
@@ -426,8 +412,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return List
    */
   @Override
-  @NotNull
-  public List<Boolean> getBooleanList(@NotNull final String path) {
+  public List<Boolean> getBooleanList(final String path) {
     return get(path, new ArrayList<>());
   }
 
@@ -438,8 +423,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return Set
    */
   @Override
-  @NotNull
-  public Set<String> getKeys(@NotNull final String path) {
+  public Set<String> getKeys(final String path) {
     Object result = configuration.clone();
 
     if (!path.equals("")) {
@@ -467,7 +451,6 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return ReplaceRegistry
    */
   @Override
-  @NotNull
   public ReplaceRegistry getReplaceRegistry() {
     return replace;
   }
@@ -479,7 +462,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @return Object
    */
   @Nullable
-  private Object getResult(@NotNull final String path) {
+  private Object getResult(final String path) {
     Object result = configuration.clone();
 
     for (final String key : path.split("\\.")) {
@@ -497,11 +480,10 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * Get the result already replaced.
    *
    * @param replace T
-   * @param type    ReplaceType
-   * @param <T>     Any type
+   * @param type ReplaceType
+   * @param <T> Any type
    * @return T
    */
-  @NotNull
   @SuppressWarnings("unchecked")
   private <T> T replace(final T replace, final ReplaceType type) {
     if (replace instanceof String) {
@@ -540,8 +522,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * @param resourcePath String
    * @return InputStream
    */
-  @NotNull
-  private InputStream getResource(@NotNull final String resourcePath) {
+  private InputStream getResource(final String resourcePath) {
     final InputStream input = getClass().getClassLoader().getResourceAsStream(resourcePath);
 
     if (input == null) {
@@ -554,35 +535,30 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   /**
    * Creates the configuration file.
    *
-   * @param path         String
-   * @param resourcePath String
+   * @param path String
+   * @param resource String
    * @return File
    */
-  @NotNull
-  private File create(@NotNull final String path, @NotNull final String resourcePath)
-      throws FailedCreateException {
-    final int lastIndex = resourcePath.lastIndexOf("/");
-    final String directories = resourcePath.contains("/")
-        ? resourcePath.substring(0, lastIndex)
-        : "";
+  private File create(final String path, final String resource) throws FailedCreateException {
+    final int lastIndex = resource.lastIndexOf("/");
+    final String directories = resource.contains("/") ? resource.substring(0, lastIndex) : "";
 
     final File file = new File(path, directories);
     if (!file.exists() && !file.mkdirs()) {
       throw new FailedCreateException("There was an error creating the file folder");
     }
 
-    return new File(path, resourcePath);
+    return new File(path, resource);
   }
 
   /**
    * Copy a configuration.
    *
-   * @param input  InputStream
+   * @param input InputStream
    * @param output File
    * @throws FailedCreateException Throws when it fails to create the new configuration
    */
-  private void copy(@NotNull final InputStream input, @NotNull final File output)
-      throws FailedCreateException {
+  private void copy(final InputStream input, final File output) throws FailedCreateException {
     try (
         final Scanner scanner = new Scanner(input);
         final PrintStream print = new PrintStream(output)
@@ -600,7 +576,6 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    *
    * @return TokenStreamFactory
    */
-  @NotNull
   protected abstract U getFactory();
 
   /**
@@ -608,7 +583,6 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    *
    * @return ObjectMapper
    */
-  @NotNull
   protected abstract ObjectMapper getMapper();
 
 }
