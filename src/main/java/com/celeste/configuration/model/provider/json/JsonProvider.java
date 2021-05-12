@@ -31,8 +31,7 @@ public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
    * @throws FailedLoadException   Throws when it wasn't possible to load the configuration
    */
   public JsonProvider(@NotNull final String path, @NotNull final String resourcePath,
-      final boolean replace)
-      throws FailedCreateException, FailedLoadException {
+      final boolean replace) throws FailedCreateException, FailedLoadException {
     super(path, resourcePath, replace);
   }
 
