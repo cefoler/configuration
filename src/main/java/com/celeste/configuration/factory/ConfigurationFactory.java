@@ -11,7 +11,11 @@ import java.util.Properties;
  */
 public final class ConfigurationFactory {
 
-  private static final ConfigurationFactory INSTANCE = new ConfigurationFactory();
+  private static final ConfigurationFactory INSTANCE;
+
+  static {
+    INSTANCE = new ConfigurationFactory();
+  }
 
   /**
    * Returns the ConfigurationFactory instance.
@@ -23,7 +27,7 @@ public final class ConfigurationFactory {
   }
 
   /**
-   * Starts a configuration with the properties driver, path, resourcePath and replace.
+   * Starts a configuration with the properties driver, path, resource and replace.
    *
    * @param properties Properties
    * @return Configuration
@@ -40,8 +44,8 @@ public final class ConfigurationFactory {
       final boolean replace = Boolean.parseBoolean(properties.getProperty("replace"));
 
       return start(driver, path, resource, replace);
-    } catch (Throwable throwable) {
-      throw new FailedCreateException(throwable);
+    } catch (Exception exception) {
+      throw new FailedCreateException(exception.getMessage(), exception.getCause());
     }
   }
 
@@ -62,8 +66,8 @@ public final class ConfigurationFactory {
           .getConstructor(String.class, String.class, boolean.class);
 
       return providerConstructor.newInstance(path, resource, replace);
-    } catch (Throwable throwable) {
-      throw new FailedCreateException(throwable);
+    } catch (Exception exception) {
+      throw new FailedCreateException(exception.getMessage(), exception.getCause());
     }
   }
 

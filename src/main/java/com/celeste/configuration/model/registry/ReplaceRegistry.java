@@ -99,8 +99,8 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    */
   public Set<Entry<String, ReplaceValue>> getEntrySet(final ReplaceType type) {
     return map.entrySet().stream()
-        .filter(entry -> entry.getValue().getType().equals(type) || entry.getValue().getType()
-            .equals(ReplaceType.ALL))
+        .filter(entry -> entry.getValue().getType().equals(type)
+            || entry.getValue().getType().equals(ReplaceType.ALL))
         .collect(Collectors.toSet());
   }
 
@@ -116,8 +116,8 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    */
   public Set<String> getKeys(final ReplaceType type) {
     return map.entrySet().stream()
-        .filter(entry -> entry.getValue().getType().equals(type) || entry.getValue().getType()
-            .equals(ReplaceType.ALL))
+        .filter(entry -> entry.getValue().getType().equals(type)
+            || entry.getValue().getType().equals(ReplaceType.ALL))
         .map(Entry::getKey)
         .collect(Collectors.toSet());
   }
@@ -134,8 +134,8 @@ public final class ReplaceRegistry implements Serializable, Cloneable {
    */
   public Set<ReplaceValue> getAll(final ReplaceType type) {
     return map.values().stream()
-        .filter(
-            replace -> replace.getType().equals(type) || replace.getType().equals(ReplaceType.ALL))
+        .filter(replace -> replace.getType().equals(type)
+            || replace.getType().equals(ReplaceType.ALL))
         .collect(Collectors.toSet());
   }
 

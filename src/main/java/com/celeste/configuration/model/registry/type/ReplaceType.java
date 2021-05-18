@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Types of replaces.

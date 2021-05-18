@@ -43,8 +43,8 @@ public enum ConfigurationType {
     return Arrays.stream(values())
         .filter(type -> type.getNames().contains(configuration.toUpperCase()))
         .findFirst()
-        .orElseThrow(
-            () -> new NullPointerException("Invalid configuration type: " + configuration));
+        .orElseThrow(() ->
+            new NullPointerException("Invalid configuration type: " + configuration));
   }
 
 }

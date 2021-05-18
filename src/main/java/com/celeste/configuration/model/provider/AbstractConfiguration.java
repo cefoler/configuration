@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -68,8 +67,8 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
     if (!file.exists() || replace) {
       try (final InputStream input = getResource(resource)) {
         copy(input, file);
-      } catch (IOException exception) {
-        throw new FailedLoadException("Some unexpected error has occurred: ", exception);
+      } catch (Exception exception) {
+        throw new FailedLoadException("Some unexpected error has occurred: ", exception.getCause());
       }
     }
 
@@ -88,8 +87,8 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
         final Reader reader = new InputStreamReader(input, Charset.defaultCharset())
     ) {
       this.configuration = mapper.readValue(reader, LinkedHashMap.class);
-    } catch (Throwable throwable) {
-      throw new FailedLoadException(throwable);
+    } catch (Exception exception) {
+      throw new FailedLoadException(exception.getMessage(), exception.getCause());
     }
   }
 
@@ -106,8 +105,8 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
     ) {
       final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
       mapper.writer(printer).writeValue(writer, configuration);
-    } catch (Throwable throwable) {
-      throw new FailedSaveException(throwable);
+    } catch (Exception exception) {
+      throw new FailedSaveException(exception.getMessage(), exception.getCause());
     }
   }
 
@@ -489,7 +488,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
     if (replace instanceof String) {
       String replaced = replace.toString();
 
-      for (Entry<String, ReplaceValue> entry : getReplaceRegistry().getEntrySet(type)) {
+      for (final Entry<String, ReplaceValue> entry : getReplaceRegistry().getEntrySet(type)) {
         replaced = replaced.replaceAll("(?i)" + entry.getKey(), entry.getValue().getValue());
       }
 
@@ -503,7 +502,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
         return replace;
       }
 
-      for (Entry<String, ReplaceValue> entry : getReplaceRegistry().getEntrySet(type)) {
+      for (final Entry<String, ReplaceValue> entry : getReplaceRegistry().getEntrySet(type)) {
         replaced = replaced.stream()
             .map(line -> line.toString()
                 .replaceAll("(?i)" + entry.getKey(), entry.getValue().getValue()))
@@ -519,14 +518,14 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   /**
    * Gets the InputStream from the path.
    *
-   * @param resourcePath String
+   * @param resource String
    * @return InputStream
    */
-  private InputStream getResource(final String resourcePath) {
-    final InputStream input = getClass().getClassLoader().getResourceAsStream(resourcePath);
+  private InputStream getResource(final String resource) {
+    final InputStream input = getClass().getClassLoader().getResourceAsStream(resource);
 
     if (input == null) {
-      throw new IllegalArgumentException(resourcePath + " not found");
+      throw new IllegalArgumentException(resource + " not found");
     }
 
     return input;
@@ -544,6 +543,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
     final String directories = resource.contains("/") ? resource.substring(0, lastIndex) : "";
 
     final File file = new File(path, directories);
+
     if (!file.exists() && !file.mkdirs()) {
       throw new FailedCreateException("There was an error creating the file folder");
     }
@@ -566,8 +566,8 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
       while (scanner.hasNext()) {
         print.println(scanner.nextLine());
       }
-    } catch (Throwable exception) {
-      throw new FailedCreateException(exception);
+    } catch (Exception exception) {
+      throw new FailedCreateException(exception.getMessage(), exception.getCause());
     }
   }
 
