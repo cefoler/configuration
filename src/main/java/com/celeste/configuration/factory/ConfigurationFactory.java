@@ -45,7 +45,7 @@ public final class ConfigurationFactory {
 
       return start(driver, path, resource, replace);
     } catch (Exception exception) {
-      throw new FailedCreateException(exception.getMessage(), exception.getCause());
+      throw new FailedCreateException(exception);
     }
   }
 
@@ -67,7 +67,7 @@ public final class ConfigurationFactory {
 
       return providerConstructor.newInstance(path, resource, replace);
     } catch (Exception exception) {
-      throw new FailedCreateException(exception.getMessage(), exception.getCause());
+      throw new FailedCreateException(exception);
     }
   }
 

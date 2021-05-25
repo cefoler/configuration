@@ -68,7 +68,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
       try (final InputStream input = getResource(resource)) {
         copy(input, file);
       } catch (Exception exception) {
-        throw new FailedLoadException("Some unexpected error has occurred: ", exception.getCause());
+        throw new FailedLoadException("Some unexpected error has occurred: ", exception);
       }
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
     ) {
       this.configuration = mapper.readValue(reader, LinkedHashMap.class);
     } catch (Exception exception) {
-      throw new FailedLoadException(exception.getMessage(), exception.getCause());
+      throw new FailedLoadException(exception);
     }
   }
 
@@ -106,7 +106,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
       final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
       mapper.writer(printer).writeValue(writer, configuration);
     } catch (Exception exception) {
-      throw new FailedSaveException(exception.getMessage(), exception.getCause());
+      throw new FailedSaveException(exception);
     }
   }
 
@@ -567,7 +567,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
         print.println(scanner.nextLine());
       }
     } catch (Exception exception) {
-      throw new FailedCreateException(exception.getMessage(), exception.getCause());
+      throw new FailedCreateException(exception);
     }
   }
 

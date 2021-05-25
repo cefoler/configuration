@@ -1,11 +1,10 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
-    id 'maven'
     id 'java'
 }
 
 group 'com.celeste'
-version '1.0.5-SNAPSHOT'
+version '1.0.6-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
