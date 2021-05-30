@@ -152,7 +152,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
         result.put(key, new LinkedHashMap<>());
       }
 
-      if (result.containsKey(lastPath)) {
+      if (key.equals(lastPath) && result.containsKey(lastPath)) {
         if (object == null) {
           result.remove(lastPath);
           return;
