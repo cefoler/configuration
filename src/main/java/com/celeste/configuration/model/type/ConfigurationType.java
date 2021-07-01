@@ -5,6 +5,7 @@ import com.celeste.configuration.model.provider.json.JsonProvider;
 import com.celeste.configuration.model.provider.properties.PropertiesProvider;
 import com.celeste.configuration.model.provider.yaml.YamlProvider;
 import com.google.common.collect.ImmutableList;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
@@ -43,8 +44,8 @@ public enum ConfigurationType {
     return Arrays.stream(values())
         .filter(type -> type.getNames().contains(configuration.toUpperCase()))
         .findFirst()
-        .orElseThrow(() ->
-            new NullPointerException("Invalid configuration type: " + configuration));
+        .orElseThrow(() -> new InvalidParameterException("Invalid configuration type: "
+            + configuration));
   }
 
 }

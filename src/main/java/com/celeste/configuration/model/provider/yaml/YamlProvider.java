@@ -13,8 +13,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
  */
 public final class YamlProvider extends AbstractConfiguration<YAMLFactory> {
 
-  private static final YAMLFactory YAML_FACTORY;
-  private static final ObjectMapper OBJECT_MAPPER;
+  protected static final YAMLFactory YAML_FACTORY;
+  protected static final ObjectMapper OBJECT_MAPPER;
 
   static {
     YAML_FACTORY = new YAMLFactory();

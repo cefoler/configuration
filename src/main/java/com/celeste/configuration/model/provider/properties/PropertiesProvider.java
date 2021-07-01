@@ -12,8 +12,8 @@ import com.fasterxml.jackson.dataformat.javaprop.JavaPropsFactory;
  */
 public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFactory> {
 
-  private static final JavaPropsFactory PROPERTIES_FACTORY;
-  private static final ObjectMapper OBJECT_MAPPER;
+  protected static final JavaPropsFactory PROPERTIES_FACTORY;
+  protected static final ObjectMapper OBJECT_MAPPER;
 
   static {
     PROPERTIES_FACTORY = new JavaPropsFactory();
@@ -27,7 +27,7 @@ public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFac
    * @param resource String
    * @param replace boolean
    * @throws FailedCreateException Throws when it wasn't possible to create the configuration
-   * @throws FailedLoadException   Throws when it wasn't possible to load the configuration
+   * @throws FailedLoadException Throws when it wasn't possible to load the configuration
    */
   public PropertiesProvider(final String path, final String resource, final boolean replace)
       throws FailedCreateException, FailedLoadException {
@@ -36,7 +36,7 @@ public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFac
 
   @Override
   public ConfigurationType getType() {
-    return ConfigurationType.YAML;
+    return ConfigurationType.PROPERTIES;
   }
 
   /**

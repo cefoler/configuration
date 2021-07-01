@@ -18,15 +18,6 @@ public final class ConfigurationFactory {
   }
 
   /**
-   * Returns the ConfigurationFactory instance.
-   *
-   * @return ConfigurationFactory
-   */
-  public static ConfigurationFactory getInstance() {
-    return INSTANCE;
-  }
-
-  /**
    * Starts a configuration with the properties driver, path, resource and replace.
    *
    * @param properties Properties
@@ -69,6 +60,15 @@ public final class ConfigurationFactory {
     } catch (Exception exception) {
       throw new FailedCreateException(exception);
     }
+  }
+
+  /**
+   * Returns the ConfigurationFactory instance.
+   *
+   * @return ConfigurationFactory
+   */
+  public static ConfigurationFactory getInstance() {
+    return INSTANCE;
   }
 
 }

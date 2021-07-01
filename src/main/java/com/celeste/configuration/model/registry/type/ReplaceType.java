@@ -1,6 +1,7 @@
 package com.celeste.configuration.model.registry.type;
 
 import com.google.common.collect.ImmutableList;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public enum ReplaceType {
     return Arrays.stream(values())
         .filter(type -> type.getNames().contains(replace.toUpperCase()))
         .findFirst()
-        .orElseThrow(() -> new NullPointerException("Invalid replace type: " + replace));
+        .orElseThrow(() -> new InvalidParameterException("Invalid replace type: " + replace));
   }
 
 }

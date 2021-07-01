@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
 
-  private static final JsonFactory JSON_FACTORY;
-  private static final ObjectMapper OBJECT_MAPPER;
+  protected static final JsonFactory JSON_FACTORY;
+  protected static final ObjectMapper OBJECT_MAPPER;
 
   static {
     JSON_FACTORY = new JsonFactory();

@@ -56,5 +56,6 @@ tasks.withType(Jar) {
 }
 
 shadowJar {
+    relocate 'com.fasterxml.jackson', 'com.jackson'
     relocate 'org.yaml.snakeyaml', 'org.snakeyaml'
 }
