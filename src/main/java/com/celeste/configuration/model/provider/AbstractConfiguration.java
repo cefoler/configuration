@@ -21,7 +21,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -86,6 +88,11 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
         final FileInputStream input = new FileInputStream(file);
         final Reader reader = new InputStreamReader(input, Charset.defaultCharset())
     ) {
+      if (file.length() == 0) {
+        this.configuration = new LinkedHashMap<>();
+        return;
+      }
+
       this.configuration = mapper.readValue(reader, LinkedHashMap.class);
     } catch (Exception exception) {
       throw new FailedLoadException(exception);
@@ -433,6 +440,10 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
 
         result = ((Map<?, ?>) result).get(key);
       }
+    }
+
+    if (result instanceof List) {
+      return new LinkedHashSet<>();
     }
 
     if (!(result instanceof Map)) {
