@@ -239,7 +239,7 @@ public interface Configuration {
    * @param path String
    * @return Set
    */
-  Set<String> getKeys(final String path);
+  Set<?> getKeys(final String path);
 
   /**
    * Returns Map with contains all type of replaces.
