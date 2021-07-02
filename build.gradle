@@ -9,15 +9,15 @@ version '1.0.9-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 def jackson = "2.12.3"
 def lombok = "1.18.20"
 def jetbrains = "21.0.1"
 def junit = "5.7.0"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
 
 dependencies {
     /**
