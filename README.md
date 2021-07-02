@@ -12,7 +12,7 @@ Want to take a look how easily you can create a new configuration? Take a look b
 ```
 final Configuration configuration = ConfigurationFactory.start(
     ConfigurationType.YOUR_DRIVER,
-    "src/main/resources",
+    "YOUR_PATH",
     "settings.yml",
     false
 );
