@@ -21,7 +21,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -284,7 +283,8 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    */
   @Override
   public long getLong(final String path) {
-    return get(path);
+    final Number number = get(path);
+    return number.longValue();
   }
 
   /**
@@ -296,7 +296,8 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    */
   @Override
   public long getLong(final String path, @Nullable final Long orElse) {
-    return get(path, orElse);
+    final Number number = get(path, orElse);
+    return number.longValue();
   }
 
   /**
