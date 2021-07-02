@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.celeste'
-version '1.0.8-SNAPSHOT'
+version '1.0.9-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -14,18 +14,18 @@ repositories {
     mavenCentral()
 }
 
-def jacksonVersion = "2.12.2"
-def lombokVersion = "1.18.20"
-def jetbrainsVersion = "21.0.1"
-def junitVersion = "5.7.0"
+def jackson = "2.12.3"
+def lombok = "1.18.20"
+def jetbrains = "21.0.1"
+def junit = "5.7.0"
 
 dependencies {
     /**
      * FILE DEPENDENCY
      */
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:${jackson}"
 
     /**
      * LIBRARY FRAMEWORK
@@ -35,17 +35,17 @@ dependencies {
     /**
      * ANNOTATION FRAMEWORK
      */
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombok}"
+    annotationProcessor "org.projectlombok:lombok:${lombok}"
 
-    compileOnly "org.jetbrains:annotations:${jetbrainsVersion}"
-    annotationProcessor "org.jetbrains:annotations:${jetbrainsVersion}"
+    compileOnly "org.jetbrains:annotations:${jetbrains}"
+    annotationProcessor "org.jetbrains:annotations:${jetbrains}"
 
     /**
      * TEST FRAMEWORK
      */
-    testCompileOnly "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:${junit}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit}"
 }
 
 jar {
