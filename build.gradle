@@ -1,18 +1,13 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
-    id 'java'
+    id "java"
 }
 
-group 'com.celeste'
-version '1.1.0-SNAPSHOT'
+group "com.celeste.configuration"
+version "1.1.1-SNAPSHOT"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-def jackson = "2.12.3"
-def lombok = "1.18.20"
-def jetbrains = "21.0.1"
-def junit = "5.7.0"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenLocal()
@@ -20,47 +15,35 @@ repositories {
 }
 
 dependencies {
-    /**
-     * FILE DEPENDENCY
-     */
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:${jackson}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.12.4"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.4"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.12.4"
 
-    /**
-     * LIBRARY FRAMEWORK
-     */
-    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation "com.google.guava:guava:30.1.1-jre"
 
-    /**
-     * ANNOTATION FRAMEWORK
-     */
-    compileOnly "org.projectlombok:lombok:${lombok}"
-    annotationProcessor "org.projectlombok:lombok:${lombok}"
+    compileOnly "org.projectlombok:lombok:1.18.20"
+    annotationProcessor "org.projectlombok:lombok:1.18.20"
 
-    compileOnly "org.jetbrains:annotations:${jetbrains}"
-    annotationProcessor "org.jetbrains:annotations:${jetbrains}"
+    compileOnly "org.jetbrains:annotations:22.0.0"
+    annotationProcessor "org.jetbrains:annotations:22.0.0"
 
-    /**
-     * TEST FRAMEWORK
-     */
-    testCompileOnly "org.junit.jupiter:junit-jupiter-api:${junit}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit}"
-}
-
-jar {
-    from 'LICENSE.md'
+    testCompileOnly 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
 }
 
 tasks.withType(Jar) {
-    destinationDirectory.set(file("$rootDir/target/"))
+    from "LICENSE.md"
 }
 
 shadowJar {
-    relocate 'com.fasterxml.jackson', 'com.jackson'
-    relocate 'org.yaml.snakeyaml', 'org.snakeyaml'
+    relocate "com.fasterxml.jackson", "com.celeste.configuration.jackson"
+    relocate "org.yaml.snakeyaml", "com.celeste.configuration.snakeyaml"
+
+    relocate "com.google.common", "com.celeste.configuration.guava"
+
+    archiveFileName = "Configuration-${project.version}.jar"
 }

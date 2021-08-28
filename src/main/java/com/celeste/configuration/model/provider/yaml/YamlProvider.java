@@ -6,21 +6,21 @@ import com.celeste.configuration.model.provider.AbstractConfiguration;
 import com.celeste.configuration.model.type.ConfigurationType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 /**
  * Responsible for instantiating and managing the YAML configuration.
  */
 public final class YamlProvider extends AbstractConfiguration<YAMLFactory> {
 
-  protected static final YAMLFactory YAML_FACTORY;
-  protected static final ObjectMapper OBJECT_MAPPER;
+  private static final YAMLFactory YAML_FACTORY;
+  private static final ObjectMapper OBJECT_MAPPER;
 
   static {
     YAML_FACTORY = new YAMLFactory();
     OBJECT_MAPPER = new ObjectMapper(YAML_FACTORY);
 
-    YAML_FACTORY.disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
+    YAML_FACTORY.disable(Feature.WRITE_DOC_START_MARKER);
   }
 
   /**
@@ -37,6 +37,11 @@ public final class YamlProvider extends AbstractConfiguration<YAMLFactory> {
     super(path, resource, replace);
   }
 
+  /**
+   * Get the type of the configuration.
+   *
+   * @return ConfigurationType
+   */
   @Override
   public ConfigurationType getType() {
     return ConfigurationType.YAML;

@@ -27,7 +27,7 @@ public enum ConfigurationType {
    * Create a new enum of ConfigurationType.
    *
    * @param provider Type of this class
-   * @param names    List of names that can be given to this format
+   * @param names List of names that can be given to this format
    */
   ConfigurationType(final Class<? extends Configuration> provider, final String... names) {
     this.provider = provider;
@@ -44,7 +44,7 @@ public enum ConfigurationType {
     return Arrays.stream(values())
         .filter(type -> type.getNames().contains(configuration.toUpperCase()))
         .findFirst()
-        .orElseThrow(() -> new InvalidParameterException("Invalid configuration type: "
+        .orElseThrow(() -> new InvalidParameterException("Invalid configuration: "
             + configuration));
   }
 

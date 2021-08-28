@@ -1,35 +1,45 @@
 package com.celeste.configuration.model.exception;
 
 /**
- * Thrown when a checked exception occurred while loading the configuration.
- * <p></p>
- * It is usually thrown when the configuration is not found
+ * This class is subclass of the {@link ConfigurationException} checked exception which
+ * indicates error in remote file loading.
  */
 public class FailedLoadException extends ConfigurationException {
 
   /**
-   * Creates a new ConfigurationException.
+   * Create a new {@link FailedLoadException} is a checked exception that is created
+   * when an error occurs when loading a remote file.
+   */
+  public FailedLoadException() {
+    super();
+  }
+
+  /**
+   * Create a new {@link FailedLoadException} is a checked exception that is created
+   * when an error occurs when loading a remote file.
    *
-   * @param error String
+   * @param error Error message.
    */
   public FailedLoadException(final String error) {
     super(error);
   }
 
   /**
-   * Creates a new ConfigurationException.
+   * Create a new {@link FailedLoadException} is a checked exception that is created
+   * when an error occurs when loading a remote file.
    *
-   * @param cause Throwable
+   * @param cause What caused the exception.
    */
   public FailedLoadException(final Throwable cause) {
     super(cause);
   }
 
   /**
-   * Creates a new ConfigurationException.
+   * Create a new {@link FailedLoadException} is a checked exception that is created
+   * when an error occurs when loading a remote file.
    *
-   * @param error String
-   * @param cause Throwable
+   * @param error Error message.
+   * @param cause What caused the exception.
    */
   public FailedLoadException(final String error, final Throwable cause) {
     super(error, cause);

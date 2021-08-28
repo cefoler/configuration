@@ -1,35 +1,50 @@
 package com.celeste.configuration.model.exception;
 
+import com.celeste.configuration.model.provider.Configuration;
+
 /**
- * Thrown when an unchecked exception occurred while getting some configuration data.
- * <p></p>
- * It is usually thrown when a data is not found.
+ * This class is subclass of the {@link RuntimeException} unchecked exception which
+ * indicates error in getting {@link Configuration} data.
+ *
+ * @see Configuration
+ * @see RuntimeException
  */
 public class FailedGetException extends RuntimeException {
 
   /**
-   * Creates a new ConfigurationException.
+   * Creating a new {@link FailedGetException} is an unchecked exception created when it occurs
+   * while getting {@link Configuration} data.
+   */
+  public FailedGetException() {
+    super();
+  }
+
+  /**
+   * Creating a new {@link FailedGetException} is an unchecked exception created when it occurs
+   * while getting {@link Configuration} data.
    *
-   * @param error String
+   * @param error Error message.
    */
   public FailedGetException(final String error) {
     super(error);
   }
 
   /**
-   * Creates a new ConfigurationException.
+   * Creating a new {@link FailedGetException} is an unchecked exception created when it occurs
+   * while getting {@link Configuration} data.
    *
-   * @param cause Throwable
+   * @param cause What caused the exception.
    */
   public FailedGetException(final Throwable cause) {
     super(cause);
   }
 
   /**
-   * Creates a new ConfigurationException.
+   * Creating a new {@link FailedGetException} is an unchecked exception created when it occurs
+   * while getting {@link Configuration} data.
    *
-   * @param error String
-   * @param cause Throwable
+   * @param error Error message.
+   * @param cause What caused the exception.
    */
   public FailedGetException(final String error, final Throwable cause) {
     super(error, cause);

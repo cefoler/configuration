@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
 
-  protected static final JsonFactory JSON_FACTORY;
-  protected static final ObjectMapper OBJECT_MAPPER;
+  private static final JsonFactory JSON_FACTORY;
+  private static final ObjectMapper OBJECT_MAPPER;
 
   static {
     JSON_FACTORY = new JsonFactory();
@@ -23,11 +23,11 @@ public final class JsonProvider extends AbstractConfiguration<JsonFactory> {
   /**
    * Creates a new JsonProvider.
    *
-   * @param path String
-   * @param resource String
-   * @param replace boolean
-   * @throws FailedCreateException Throws when it wasn't possible to create the configuration
-   * @throws FailedLoadException Throws when it wasn't possible to load the configuration
+   * @param path String.
+   * @param resource String.
+   * @param replace boolean.
+   * @throws FailedCreateException Throws when it wasn't possible to create the configuration.
+   * @throws FailedLoadException Throws when it wasn't possible to load the configuration.
    */
   public JsonProvider(final String path, final String resource, final boolean replace)
       throws FailedCreateException, FailedLoadException {

@@ -12,8 +12,8 @@ import com.fasterxml.jackson.dataformat.javaprop.JavaPropsFactory;
  */
 public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFactory> {
 
-  protected static final JavaPropsFactory PROPERTIES_FACTORY;
-  protected static final ObjectMapper OBJECT_MAPPER;
+  private static final JavaPropsFactory PROPERTIES_FACTORY;
+  private static final ObjectMapper OBJECT_MAPPER;
 
   static {
     PROPERTIES_FACTORY = new JavaPropsFactory();
@@ -34,6 +34,11 @@ public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFac
     super(path, resource, replace);
   }
 
+  /**
+   * Get the type of the configuration.
+   *
+   * @return ConfigurationType
+   */
   @Override
   public ConfigurationType getType() {
     return ConfigurationType.PROPERTIES;
