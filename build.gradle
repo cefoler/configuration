@@ -43,10 +43,6 @@ tasks.withType(Jar) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId = "com.celeste"
-            artifactId = "configuration"
-            version = "1.1.2-SNAPSHOT"
-
             from components.java
         }
     }
