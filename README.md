@@ -34,7 +34,7 @@ final ReplaceValue replace = ReplaceValue.builder()
     .type(ReplaceType.ALL)
     .build();
 
-configuration.getReplaceRegistry().register(VALUE_TO_REPLACE, replace);
+configuration.getReplacer().put(VALUE_TO_REPLACE, replace);
 ```
 
 By adding this to your code, the **VALUE_TO_REPLACE** will be the value set at every **VALUE_TO_BE_REPLACED** that is used
