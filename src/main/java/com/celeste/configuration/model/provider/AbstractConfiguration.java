@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -39,12 +40,13 @@ import org.jetbrains.annotations.Nullable;
  * Abstract class that will do all the functions of get, set and save regardless
  * of the type of Abstraction.
  *
- * @param <U> A factory that extends TokenStreamFactory, used to instantiate Mappers
+ * @param <T> A factory that extends TokenStreamFactory, used to instantiate Mappers
  */
 @Getter
-public abstract class AbstractConfiguration<U extends TokenStreamFactory> implements Configuration {
+public abstract class AbstractConfiguration<T extends TokenStreamFactory> implements Configuration,
+    Serializable {
 
-  protected final U factory;
+  protected final T factory;
   protected final ObjectMapper mapper;
 
   protected final File file;
@@ -147,11 +149,11 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * Sets a value into the configuration.
    *
    * @param path String
-   * @param object Object
+   * @param value Object
    */
   @Override
   @SuppressWarnings("unchecked")
-  public void set(final String path, @Nullable final Object object) {
+  public void set(final String path, @Nullable final Object value) {
     final String[] split = path.split("\\.");
     final String lastPath = split[split.length - 1];
 
@@ -159,17 +161,18 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
 
     for (final String key : split) {
       if (!result.containsKey(key)) {
-        result.put(key, new LinkedHashMap<>());
+        final Map<?, ?> newPath = new LinkedHashMap<>();
+        result.put(key, newPath);
       }
 
       if (key.equals(lastPath)) {
-        if (object == null) {
+        if (value == null) {
           result.remove(lastPath);
           return;
         }
 
-        final Object newObject = replace(object, ReplaceType.SET);
-        result.put(lastPath, newObject);
+        final Object replaced = replace(value, ReplaceType.SET);
+        result.put(lastPath, replaced);
         return;
       }
 
@@ -181,15 +184,15 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    * Gets the value from path in the configuration.
    *
    * @param path String
-   * @param <T> Object
+   * @param <U> Object
    * @return Object
    */
   @Override
   @SuppressWarnings("unchecked")
-  public <T> T get(final String path) {
+  public <U> U get(final String path) {
     final Object result = getResult(path);
 
-    return (T) Validation.notNull(result, () -> new FailedGetException("Path " + path
+    return (U) Validation.notNull(result, () -> new FailedGetException("Path " + path
         + " was not found"));
   }
 
@@ -198,14 +201,14 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    *
    * @param path String
    * @param orElse T
-   * @param <T> T
+   * @param <U> T
    * @return T
    */
   @Override
   @SuppressWarnings("unchecked")
-  public <T> T get(final String path, @Nullable final T orElse) {
+  public <U> U get(final String path, @Nullable final U orElse) {
     final Object result = getResult(path);
-    return result == null ? orElse : (T) result;
+    return result == null ? orElse : (U) result;
   }
 
   /**
@@ -438,7 +441,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
     if (!path.equals("")) {
       for (final String key : path.split("\\.")) {
         if (!(result instanceof Map)) {
-          throw new FailedGetException("The path " + path + " was not found");
+          throw new FailedGetException("Path " + path + " was not found");
         }
 
         result = ((Map<?, ?>) result).get(key);
@@ -449,13 +452,13 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
       return new LinkedHashSet<>();
     }
 
-    if (!(result instanceof Map)) {
-      throw new FailedGetException("The path " + path + " was not found");
+    if (result instanceof Map) {
+      return ((Map<?, ?>) result).keySet().stream()
+          .map(Object::toString)
+          .collect(Collectors.toSet());
     }
 
-    return ((Map<?, ?>) result).keySet().stream()
-        .map(Object::toString)
-        .collect(Collectors.toSet());
+    throw new FailedGetException("Path " + path + " was not found");
   }
 
   /**
@@ -492,41 +495,48 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   /**
    * Get the result already replaced.
    *
-   * @param replace T
+   * @param object T
    * @param type ReplaceType
-   * @param <T> Any type
+   * @param <U> Any type
    * @return T
    */
   @SuppressWarnings("unchecked")
-  private <T> T replace(final T replace, final ReplaceType type) {
-    if (replace instanceof String) {
-      String replaced = Wrapper.toString(replace);
+  private <U> U replace(final U object, final ReplaceType type) {
+    if (object instanceof String) {
+      String replaced = Wrapper.toString(object);
 
-      for (final Entry<String, ReplaceValue> entry : getReplacer().entrySet(type)) {
-        replaced = replaced.replaceAll("(?i)" + entry.getKey(), entry.getValue().getValue());
+      for (final Entry<String, ReplaceValue> entry : replace.entrySet(type)) {
+        final String key = entry.getKey();
+        final ReplaceValue value = entry.getValue();
+
+        replaced = replaced.replaceAll("(?i)" + key, value.getValue());
       }
 
-      return (T) replaced;
+      return (U) replaced;
     }
 
-    if (replace instanceof List) {
-      List<?> replaced = (List<?>) replace;
+    if (object instanceof List) {
+      List<?> replaced = (List<?>) object;
 
       if (replaced.size() == 0 || !(replaced.get(0) instanceof String)) {
-        return replace;
+        return object;
       }
 
-      for (final Entry<String, ReplaceValue> entry : getReplacer().entrySet(type)) {
+      for (final Entry<String, ReplaceValue> entry : replace.entrySet(type)) {
         replaced = replaced.stream()
-            .map(line -> Wrapper.toString(line).replaceAll("(?i)" + entry.getKey(),
-                entry.getValue().getValue()))
+            .map(line -> {
+              final String key = entry.getKey();
+              final ReplaceValue value = entry.getValue();
+
+              return Wrapper.toString(line).replaceAll("(?i)" + key, value.getValue());
+            })
             .collect(CollectorPattern.toList());
       }
 
-      return (T) replaced;
+      return (U) replaced;
     }
 
-    return replace;
+    return object;
   }
 
   /**
@@ -538,7 +548,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
   private InputStream getResource(final String resource) {
     final InputStream input = getClass().getClassLoader().getResourceAsStream(resource);
 
-    return Validation.notNull(input, resource + " not found");
+    return Validation.notNull(input, "Resource " + resource + " not found");
   }
 
   /**
@@ -550,11 +560,11 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    */
   private File create(final String path, final String resource) throws FailedCreateException {
     final int lastIndex = resource.lastIndexOf("/");
-    final String directories = resource.contains("/") ? resource.substring(0, lastIndex) : "";
+    final String directory = resource.contains("/") ? resource.substring(0, lastIndex) : "";
 
-    final File file = new File(path, directories);
+    final File folder = new File(path, directory);
 
-    if (!file.exists() && !file.mkdirs()) {
+    if (!folder.exists() && !folder.mkdirs()) {
       throw new FailedCreateException("There was an error creating the file folder");
     }
 
@@ -586,7 +596,7 @@ public abstract class AbstractConfiguration<U extends TokenStreamFactory> implem
    *
    * @return TokenStreamFactory
    */
-  protected abstract U getFactory();
+  protected abstract T getFactory();
 
   /**
    * Return a ObjectMapper.

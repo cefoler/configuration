@@ -44,49 +44,50 @@ public final class ReplaceMap extends ForwardingMap<String, ReplaceValue> implem
   /**
    * Register a large number of values on a map if they do not exist.
    *
-   * @param newMap Map
+   * @param values Map
    */
-  public void putAllIfAbsent(final Map<String, ReplaceValue> newMap) {
-    newMap.forEach(map::putIfAbsent);
+  public void putAllIfAbsent(final Map<String, ReplaceValue> values) {
+    values.forEach(map::putIfAbsent);
   }
 
   /**
-   * Get all keys and values that contain a type.
+   * Get all keys and values that contain a {@link ReplaceType}.
    *
-   * @param type ReplaceType
+   * @param replace ReplaceType
    * @return Set
    */
-  public Set<Entry<String, ReplaceValue>> entrySet(final ReplaceType type) {
-    return map.entrySet().stream()
-        .filter(entry -> entry.getValue().getType().equals(type)
-            || entry.getValue().getType().equals(ReplaceType.ALL))
+  public Set<Entry<String, ReplaceValue>> entrySet(final ReplaceType replace) {
+    return entrySet().stream()
+        .filter(entry -> {
+          final ReplaceValue value = entry.getValue();
+          final ReplaceType type = value.getType();
+
+          return type.equals(replace) || type.equals(ReplaceType.ALL);
+        })
         .collect(CollectorPattern.toSet());
   }
 
   /**
-   * Get all keys that contain a type.
+   * Get all keys that contain a {@link ReplaceType}.
    *
-   * @param type ReplaceType
+   * @param replace ReplaceType
    * @return Set
    */
-  public Set<String> keySet(final ReplaceType type) {
-    return map.entrySet().stream()
-        .filter(entry -> entry.getValue().getType().equals(type)
-            || entry.getValue().getType().equals(ReplaceType.ALL))
+  public Set<String> keySet(final ReplaceType replace) {
+    return entrySet(replace).stream()
         .map(Entry::getKey)
         .collect(CollectorPattern.toSet());
   }
 
   /**
-   * Get all values that contain a type.
+   * Get all values that contain a {@link ReplaceType}.
    *
-   * @param type ReplaceType
+   * @param replace ReplaceType
    * @return Set
    */
-  public Collection<ReplaceValue> values(final ReplaceType type) {
-    return map.values().stream()
-        .filter(replace -> replace.getType().equals(type)
-            || replace.getType().equals(ReplaceType.ALL))
+  public Collection<ReplaceValue> values(final ReplaceType replace) {
+    return entrySet(replace).stream()
+        .map(Entry::getValue)
         .collect(CollectorPattern.toSet());
   }
 
@@ -97,8 +98,7 @@ public final class ReplaceMap extends ForwardingMap<String, ReplaceValue> implem
    * @return Set
    */
   public Set<ReplaceValue> sort(final Comparator<ReplaceValue> comparator) {
-    return this.values()
-        .stream()
+    return values().stream()
         .sorted(comparator)
         .collect(CollectorPattern.toCollection(LinkedHashSet::new));
   }
