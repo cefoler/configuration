@@ -1,0 +1,4 @@
+install:
+  - ./gradlew build :publishToMavenLocal
+jdk:
+  - openjdk8
