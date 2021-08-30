@@ -1,5 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.0.0"
+    id "maven-publish"
     id "java"
 }
 
@@ -27,8 +28,8 @@ dependencies {
     compileOnly "org.jetbrains:annotations:22.0.0"
     annotationProcessor "org.jetbrains:annotations:22.0.0"
 
-    testCompileOnly 'org.junit.jupiter:junit-jupiter-api:5.7.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:5.7.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
 }
 
 tasks.withType(JavaCompile) {
