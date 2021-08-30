@@ -40,6 +40,18 @@ tasks.withType(Jar) {
     from "LICENSE.md"
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "com.celeste"
+            artifactId = "configuration"
+            version = "1.1.2-SNAPSHOT"
+
+            from components.java
+        }
+    }
+}
+
 shadowJar {
     relocate "com.fasterxml.jackson", "com.celeste.configuration.jackson"
     relocate "org.yaml.snakeyaml", "com.celeste.configuration.snakeyaml"
