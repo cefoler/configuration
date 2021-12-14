@@ -21,9 +21,9 @@ dependencies {
      */
     def jackson = "2.13.0"
 
-    implementation "com.fasterxml.jackson.core:jackson-databind:{$jackson}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:{$jackson}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:{$jackson}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:$jackson"
 
     /**
      * Annotations processors
@@ -39,8 +39,8 @@ dependencies {
      */
     def junit = "5.8.2"
 
-    testCompileOnly "org.junit.jupiter:junit-jupiter-api:${junit}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit}"
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:$junit"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
 
     /**
      * General
