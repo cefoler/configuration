@@ -16,20 +16,36 @@ repositories {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.12.4"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.4"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.12.4"
+    /**
+     * Jackson configuration dependencies
+     */
+    def jackson = "2.13.0"
 
-    implementation "com.google.guava:guava:30.1.1-jre"
+    implementation "com.fasterxml.jackson.core:jackson-databind:{$jackson}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:{$jackson}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:{$jackson}"
 
-    compileOnly "org.projectlombok:lombok:1.18.20"
-    annotationProcessor "org.projectlombok:lombok:1.18.20"
+    /**
+     * Annotations processors
+     */
+    def lombok = "org.projectlombok:lombok:1.18.22"
+    def annotations = "org.jetbrains:annotations:22.0.0"
 
-    compileOnly "org.jetbrains:annotations:22.0.0"
-    annotationProcessor "org.jetbrains:annotations:22.0.0"
+    compileOnly lombok, annotations
+    annotationProcessor lombok, annotations
 
-    testCompileOnly "org.junit.jupiter:junit-jupiter-api:5.7.2"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
+    /**
+     * Testing dependencies
+     */
+    def junit = "5.8.2"
+
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:${junit}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit}"
+
+    /**
+     * General
+     */
+    implementation 'com.google.guava:guava:31.0.1-jre'
 }
 
 tasks.withType(JavaCompile) {
