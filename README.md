@@ -42,4 +42,3 @@ on the configuration file.
 The value is a ReplaceType enum that can use the **GET, SET or ALL** values.
 
 Have more questions? Feel free to create a issue and help us out!
-
