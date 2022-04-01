@@ -37,7 +37,7 @@ if [ "$CODE" -ge 400 ]; then
 fi
 
 FILE="amazon-corretto-$VERSION-x64-linux-jdk.tar.gz"
-DIRECTORY="java/java-$VERSION-amazon-corretto"
+DIRECTORY="$HOME/java/java-$VERSION-amazon-corretto"
 
 echo "Downloading JDK $VERSION..."
 wget "$URL"
