@@ -1,4 +1,5 @@
 before_install:
-  - "./script/setup-jdk.sh 8"
+  - "sdk install java 8.322.06.2-amzn"
+  - "sdk use java 8.322.06.2-amzn"
 install:
   - "./gradlew build :publishToMavenLocal"
