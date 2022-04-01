@@ -31,13 +31,13 @@ done
 URL="https://corretto.aws/downloads/latest/amazon-corretto-$VERSION-x64-linux-jdk.tar.gz"
 CODE=$(curl --write-out %{http_code} --silent --output /dev/null "$URL")
 
-if [ "$CODE" -ne 200 ]; then
-  die "Failed to make the request to $URL"
+if [ "$CODE" -ge 400 ]; then
+  die "Failed to make the request to $URL with code $CODE"
   exit 1
 fi
 
 FILE="amazon-corretto-$VERSION-x64-linux-jdk.tar.gz"
-DIRECTORY="/usr/lib/jvm/java-$VERSION-amazon-corretto"
+DIRECTORY="java/java-$VERSION-amazon-corretto"
 
 echo "Downloading JDK $VERSION..."
 wget "$URL"
@@ -50,8 +50,7 @@ mkdir -p "$DIRECTORY"
 tar -xzf "$FILE" -C "$DIRECTORY" --strip-components=1
 rm -rf "$FILE"
 
-export JAVA_HOME="$DIRECTORY/bin/java"
-export PATH=$PATH:"$DIRECTORY/bin"
+export PATH=$PATH:"$JAVA_HOME/bin"
 
 if [ $? -eq 0 ]; then
   echo "JDK $VERSION installed."
