@@ -1,4 +1,4 @@
 before_install:
-  - "./scripts/setup-jdk.sh 8"
+  - "./script/setup-jdk.sh 8"
 install:
   - "./gradlew build :publishToMavenLocal"
