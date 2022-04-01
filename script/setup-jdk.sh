@@ -37,7 +37,7 @@ if [ "$CODE" -ge 400 ]; then
 fi
 
 FILE="amazon-corretto-$VERSION-x64-linux-jdk.tar.gz"
-DIRECTORY="$HOME/java-$VERSION-amazon-corretto"
+DIRECTORY=".java/distributions/java-$VERSION-amazon-corretto"
 
 echo "Downloading JDK $VERSION..."
 wget "$URL"
@@ -45,12 +45,12 @@ wget "$URL"
 echo "Downloaded JDK $VERSION"
 echo "Extracting JDK $VERSION..."
 
-#mkdir -p "$DIRECTORY"
+mkdir -p "$DIRECTORY" || die "Failed to create directory $DIRECTORY"
 
 tar -xzf "$FILE" -C "$DIRECTORY" --strip-components=1
 rm -rf "$FILE"
 
-export PATH=$PATH:"$JAVA_HOME/bin"
+export PATH=$PATH:"$DIRECTORY/bin"
 
 if [ $? -eq 0 ]; then
   echo "JDK $VERSION installed."
