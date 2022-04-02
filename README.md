@@ -1,7 +1,7 @@
 # Configuration
 
 A Configuration wrapper for **YML**, **JSON** and **Properties**, it uses **Jackson** as it's mainly reader ensuring the
-dependency is light-weight and performatic.
+dependency is light-weight and performance.
 
 **______________________________**
 
