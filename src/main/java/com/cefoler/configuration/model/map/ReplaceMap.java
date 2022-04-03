@@ -4,6 +4,7 @@ import com.cefoler.configuration.model.entity.ReplaceValue;
 import com.cefoler.configuration.model.entity.type.ReplaceType;
 import com.cefoler.configuration.util.Objects;
 import com.google.common.collect.ForwardingMap;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,7 +20,10 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public final class ReplaceMap extends ForwardingMap<String, ReplaceValue> implements Cloneable {
+public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
+    implements Serializable, Cloneable {
+
+  private static final long serialVersionUID = -7576525366887483422L;
 
   private static final int DEFAULT_CAPACITY;
   private static final float DEFAULT_FACTOR;
@@ -31,7 +35,7 @@ public final class ReplaceMap extends ForwardingMap<String, ReplaceValue> implem
 
   private final Map<String, ReplaceValue> map;
 
-  private ReplaceMap(final Map<String, ReplaceValue> map) {
+  protected ReplaceMap(final Map<String, ReplaceValue> map) {
     this.map = map;
   }
 

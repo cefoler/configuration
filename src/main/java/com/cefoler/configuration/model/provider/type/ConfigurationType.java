@@ -1,9 +1,9 @@
 package com.cefoler.configuration.model.provider.type;
 
 import com.cefoler.configuration.model.provider.Configuration;
-import com.cefoler.configuration.model.provider.json.JsonProvider;
-import com.cefoler.configuration.model.provider.properties.PropertiesProvider;
-import com.cefoler.configuration.model.provider.yaml.YamlProvider;
+import com.cefoler.configuration.model.provider.impl.json.JsonProvider;
+import com.cefoler.configuration.model.provider.impl.properties.PropertiesProvider;
+import com.cefoler.configuration.model.provider.impl.yaml.YamlProvider;
 import com.cefoler.configuration.util.Streams;
 import com.google.common.collect.ImmutableList;
 import java.security.InvalidParameterException;

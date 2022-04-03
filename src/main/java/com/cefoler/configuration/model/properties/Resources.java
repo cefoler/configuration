@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 @EqualsAndHashCode(callSuper = true)
 public class Resources extends Properties {
 
-  private static final long serialVersionUID = 4547073374549199573L;
+  private static final long serialVersionUID = -1230180278120635806L;
 
   protected Resources(final Properties properties) {
     super(properties);
