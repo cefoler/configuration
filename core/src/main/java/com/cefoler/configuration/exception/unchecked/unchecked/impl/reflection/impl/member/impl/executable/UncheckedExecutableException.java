@@ -1,7 +1,7 @@
 package com.cefoler.configuration.exception.unchecked.unchecked.impl.reflection.impl.member.impl.executable;
 
-import com.cefoler.configuration.exception.checked.reflection.impl.member.impl.executable.ExecutableException;
 import com.cefoler.configuration.exception.unchecked.unchecked.impl.reflection.impl.member.UncheckedMemberException;
+import com.cefoler.configuration.exception.checked.reflection.impl.member.impl.executable.ExecutableException;
 
 public class UncheckedExecutableException extends UncheckedMemberException {
 

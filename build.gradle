@@ -52,6 +52,11 @@ allprojects {
     }
 
     dependencies {
+        final def jackson = "2.13.0"
+        implementation "com.fasterxml.jackson.core:jackson-databind:$jackson"
+        implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson"
+        implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:$jackson"
+
         implementation "com.google.guava:guava:$guavaVersion"
         implementation "com.google.flogger:flogger:$floggerVersion"
 

@@ -1,11 +1,8 @@
 package com.cefoler.configuration.model.entity;
 
 import com.cefoler.configuration.model.entity.type.ReplaceType;
-import com.cefoler.configuration.model.map.ReplaceMap;
-import com.cefoler.configuration.model.provider.Configuration;
 import java.io.Serializable;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

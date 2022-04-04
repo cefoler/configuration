@@ -1,7 +1,7 @@
 package com.cefoler.configuration.exception.unchecked.unchecked.impl.reflection;
 
-import com.cefoler.configuration.exception.checked.reflection.ReflectionException;
 import com.cefoler.configuration.exception.unchecked.unchecked.UncheckedException;
+import com.cefoler.configuration.exception.checked.reflection.ReflectionException;
 
 public class UncheckedReflectionException extends UncheckedException {
 

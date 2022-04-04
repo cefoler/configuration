@@ -1,6 +1,7 @@
 package com.cefoler.configuration.model.provider;
 
 import com.cefoler.configuration.model.map.ReplaceMap;
+import com.cefoler.configuration.model.provider.exception.checked.impl.FailedLoadException;
 import com.cefoler.configuration.model.provider.type.ConfigurationType;
 import java.io.File;
 import java.io.Serializable;
@@ -10,11 +11,11 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Configuration extends Serializable {
 
-  void load();
+  void load() throws FailedLoadException;
 
   void save();
 
-  void saveAndLoad();
+  void saveAndLoad() throws FailedLoadException;
 
   boolean contains(final String path);
 

@@ -1,9 +1,9 @@
 package com.cefoler.configuration.factory;
 
 import com.cefoler.configuration.model.properties.Resources;
+import com.cefoler.configuration.util.Streams;
 import com.cefoler.configuration.model.provider.Configuration;
 import com.cefoler.configuration.model.provider.type.ConfigurationType;
-import com.cefoler.configuration.util.Streams;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;

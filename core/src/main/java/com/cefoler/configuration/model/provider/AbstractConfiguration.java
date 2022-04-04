@@ -1,11 +1,14 @@
 package com.cefoler.configuration.model.provider;
 
+import com.cefoler.configuration.model.map.ReplaceMap;
 import com.cefoler.configuration.model.provider.exception.checked.impl.FailedCreateException;
 import com.cefoler.configuration.model.provider.exception.checked.impl.FailedLoadException;
-import com.cefoler.configuration.model.map.ReplaceMap;
+import com.cefoler.configuration.model.provider.exception.unchecked.configuration.impl.FailedGetException;
+import com.cefoler.configuration.model.provider.exception.unchecked.configuration.impl.FailedSaveException;
 import com.cefoler.configuration.model.entity.ReplaceValue;
 import com.cefoler.configuration.model.entity.type.ReplaceType;
-import com.cefoler.configuration.model.provider.exception.unchecked.configuration.impl.FailedSaveException;
+import com.cefoler.configuration.util.Objects;
+import com.cefoler.configuration.util.Wrappers;
 import com.fasterxml.jackson.core.TokenStreamFactory;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,7 +72,7 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
   }
 
   @Override
-  public void load() {
+  public void load() throws FailedLoadException {
     try (
         final FileInputStream input = new FileInputStream(file);
         final Reader reader = new InputStreamReader(input, Charset.defaultCharset())
@@ -99,7 +102,7 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
   }
 
   @Override
-  public void saveAndLoad() {
+  public void saveAndLoad() throws FailedLoadException {
     save();
     load();
   }
@@ -142,8 +145,11 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
   public <U> U get(final String path) {
     final Object result = getResult(path);
 
-    return (U) Validation.notNull(result, () -> new FailedGetException("Path " + path
-        + " was not found"));
+    if (result == null) {
+      throw new FailedGetException("Path " + path + " was not found");
+    }
+
+    return Objects.cast(result);
   }
 
   @Override
@@ -334,7 +340,7 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
 
   private <U> U replace(final U object, final ReplaceType type) {
     if (object instanceof String) {
-      String replaced = Wrapper.toString(object);
+      String replaced = Wrappers.toString(object);
 
       for (final Entry<String, ReplaceValue> entry : replace.entrySet(type)) {
         final String key = entry.getKey();
@@ -359,9 +365,9 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
               final String key = entry.getKey();
               final ReplaceValue value = entry.getValue();
 
-              return Wrapper.toString(line).replaceAll("(?i)" + key, value.getValue());
+              return Wrappers.toString(line).replaceAll("(?i)" + key, value.getValue());
             })
-            .collect(CollectorPattern.toList());
+            .collect(Collectors.toList());
       }
 
       return (U) replaced;
@@ -373,7 +379,11 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
   private InputStream getResource(final String resource) {
     final InputStream input = getClass().getClassLoader().getResourceAsStream(resource);
 
-    return Validation.notNull(input, "Resource " + resource + " not found");
+    if (input == null) {
+      throw new NullPointerException("Resource " + resource + " not found");
+    }
+
+    return input;
   }
 
   private File create(final String path, final String resource) throws FailedCreateException {
