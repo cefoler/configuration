@@ -3,9 +3,9 @@ apply plugin: "maven-publish"
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId = groupId
-            artifactId = artifactId
-            version = version
+            groupId = "cefoler"
+            artifactId = "AA"
+            version = "1.0.0"
 
             from components.java
         }
