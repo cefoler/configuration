@@ -1,0 +1,13 @@
+apply plugin: "maven-publish"
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = groupId
+            artifactId = artifactId
+            version = version
+
+            from components.java
+        }
+    }
+}
