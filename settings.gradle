@@ -1,8 +1,9 @@
-rootProject.name = "configuration"
-
 ext {
-    prefix = ":configuration"
+    projectName = "configuration"
+    prefix = ":$projectName"
 }
+
+rootProject.name = projectName
 
 include "$prefix-core"
 include "$prefix-configuration"

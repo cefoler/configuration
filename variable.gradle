@@ -1,0 +1,28 @@
+ext {
+    projectName = project.name
+
+    projectGroup = "com.cefoler.configuration"
+    projectVersion = "1.1.4-SNAPSHOT"
+
+    projectDescription = "A Configuration wrapper for YAML, JSON and Properties."
+
+    projectUrl = "https://github.com/cefoler/configuration"
+    projectGit = "github.com/cefoler/configuration.git"
+
+    javaMain = "src/main/java"
+    javaTest = "src/test/java"
+
+    javaVersion = JavaVersion.VERSION_1_8
+
+    licenseName = "Apache License, Version 2.0"
+    licenseUrl = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+
+    organizationName = "Cefoler Studios"
+    organizationUrl = "https://cefoler.com"
+
+    fileName = "$projectName-$projectVersion"
+    fileComplete = "${fileName}.jar"
+
+    outputPath = "$rootDir/build/$projectName"
+    configPath = "$rootDir/config"
+}

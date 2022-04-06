@@ -1,0 +1,151 @@
+apply plugin: "jacoco"
+apply plugin: "pmd"
+apply plugin: "checkstyle"
+
+ext {
+    junitVersion = "5.8.2"
+
+    junitReport = "$outputPath/reports/junit"
+    junitTemp = "$outputPath/tmp/junit"
+
+    jacocoVersion = "0.8.7"
+    jacocoConfiguration = "$configPath/jacoco"
+
+    jacocoReport = "$outputPath/reports/jacoco"
+    jacocoClass = "$outputPath/classes/jacoco"
+
+    pmdVersion = "6.44.0"
+    pmdConfiguration = "$configPath/pmd"
+
+    pmdReport = "$outputPath/reports/pmd"
+    pmdClass = "$outputPath/classes/pmd"
+
+    checkstyleVersion = "10.1"
+    checkstyleConfiguration = "$configPath/checkstyle"
+
+    checkstyleReport = "$outputPath/reports/checkstyle"
+    checkstyleClass = "$outputPath/classes/checkstyle"
+}
+
+dependencies {
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+tasks.withType(Test) {
+    binaryResultsDirectory = file(junitTemp)
+
+    reports {
+        junitXml.required = true
+        html.required = true
+    }
+}
+
+tasks.withType(Pmd) {
+    classpath = files(pmdClass)
+}
+
+tasks.withType(Checkstyle) {
+    classpath = files(checkstyleClass)
+}
+
+test {
+    minHeapSize = "128M"
+    maxHeapSize = "1G"
+
+    useJUnitPlatform {
+        excludeTags "transient", "exclude"
+    }
+
+    reports {
+        junitXml.outputLocation = file("$junitReport/xml")
+        html.outputLocation = file("$junitReport/html")
+    }
+
+    jacoco {
+        destinationFile = file("$jacocoConfiguration/jacoco.exec")
+        classDumpDir = file(jacocoClass)
+    }
+
+    ignoreFailures = true
+
+    finalizedBy "jacocoTestReport", "pmdMain", "pmdTest", "checkstyleMain", "checkstyleTest"
+}
+
+jacoco {
+    toolVersion = jacocoVersion
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+
+        xml.outputLocation = file("$jacocoReport/xml/index.xml")
+        html.outputLocation = file("$jacocoReport/html")
+    }
+}
+
+pmd {
+    toolVersion = pmdVersion
+    consoleOutput = false
+
+    ruleSetFiles = files("$pmdConfiguration/rules.xml")
+    ignoreFailures = true
+}
+
+pmdMain {
+    source = javaMain
+
+    reports {
+        xml.required = true
+        html.required = true
+
+        xml.outputLocation = file("$pmdReport/main/xml/index.xml")
+        html.outputLocation = file("$pmdReport/main/html/index.html")
+    }
+}
+
+pmdTest {
+    source = javaTest
+
+    reports {
+        xml.required = true
+        html.required = true
+
+        xml.outputLocation = file("$pmdReport/test/xml/index.xml")
+        html.outputLocation = file("$pmdReport/test/html/index.html")
+    }
+}
+
+checkstyle {
+    toolVersion = checkstyleVersion
+    showViolations = false
+
+    configFile = file("$checkstyleConfiguration/style.xml")
+    ignoreFailures = true
+}
+
+checkstyleMain {
+    source = javaMain
+
+    reports {
+        xml.required = true
+        html.required = true
+
+        xml.outputLocation = file("$checkstyleReport/main/xml/index.xml")
+        html.outputLocation = file("$checkstyleReport/main/html/index.html")
+    }
+}
+
+checkstyleTest {
+    source = javaTest
+
+    reports {
+        xml.required = true
+        html.required = true
+
+        xml.outputLocation = file("$checkstyleReport/test/xml/index.xml")
+        html.outputLocation = file("$checkstyleReport/test/html/index.html")
+    }
+}

@@ -3,6 +3,7 @@ package com.cefoler.configuration.model.provider.type;
 import com.cefoler.configuration.model.provider.Configuration;
 import com.cefoler.configuration.model.provider.impl.json.JsonProvider;
 import com.cefoler.configuration.model.provider.impl.properties.PropertiesProvider;
+import com.cefoler.configuration.model.provider.impl.toml.TomlProvider;
 import com.cefoler.configuration.model.provider.impl.yaml.YamlProvider;
 import com.cefoler.configuration.util.Streams;
 import com.google.common.collect.ImmutableList;
@@ -24,6 +25,12 @@ public enum ConfigurationType {
     }
   },
   YAML(YamlProvider.class, "YAML", "YML") {
+    @Override
+    public Configuration create(final String path, final String resource, final boolean replace) {
+      return new YamlProvider(path, resource, replace);
+    }
+  },
+  TOML(TomlProvider.class, "TOML", "TML") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace) {
       return new YamlProvider(path, resource, replace);
