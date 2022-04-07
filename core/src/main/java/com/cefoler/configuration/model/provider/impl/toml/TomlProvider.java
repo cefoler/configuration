@@ -1,34 +1,35 @@
 package com.cefoler.configuration.model.provider.impl.toml;
 
 import com.cefoler.configuration.model.provider.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.properties.PropertiesProvider;
 import com.cefoler.configuration.model.provider.type.ConfigurationType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.javaprop.JavaPropsFactory;
 import com.fasterxml.jackson.dataformat.toml.TomlFactory;
+import com.fasterxml.jackson.dataformat.toml.TomlMapper;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public final class TomlProvider extends AbstractConfiguration<TomlFactory> {
+public final class TomlProvider extends AbstractConfiguration {
 
-  private static final long serialVersionUID = 2073194103307257834L;
+  private static final long serialVersionUID = 5852130573390919172L;
 
   private static final TomlFactory TOML_FACTORY;
-  private static final ObjectMapper OBJECT_MAPPER;
+  private static final TomlMapper TOML_MAPPER;
 
   static {
     TOML_FACTORY = new TomlFactory();
-    OBJECT_MAPPER = new ObjectMapper(TOML_FACTORY);
+    TOML_MAPPER = new TomlMapper(TOML_FACTORY);
   }
 
-  public TomlProvider(final String path, final String resource, final boolean replace) {
+  private TomlProvider(final String path, final String resource, final boolean replace) {
     super(path, resource, replace);
   }
 
   @Override
   public ConfigurationType getType() {
-    return ConfigurationType.PROPERTIES;
+    return ConfigurationType.TOML;
   }
 
   @Override
@@ -37,8 +38,16 @@ public final class TomlProvider extends AbstractConfiguration<TomlFactory> {
   }
 
   @Override
-  protected ObjectMapper getMapper() {
-    return OBJECT_MAPPER;
+  protected TomlMapper getMapper() {
+    return TOML_MAPPER;
+  }
+
+  public static TomlProvider of(final String path, final String resource) {
+    return of(path, resource, false);
+  }
+
+  public static TomlProvider of(final String path, final String resource, final boolean replace) {
+    return new TomlProvider(path, resource, replace);
   }
 
 }

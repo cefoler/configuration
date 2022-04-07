@@ -8,6 +8,8 @@ ext {
     junitReport = "$outputPath/reports/junit"
     junitTemp = "$outputPath/tmp/junit"
 
+    mockitoVersion = "4.4.0"
+
     jacocoVersion = "0.8.7"
     jacocoConfiguration = "$configPath/jacoco"
 
@@ -30,6 +32,9 @@ ext {
 dependencies {
     testCompileOnly "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+
+    testCompileOnly "org.mockito:mockito-core:$mockitoVersion"
+    testRuntimeOnly "org.mockito:mockito-core:$mockitoVersion"
 }
 
 tasks.withType(Test) {

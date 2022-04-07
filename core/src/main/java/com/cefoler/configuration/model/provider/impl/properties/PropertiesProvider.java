@@ -2,26 +2,26 @@ package com.cefoler.configuration.model.provider.impl.properties;
 
 import com.cefoler.configuration.model.provider.AbstractConfiguration;
 import com.cefoler.configuration.model.provider.type.ConfigurationType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsFactory;
+import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFactory> {
+public final class PropertiesProvider extends AbstractConfiguration {
 
-  private static final long serialVersionUID = 2073194103307257834L;
+  private static final long serialVersionUID = 7324002951235339179L;
 
   private static final JavaPropsFactory PROPERTIES_FACTORY;
-  private static final ObjectMapper OBJECT_MAPPER;
+  private static final JavaPropsMapper PROPERTIES_MAPPER;
 
   static {
     PROPERTIES_FACTORY = new JavaPropsFactory();
-    OBJECT_MAPPER = new ObjectMapper(PROPERTIES_FACTORY);
+    PROPERTIES_MAPPER = new JavaPropsMapper(PROPERTIES_FACTORY);
   }
 
-  public PropertiesProvider(final String path, final String resource, final boolean replace) {
+  private PropertiesProvider(final String path, final String resource, final boolean replace) {
     super(path, resource, replace);
   }
 
@@ -36,8 +36,17 @@ public final class PropertiesProvider extends AbstractConfiguration<JavaPropsFac
   }
 
   @Override
-  protected ObjectMapper getMapper() {
-    return OBJECT_MAPPER;
+  protected JavaPropsMapper getMapper() {
+    return PROPERTIES_MAPPER;
+  }
+
+  public static PropertiesProvider of(final String path, final String resource) {
+    return of(path, resource, false);
+  }
+
+  public static PropertiesProvider of(final String path, final String resource,
+      final boolean replace) {
+    return new PropertiesProvider(path, resource, replace);
   }
 
 }

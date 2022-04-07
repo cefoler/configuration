@@ -21,25 +21,25 @@ public enum ConfigurationType {
   JSON(JsonProvider.class, "JSON") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace) {
-      return new JsonProvider(path, resource, replace);
+      return JsonProvider.of(path, resource, replace);
     }
   },
   YAML(YamlProvider.class, "YAML", "YML") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace) {
-      return new YamlProvider(path, resource, replace);
+      return YamlProvider.of(path, resource, replace);
     }
   },
   TOML(TomlProvider.class, "TOML", "TML") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace) {
-      return new YamlProvider(path, resource, replace);
+      return TomlProvider.of(path, resource, replace);
     }
   },
   PROPERTIES(PropertiesProvider.class, "PROPERTIES") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace) {
-      return new PropertiesProvider(path, resource, replace);
+      return PropertiesProvider.of(path, resource, replace);
     }
   };
 
@@ -53,6 +53,10 @@ public enum ConfigurationType {
 
   public abstract Configuration create(final String path, final String resource,
       final boolean replace);
+
+  public Configuration create(final String path, final String resource) {
+    return create(path, resource, false);
+  }
 
   public static ConfigurationType getConfiguration(final String driver) {
     final ConfigurationType[] values = values();

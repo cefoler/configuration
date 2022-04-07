@@ -1,5 +1,6 @@
 package com.cefoler.configuration.model.provider;
 
+import com.cefoler.configuration.model.lambda.supplier.ThrowSupplier;
 import com.cefoler.configuration.model.map.ReplaceMap;
 import com.cefoler.configuration.model.provider.exception.checked.impl.FailedCreateException;
 import com.cefoler.configuration.model.provider.exception.checked.impl.FailedLoadException;
@@ -8,21 +9,27 @@ import com.cefoler.configuration.model.provider.exception.unchecked.configuratio
 import com.cefoler.configuration.model.entity.ReplaceValue;
 import com.cefoler.configuration.model.entity.type.ReplaceType;
 import com.cefoler.configuration.util.Objects;
-import com.cefoler.configuration.util.Wrappers;
-import com.fasterxml.jackson.core.TokenStreamFactory;
+import com.cefoler.configuration.util.Reflection;
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,6 +37,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,11 +50,11 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @ToString
 @EqualsAndHashCode
-public abstract class AbstractConfiguration<T extends TokenStreamFactory> implements Configuration {
+public abstract class AbstractConfiguration implements Configuration {
 
   private static final long serialVersionUID = 7338146955033356675L;
 
-  protected final T factory;
+  protected final JsonFactory factory;
   protected final ObjectMapper mapper;
 
   protected final File file;
@@ -63,7 +73,7 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
     if (!file.exists() || replace) {
       try (final InputStream input = getResource(resource)) {
         copy(input, file);
-      } catch (Exception exception) {
+      } catch (final Exception exception) {
         throw new FailedLoadException("Some unexpected error has occurred: ", exception);
       }
     }
@@ -335,49 +345,61 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
       result = ((Map<?, ?>) result).get(key);
     }
 
-    return replace(result, ReplaceType.GET);
+    final ReplaceType type = ReplaceType.GET;
+    return replace(result, type);
   }
 
-  private <U> U replace(final U object, final ReplaceType type) {
-    if (object instanceof String) {
-      String replaced = Wrappers.toString(object);
+  @SneakyThrows
+  private <U> U replace(final U result, final ReplaceType type) {
+    if (result instanceof CharSequence) {
+      CharSequence converted = Objects.cast(result);
 
       for (final Entry<String, ReplaceValue> entry : replace.entrySet(type)) {
         final String key = entry.getKey();
         final ReplaceValue value = entry.getValue();
 
-        replaced = replaced.replaceAll("(?i)" + key, value.getValue());
+        final String replacer = value.getValue();
+        final String pattern = "(?i)" + key;
+
+        final Pattern regex = Pattern.compile(pattern);
+        final Matcher matcher = regex.matcher(converted);
+
+        converted = matcher.replaceAll(replacer);
       }
 
-      return (U) replaced;
+      return Objects.cast(converted);
     }
 
-    if (object instanceof List) {
-      List<?> replaced = (List<?>) object;
+    if (result instanceof Collection) {
+      final Collection<?> converted = Objects.cast(result);
 
-      if (replaced.size() == 0 || !(replaced.get(0) instanceof String)) {
-        return object;
+      if (converted.isEmpty()) {
+        return result;
       }
 
-      for (final Entry<String, ReplaceValue> entry : replace.entrySet(type)) {
-        replaced = replaced.stream()
-            .map(line -> {
-              final String key = entry.getKey();
-              final ReplaceValue value = entry.getValue();
+      collection(converted, candidate -> replace(candidate, type));
 
-              return Wrappers.toString(line).replaceAll("(?i)" + key, value.getValue());
-            })
-            .collect(Collectors.toList());
-      }
+      final Collection<?> collection = converted.stream()
+          .map(candidate -> replace(candidate, type))
+          .collect(Collectors.toCollection(ThrowSupplier.convert(() ->
+              Reflection.instance(result), new ArrayList<>(0))));
 
-      return (U) replaced;
+      return Objects.cast(collection);
     }
 
-    return object;
+    return result;
+  }
+
+  private <U extends Collection<?>> U collection(final U collection,
+      final Function<?, ?> function) {
+    return null;
   }
 
   private InputStream getResource(final String resource) {
-    final InputStream input = getClass().getClassLoader().getResourceAsStream(resource);
+    final Class<? extends AbstractConfiguration> clazz = getClass();
+
+    final ClassLoader loader = clazz.getClassLoader();
+    final InputStream input = loader.getResourceAsStream(resource);
 
     if (input == null) {
       throw new NullPointerException("Resource " + resource + " not found");
@@ -387,8 +409,8 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
   }
 
   private File create(final String path, final String resource) throws FailedCreateException {
-    final int lastIndex = resource.lastIndexOf("/");
-    final String directory = resource.contains("/") ? resource.substring(0, lastIndex) : "";
+    final int index = resource.lastIndexOf('/');
+    final String directory = resource.contains("/") ? resource.substring(0, index) : "";
 
     final File folder = new File(path, directory);
 
@@ -399,20 +421,22 @@ public abstract class AbstractConfiguration<T extends TokenStreamFactory> implem
     return new File(path, resource);
   }
 
-  private void copy(final InputStream input, final File output) throws FailedCreateException {
+  @SneakyThrows(UnsupportedEncodingException.class)
+  private void copy(final InputStream input, final File output) throws FileNotFoundException {
+    final String charset = "UTF-8";
+
     try (
-        final Scanner scanner = new Scanner(input);
-        final PrintStream print = new PrintStream(output)
+        final Scanner scanner = new Scanner(input, charset);
+        final PrintStream print = new PrintStream(output, charset)
     ) {
       while (scanner.hasNext()) {
-        print.println(scanner.nextLine());
+        final String line = scanner.nextLine();
+        print.println(line);
       }
-    } catch (Exception exception) {
-      throw new FailedCreateException(exception);
     }
   }
 
-  protected abstract T getFactory();
+  protected abstract JsonFactory getFactory();
 
   protected abstract ObjectMapper getMapper();
 
