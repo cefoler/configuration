@@ -6,13 +6,13 @@ import java.util.function.UnaryOperator;
 import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
-public interface ThrowingUnaryOperator<T, U extends Exception> extends ThrowFunction<T, T, U> {
+public interface ThrowUnaryOperator<T, U extends Exception> extends ThrowFunction<T, T, U> {
 
   static <T> UnaryOperator<T> identity() {
     return key -> key;
   }
 
-  static <T> UnaryOperator<T> convert(final ThrowingUnaryOperator<T, ?> operator) {
+  static <T> UnaryOperator<T> convert(final ThrowUnaryOperator<T, ?> operator) {
     return key -> {
       try {
         return operator.apply(key);
@@ -22,7 +22,7 @@ public interface ThrowingUnaryOperator<T, U extends Exception> extends ThrowFunc
     };
   }
 
-  static <T> UnaryOperator<T> convert(final ThrowingUnaryOperator<T, ?> operator,
+  static <T> UnaryOperator<T> convert(final ThrowUnaryOperator<T, ?> operator,
       @Nullable final T orElse) {
     return key -> {
       try {
