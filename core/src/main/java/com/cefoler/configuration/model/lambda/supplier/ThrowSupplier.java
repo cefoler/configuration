@@ -30,4 +30,15 @@ public interface ThrowSupplier<T, U extends Exception> {
     };
   }
 
+  static <T> Supplier<T> convert(final ThrowSupplier<? extends T, ?> supplier,
+      final Supplier<? extends T> orElse) {
+    return () -> {
+      try {
+        return supplier.get();
+      } catch (final Exception exception) {
+        return orElse.get();
+      }
+    };
+  }
+
 }

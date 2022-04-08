@@ -2,6 +2,7 @@ package com.cefoler.configuration.model.lambda.function;
 
 import com.cefoler.configuration.exception.unchecked.unchecked.UncheckedException;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
@@ -42,6 +43,17 @@ public interface ThrowFunction<T, U, V extends Exception> {
         return function.apply(key);
       } catch (final Exception exception) {
         return orElse;
+      }
+    };
+  }
+
+  static <T, U> Function<T, U> convert(final ThrowFunction<? super T, ? extends U, ?> function,
+      final Supplier<? extends U> orElse) {
+    return key -> {
+      try {
+        return function.apply(key);
+      } catch (final Exception exception) {
+        return orElse.get();
       }
     };
   }

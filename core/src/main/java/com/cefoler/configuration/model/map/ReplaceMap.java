@@ -33,14 +33,14 @@ public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
     DEFAULT_FACTOR = 0.75F;
   }
 
-  private final Map<String, ReplaceValue> map;
+  private final Map<String, ReplaceValue> values;
 
-  protected ReplaceMap(final Map<String, ReplaceValue> map) {
-    this.map = map;
+  protected ReplaceMap(final Map<String, ReplaceValue> values) {
+    this.values = values;
   }
 
-  public void putAllIfAbsent(final Map<String, ReplaceValue> values) {
-    values.forEach(map::putIfAbsent);
+  public void putAllIfAbsent(final Map<String, ReplaceValue> newValues) {
+    newValues.forEach(values::putIfAbsent);
   }
 
   public Set<Entry<String, ReplaceValue>> entrySet(final ReplaceType type) {
@@ -52,8 +52,7 @@ public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
           final ReplaceType candidate = value.getType();
 
           return type == candidate || candidate == ReplaceType.ALL;
-        })
-        .collect(Collectors.toSet());
+        }).collect(Collectors.toSet());
   }
 
   public Set<String> keySet(final ReplaceType type) {
@@ -75,7 +74,7 @@ public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
   @Override
   @NotNull
   protected Map<String, ReplaceValue> delegate() {
-    return map;
+    return values;
   }
 
   @Override
@@ -94,13 +93,13 @@ public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
   }
 
   public static ReplaceMap create(final int capacity, final float factor) {
-    final Map<String, ReplaceValue> map = new LinkedHashMap<>(capacity, factor);
-    return of(map);
+    final Map<String, ReplaceValue> values = new LinkedHashMap<>(capacity, factor);
+    return of(values);
   }
 
-  public static ReplaceMap create(final Supplier<Map<String, ReplaceValue>> supplier) {
-    final Map<String, ReplaceValue> map = supplier.get();
-    return of(map);
+  public static ReplaceMap create(final Supplier<? extends Map<String, ReplaceValue>> supplier) {
+    final Map<String, ReplaceValue> values = supplier.get();
+    return of(values);
   }
 
   public static ReplaceMap of(final Map<String, ReplaceValue> values) {

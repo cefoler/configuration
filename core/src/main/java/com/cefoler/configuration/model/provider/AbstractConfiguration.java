@@ -1,22 +1,25 @@
 package com.cefoler.configuration.model.provider;
 
+import com.cefoler.configuration.model.entity.ReplaceValue;
+import com.cefoler.configuration.model.entity.type.ReplaceType;
 import com.cefoler.configuration.model.lambda.supplier.ThrowSupplier;
 import com.cefoler.configuration.model.map.ReplaceMap;
 import com.cefoler.configuration.model.provider.exception.checked.impl.FailedCreateException;
 import com.cefoler.configuration.model.provider.exception.checked.impl.FailedLoadException;
 import com.cefoler.configuration.model.provider.exception.unchecked.configuration.impl.FailedGetException;
 import com.cefoler.configuration.model.provider.exception.unchecked.configuration.impl.FailedSaveException;
-import com.cefoler.configuration.model.entity.ReplaceValue;
-import com.cefoler.configuration.model.entity.type.ReplaceType;
 import com.cefoler.configuration.util.Objects;
 import com.cefoler.configuration.util.Reflection;
+import com.cefoler.configuration.util.Streams;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -24,20 +27,17 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -45,6 +45,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
@@ -54,26 +55,20 @@ public abstract class AbstractConfiguration implements Configuration {
 
   private static final long serialVersionUID = 7338146955033356675L;
 
-  protected final JsonFactory factory;
-  protected final ObjectMapper mapper;
-
   protected final File file;
   protected final ReplaceMap replace;
 
-  protected LinkedHashMap<?, ?> configuration;
+  protected Map<?, ?> configuration;
 
   @SneakyThrows
   protected AbstractConfiguration(final String path, final String resource, final boolean replace) {
-    this.factory = getFactory();
-    this.mapper = getMapper();
-
     this.file = create(path, resource);
     this.replace = ReplaceMap.create();
 
     if (!file.exists() || replace) {
       try (final InputStream input = getResource(resource)) {
         copy(input, file);
-      } catch (final Exception exception) {
+      } catch (final IOException exception) {
         throw new FailedLoadException("Some unexpected error has occurred: ", exception);
       }
     }
@@ -83,30 +78,41 @@ public abstract class AbstractConfiguration implements Configuration {
 
   @Override
   public void load() throws FailedLoadException {
+    final Charset charset = StandardCharsets.UTF_8;
+
     try (
         final FileInputStream input = new FileInputStream(file);
-        final Reader reader = new InputStreamReader(input, Charset.defaultCharset())
+        final Reader reader = new InputStreamReader(input, charset)
     ) {
-      if (file.length() == 0) {
-        this.configuration = new LinkedHashMap<>();
+      final long length = file.length();
+
+      if (length == 0) {
+        this.configuration = new LinkedHashMap<>(0);
         return;
       }
 
+      final ObjectMapper mapper = getMapper();
       this.configuration = mapper.readValue(reader, LinkedHashMap.class);
-    } catch (Exception exception) {
+    } catch (final IOException exception) {
       throw new FailedLoadException(exception);
     }
   }
 
   @Override
   public void save() {
+    final Charset charset = StandardCharsets.UTF_8;
+
     try (
         final FileOutputStream output = new FileOutputStream(file);
-        final Writer writer = new OutputStreamWriter(output, Charset.defaultCharset())
+        final Writer writer = new OutputStreamWriter(output, charset)
     ) {
+      final ObjectMapper mapper = getMapper();
+
       final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
-      mapper.writer(printer).writeValue(writer, configuration);
-    } catch (Exception exception) {
+      final ObjectWriter object = mapper.writer(printer);
+
+      object.writeValue(writer, configuration);
+    } catch (final IOException exception) {
       throw new FailedSaveException(exception);
     }
   }
@@ -119,35 +125,38 @@ public abstract class AbstractConfiguration implements Configuration {
 
   @Override
   public boolean contains(final String path) {
-    return getResult(path) != null;
+    final Object result = getResult(path);
+    return result != null;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void set(final String path, @Nullable final Object value) {
     final String[] split = path.split("\\.");
-    final String lastPath = split[split.length - 1];
+    final int length = split.length;
 
-    Map<Object, Object> result = (Map<Object, Object>) configuration;
+    final int index = length - 1;
+    final String last = split[index];
 
-    for (final String key : split) {
+    Map<Object, Object> result = Objects.cast(configuration);
+
+    for (@NonNls final String key : split) {
       if (!result.containsKey(key)) {
-        final Map<?, ?> newPath = new LinkedHashMap<>();
-        result.put(key, newPath);
+        final Map<?, ?> values = new LinkedHashMap<>(1);
+        result.put(key, values);
       }
 
-      if (key.equals(lastPath)) {
+      if (key.equals(last)) {
         if (value == null) {
-          result.remove(lastPath);
+          result.remove(last);
           return;
         }
 
-        final Object replaced = replace(value, ReplaceType.SET);
-        result.put(lastPath, replaced);
+        result.put(last, value);
         return;
       }
 
-      result = (Map<Object, Object>) result.get(key);
+      final Object sub = result.get(key);
+      result = Objects.cast(sub);
     }
   }
 
@@ -165,7 +174,13 @@ public abstract class AbstractConfiguration implements Configuration {
   @Override
   public <U> U get(final String path, @Nullable final U orElse) {
     final Object result = getResult(path);
-    return result == null ? orElse : (U) result;
+    return result != null ? Objects.cast(result) : orElse;
+  }
+
+  @Override
+  public <U> U get(final String path, final Supplier<? extends U> orElse) {
+    final Object result = getResult(path);
+    return result != null ? Objects.cast(result) : orElse.get();
   }
 
   @Override
@@ -189,43 +204,87 @@ public abstract class AbstractConfiguration implements Configuration {
   }
 
   @Override
-  public int getInt(final String path) {
+  public Number getNumber(final String path) {
     return get(path);
   }
 
   @Override
-  public int getInt(final String path, @Nullable final Integer orElse) {
+  public Number getNumber(final String path, @Nullable final Number orElse) {
     return get(path, orElse);
   }
 
   @Override
+  public byte getByte(final String path) {
+    final Number number = getNumber(path);
+    return number.byteValue();
+  }
+
+  @Override
+  public byte getByte(final String path, @Nullable final Byte orElse) {
+    final Number number = getNumber(path, orElse);
+    return number.byteValue();
+  }
+
+  @Override
+  public short getShort(final String path) {
+    final Number number = getNumber(path);
+    return number.shortValue();
+  }
+
+  @Override
+  public short getShort(final String path, @Nullable final Short orElse) {
+    final Number number = getNumber(path, orElse);
+    return number.shortValue();
+  }
+
+  @Override
+  public int getInt(final String path) {
+    final Number number = getNumber(path);
+    return number.intValue();
+  }
+
+  @Override
+  public int getInt(final String path, @Nullable final Integer orElse) {
+    final Number number = getNumber(path, orElse);
+    return number.intValue();
+  }
+
+  @Override
   public long getLong(final String path) {
-    final Number number = get(path);
+    final Number number = getNumber(path);
     return number.longValue();
   }
 
   @Override
   public long getLong(final String path, @Nullable final Long orElse) {
-    final Number number = get(path, orElse);
+    final Number number = getNumber(path, orElse);
     return number.longValue();
   }
 
   @Override
+  public float getFloat(final String path) {
+    final Number number = getNumber(path);
+    return number.floatValue();
+  }
+
+  @Override
+  public float getFloat(final String path, @Nullable final Float orElse) {
+    final Number number = getNumber(path, orElse);
+    return number.floatValue();
+  }
+
+  @Override
   public double getDouble(final String path) {
-    return get(path);
+    final Number number = getNumber(path);
+    return number.doubleValue();
   }
 
   @Override
   public double getDouble(final String path, @Nullable final Double orElse) {
-    return get(path, orElse);
+    final Number number = getNumber(path, orElse);
+    return number.doubleValue();
   }
 
-  /**
-   * Gets boolean from path.
-   *
-   * @param path String
-   * @return boolean
-   */
   @Override
   public boolean getBoolean(final String path) {
     return get(path);
@@ -238,7 +297,7 @@ public abstract class AbstractConfiguration implements Configuration {
 
   @Override
   public List<?> getList(final String path) {
-    return get(path);
+    return get(path, ArrayList::new);
   }
 
   @Override
@@ -248,79 +307,186 @@ public abstract class AbstractConfiguration implements Configuration {
 
   @Override
   public List<String> getStringList(final String path) {
-    return get(path, new ArrayList<>());
+    return get(path, ArrayList::new);
   }
 
   @Override
-  public List<String> getStringList(final String path, final @Nullable List<String> orElse) {
-    return null;
+  public List<String> getStringList(final String path, @Nullable final List<String> orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
+  public List<? extends Number> getNumberList(final String path) {
+    return get(path, ArrayList::new);
+  }
+
+  @Override
+  public List<? extends Number> getNumberList(final String path,
+      @Nullable final List<? extends Number> orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
+  public List<Byte> getByteList(final String path) {
+    final List<? extends Number> numbers = getNumberList(path);
+
+    return numbers.stream()
+        .map(Number::byteValue)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Byte> getByteList(final String path, @Nullable final List<Byte> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::byteValue)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Short> getShortList(final String path) {
+    final List<? extends Number> numbers = getNumberList(path);
+
+    return numbers.stream()
+        .map(Number::shortValue)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Short> getShortList(final String path, @Nullable final List<Short> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::shortValue)
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<Integer> getIntegerList(final String path) {
-    return get(path, new ArrayList<>());
+    final List<? extends Number> numbers = getNumberList(path);
+
+    return numbers.stream()
+        .map(Number::intValue)
+        .collect(Collectors.toList());
   }
 
   @Override
-  public List<Integer> getIntegerList(final String path, final @Nullable List<Integer> orElse) {
-    return null;
+  public List<Integer> getIntegerList(final String path, @Nullable final List<Integer> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::intValue)
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<Long> getLongList(final String path) {
-    return get(path, new ArrayList<>());
+    final List<? extends Number> numbers = getNumberList(path);
+
+    return numbers.stream()
+        .map(Number::longValue)
+        .collect(Collectors.toList());
   }
 
   @Override
-  public List<Long> getLongList(final String path, final @Nullable List<Long> orElse) {
-    return null;
+  public List<Long> getLongList(final String path, @Nullable final List<Long> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::longValue)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Float> getFloatList(final String path) {
+    final List<? extends Number> numbers = getNumberList(path);
+
+    return numbers.stream()
+        .map(Number::floatValue)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Float> getFloatList(final String path, @Nullable final List<Float> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::floatValue)
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<Double> getDoubleList(final String path) {
-    return get(path, new ArrayList<>());
+    final List<? extends Number> numbers = getNumberList(path);
+
+    return numbers.stream()
+        .map(Number::doubleValue)
+        .collect(Collectors.toList());
   }
 
   @Override
-  public List<Double> getDoubleList(final String path, final @Nullable List<Double> orElse) {
-    return null;
+  public List<Double> getDoubleList(final String path, @Nullable final List<Double> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::doubleValue)
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<Boolean> getBooleanList(final String path) {
-    return get(path, new ArrayList<>());
+    return get(path, ArrayList::new);
   }
 
   @Override
-  public List<Boolean> getBooleanList(final String path, final @Nullable List<Boolean> orElse) {
-    return null;
+  public List<Boolean> getBooleanList(final String path, @Nullable final List<Boolean> orElse) {
+    return get(path, orElse);
   }
 
   @Override
   public Set<String> getKeys() {
-    return null;
+    final Set<?> keys = configuration.keySet();
+
+    return keys.stream()
+        .map(Object::toString)
+        .collect(Collectors.toSet());
   }
 
   @Override
   public Set<String> getKeys(final String path) {
-    Object result = configuration.clone();
+    Object result = configuration;
 
-    if (!path.equals("")) {
-      for (final String key : path.split("\\.")) {
-        if (!(result instanceof Map)) {
-          throw new FailedGetException("Path " + path + " was not found");
-        }
-
-        result = ((Map<?, ?>) result).get(key);
+    for (final String key : path.split("\\.")) {
+      if (!(result instanceof Map)) {
+        throw new FailedGetException("Path " + path + " was not found");
       }
-    }
 
-    if (result instanceof List) {
-      return new LinkedHashSet<>();
+      final Map<?, ?> converted = Objects.cast(result);
+      result = converted.get(key);
     }
 
     if (result instanceof Map) {
-      return ((Map<?, ?>) result).keySet().stream()
+      final Map<?, ?> converted = Objects.cast(result);
+      final Set<?> keys = converted.keySet();
+
+      return keys.stream()
+          .map(Object::toString)
+          .collect(Collectors.toSet());
+    }
+
+    if (result instanceof Collection) {
+      final Collection<?> converted = Objects.cast(result);
+
+      return converted.stream()
+          .map(Object::toString)
+          .collect(Collectors.toSet());
+    }
+
+    if (result instanceof Object[]) {
+      final Object[] converted = Objects.cast(result);
+
+      return Streams.toStream(converted)
           .map(Object::toString)
           .collect(Collectors.toSet());
     }
@@ -335,21 +501,21 @@ public abstract class AbstractConfiguration implements Configuration {
 
   @Nullable
   private Object getResult(final String path) {
-    Object result = configuration.clone();
+    Object result = configuration;
 
     for (final String key : path.split("\\.")) {
       if (!(result instanceof Map)) {
         return null;
       }
 
-      result = ((Map<?, ?>) result).get(key);
+      final Map<?, ?> converted = Objects.cast(result);
+      result = converted.get(key);
     }
 
     final ReplaceType type = ReplaceType.GET;
     return replace(result, type);
   }
 
-  @SneakyThrows
   private <U> U replace(final U result, final ReplaceType type) {
     if (result instanceof CharSequence) {
       CharSequence converted = Objects.cast(result);
@@ -377,26 +543,34 @@ public abstract class AbstractConfiguration implements Configuration {
         return result;
       }
 
-      collection(converted, candidate -> replace(candidate, type));
-
       final Collection<?> collection = converted.stream()
           .map(candidate -> replace(candidate, type))
           .collect(Collectors.toCollection(ThrowSupplier.convert(() ->
-              Reflection.instance(result), new ArrayList<>(0))));
+              Reflection.instance(result), ArrayList::new)));
 
       return Objects.cast(collection);
+    }
+
+    if (result instanceof Object[]) {
+      final Object[] converted = Objects.cast(result);
+      final int length = converted.length;
+
+      if (length == 0) {
+        return result;
+      }
+
+      final Object[] array = Streams.toStream(converted)
+          .map(candidate -> replace(candidate, type))
+          .toArray();
+
+      return Objects.cast(array);
     }
 
     return result;
   }
 
-  private <U extends Collection<?>> U collection(final U collection,
-      final Function<?, ?> function) {
-    return null;
-  }
-
   private InputStream getResource(final String resource) {
-    final Class<? extends AbstractConfiguration> clazz = getClass();
+    final Class<?> clazz = getClass();
 
     final ClassLoader loader = clazz.getClassLoader();
     final InputStream input = loader.getResourceAsStream(resource);

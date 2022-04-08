@@ -4,6 +4,7 @@ import com.cefoler.configuration.exception.unchecked.unchecked.UncheckedExceptio
 import com.cefoler.configuration.model.lambda.function.ThrowBiFunction;
 import java.util.Comparator;
 import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
@@ -34,6 +35,17 @@ public interface ThrowBinaryOperator<T, U extends Exception> extends ThrowBiFunc
         return operator.apply(key1, key2);
       } catch (final Exception exception) {
         return orElse;
+      }
+    };
+  }
+
+  static <T> BinaryOperator<T> convert(final ThrowBinaryOperator<T, ?> operator,
+      final Supplier<? extends T> orElse) {
+    return (key1, key2) -> {
+      try {
+        return operator.apply(key1, key2);
+      } catch (final Exception exception) {
+        return orElse.get();
       }
     };
   }

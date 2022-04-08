@@ -2,6 +2,7 @@ package com.cefoler.configuration.model.lambda.function;
 
 import com.cefoler.configuration.exception.unchecked.unchecked.UncheckedException;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
@@ -35,6 +36,17 @@ public interface ThrowBiFunction<T, U, V, W extends Exception> {
         return function.apply(key1, key2);
       } catch (final Exception exception) {
         return orElse;
+      }
+    };
+  }
+
+  static <T, U, V> BiFunction<T, U, V> convert(final ThrowBiFunction<? super T, ? super U,
+      ? extends V, ?> function, final Supplier<? extends V> orElse) {
+    return (key1, key2) -> {
+      try {
+        return function.apply(key1, key2);
+      } catch (final Exception exception) {
+        return orElse.get();
       }
     };
   }
