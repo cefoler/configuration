@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
     implements Serializable, Cloneable {
 
-  private static final long serialVersionUID = -7576525366887483422L;
+  private static final long serialVersionUID = -6777936175157633076L;
 
   private static final int DEFAULT_CAPACITY;
   private static final float DEFAULT_FACTOR;
@@ -37,10 +37,6 @@ public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
 
   protected ReplaceMap(final Map<String, ReplaceValue> values) {
     this.values = values;
-  }
-
-  public void putAllIfAbsent(final Map<String, ReplaceValue> newValues) {
-    newValues.forEach(values::putIfAbsent);
   }
 
   public Set<Entry<String, ReplaceValue>> entrySet(final ReplaceType type) {

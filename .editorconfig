@@ -3,7 +3,7 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
-indent_size = 2
+indent_size = 4
 indent_style = space
 insert_final_newline = false
 max_line_length = 100
@@ -45,7 +45,6 @@ ij_continuation_indent_size = 8
 ij_gherkin_keep_indents_on_empty_lines = false
 
 [*.gsp]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_gsp_keep_indents_on_empty_lines = false
@@ -56,6 +55,7 @@ ij_continuation_indent_size = 8
 ij_haml_keep_indents_on_empty_lines = false
 
 [*.java]
+indent_size = 2
 ij_java_align_consecutive_assignments = false
 ij_java_align_consecutive_variable_declarations = false
 ij_java_align_group_field_declarations = false
@@ -335,7 +335,6 @@ ij_less_use_double_quotes = true
 ij_less_value_alignment = 0
 
 [*.nbtt]
-indent_size = 4
 max_line_length = 150
 tab_width = 4
 ij_nbtt_keep_indents_on_empty_lines = false
@@ -797,13 +796,11 @@ ij_javascript_while_on_new_line = false
 ij_javascript_wrap_comments = false
 
 [{*.ft,*.vm,*.vsl}]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_vtl_keep_indents_on_empty_lines = false
 
 [{*.gant,*.groovy,*.gson,*.gy}]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_groovy_align_group_field_declarations = false
@@ -1029,20 +1026,17 @@ ij_html_space_inside_empty_tag = false
 ij_html_text_wrap = normal
 
 [{*.jsf,*.jsp,*.jspf,*.tag,*.tagf,*.xjsp}]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_jsp_jsp_prefer_comma_separated_import_list = false
 ij_jsp_keep_indents_on_empty_lines = false
 
 [{*.jspx,*.tagx}]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_jspx_keep_indents_on_empty_lines = false
 
 [{*.kt,*.kts}]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_kotlin_align_in_columns_case_branch = false
@@ -1127,7 +1121,6 @@ ij_kotlin_wrap_expression_body_functions = 0
 ij_kotlin_wrap_first_method_in_call_chain = false
 
 [{*.markdown,*.md}]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_markdown_force_one_space_after_blockquote_symbol = true
@@ -1160,7 +1153,6 @@ ij_properties_key_value_delimiter = equals
 ij_properties_spaces_around_key_value_delimiter = false
 
 [{*.qute.html,*.qute.json,*.qute.txt,*.qute.yaml,*.qute.yml}]
-indent_size = 4
 tab_width = 4
 ij_continuation_indent_size = 8
 ij_qute_keep_indents_on_empty_lines = false

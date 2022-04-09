@@ -4,7 +4,7 @@ import com.cefoler.configuration.exception.unchecked.compression.CompressionExce
 
 public class FailedToCompressionException extends CompressionException {
 
-  private static final long serialVersionUID = -1522763878459092660L;
+  private static final long serialVersionUID = 4594165481189045641L;
 
   public FailedToCompressionException() {
   }

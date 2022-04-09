@@ -1,12 +1,12 @@
-package com.cefoler.configuration.model.provider.impl.yaml;
+package com.cefoler.configuration.model.provider.impl.configuration.impl.yaml;
 
-import com.cefoler.configuration.model.provider.AbstractConfiguration;
-import com.cefoler.configuration.model.provider.impl.toml.TomlProvider;
-import com.cefoler.configuration.model.provider.type.ConfigurationType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import java.io.File;
+import java.io.FileNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -26,8 +26,13 @@ public final class YamlProvider extends AbstractConfiguration {
     YAML_FACTORY.disable(Feature.WRITE_DOC_START_MARKER);
   }
 
-  private YamlProvider(final String path, final String resource, final boolean replace) {
+  private YamlProvider(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     super(path, resource, replace);
+  }
+
+  private YamlProvider(final File file) throws FileNotFoundException {
+    super(file);
   }
 
   @Override
@@ -45,11 +50,13 @@ public final class YamlProvider extends AbstractConfiguration {
     return YAML_MAPPER;
   }
 
-  public static YamlProvider of(final String path, final String resource) {
+  public static YamlProvider of(final String path, final String resource)
+      throws FileNotFoundException {
     return of(path, resource, false);
   }
 
-  public static YamlProvider of(final String path, final String resource, final boolean replace) {
+  public static YamlProvider of(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     return new YamlProvider(path, resource, replace);
   }
 

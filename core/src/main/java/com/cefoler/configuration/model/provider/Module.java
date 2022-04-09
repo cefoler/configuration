@@ -1,32 +1,22 @@
 package com.cefoler.configuration.model.provider;
 
-import com.cefoler.configuration.model.map.ReplaceMap;
-import com.cefoler.configuration.model.provider.exception.checked.impl.FailedLoadException;
-import com.cefoler.configuration.model.provider.type.ConfigurationType;
-import java.io.File;
+import com.cefoler.configuration.model.entity.ReplaceValue;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-public interface Configuration extends Serializable {
-
-  void load() throws FailedLoadException;
-
-  void save();
-
-  void saveAndLoad() throws FailedLoadException;
+public interface Module extends Serializable {
 
   boolean contains(final String path);
-
-  void set(final String path, @Nullable final Object object);
 
   <T> T get(final String path);
 
   <T> T get(final String path, @Nullable final T orElse);
-
-  <T> T get(final String path, final Supplier<? extends T> orElse);
 
   Object getObject(final String path);
 
@@ -68,9 +58,17 @@ public interface Configuration extends Serializable {
 
   boolean getBoolean(final String path, @Nullable final Boolean orElse);
 
+  Module getModule(final String path);
+
+  Module getModule(final String path, @Nullable final Module orElse);
+
   List<?> getList(final String path);
 
   List<?> getList(final String path, @Nullable final List<?> orElse);
+
+  List<Object> getObjectList(final String path);
+
+  List<Object> getObjectList(final String path, @Nullable final List<Object> orElse);
 
   List<String> getStringList(final String path);
 
@@ -109,14 +107,33 @@ public interface Configuration extends Serializable {
 
   List<Boolean> getBooleanList(final String path, @Nullable final List<Boolean> orElse);
 
+  List<Module> getModuleList(final String path);
+
+  List<Module> getModuleList(final String path, @Nullable final List<Module> orElse);
+
   Set<String> getKeys();
 
   Set<String> getKeys(final String path);
 
-  ReplaceMap getReplacer();
+  @Unmodifiable
+  Map<?, ?> getConfiguration();
 
-  File getFile();
+  @Unmodifiable
+  Map<Predicate<Object>, Function<Object, Object>> getConverters();
 
-  ConfigurationType getType();
+  void addConverter(final Predicate<Object> filter, final Function<Object, Object> function);
+
+  void addConverters(final Map<Predicate<Object>, Function<Object, Object>> functions);
+
+  void removeConverter(final Predicate<Object> filter);
+
+  @Unmodifiable
+  Map<String, ReplaceValue> getReplacers();
+
+  void addReplacer(final String key, final ReplaceValue replace);
+
+  void addReplacers(final Map<String, ReplaceValue> replaces);
+
+  void removeReplacer(final String key);
 
 }

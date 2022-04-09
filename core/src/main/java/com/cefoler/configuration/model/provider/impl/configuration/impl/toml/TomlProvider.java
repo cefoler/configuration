@@ -1,11 +1,11 @@
-package com.cefoler.configuration.model.provider.impl.toml;
+package com.cefoler.configuration.model.provider.impl.configuration.impl.toml;
 
-import com.cefoler.configuration.model.provider.AbstractConfiguration;
-import com.cefoler.configuration.model.provider.impl.properties.PropertiesProvider;
-import com.cefoler.configuration.model.provider.type.ConfigurationType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.dataformat.toml.TomlFactory;
 import com.fasterxml.jackson.dataformat.toml.TomlMapper;
+import java.io.File;
+import java.io.FileNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -23,8 +23,13 @@ public final class TomlProvider extends AbstractConfiguration {
     TOML_MAPPER = new TomlMapper(TOML_FACTORY);
   }
 
-  private TomlProvider(final String path, final String resource, final boolean replace) {
+  private TomlProvider(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     super(path, resource, replace);
+  }
+
+  private TomlProvider(final File file) throws FileNotFoundException {
+    super(file);
   }
 
   @Override
@@ -42,11 +47,13 @@ public final class TomlProvider extends AbstractConfiguration {
     return TOML_MAPPER;
   }
 
-  public static TomlProvider of(final String path, final String resource) {
+  public static TomlProvider of(final String path, final String resource)
+      throws FileNotFoundException {
     return of(path, resource, false);
   }
 
-  public static TomlProvider of(final String path, final String resource, final boolean replace) {
+  public static TomlProvider of(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     return new TomlProvider(path, resource, replace);
   }
 

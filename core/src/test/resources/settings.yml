@@ -1,9 +1,0 @@
-cefoler1: "test1"
-cefoler2:
-  - 2
-  - 3
-  - 4
-cefoler3:
-  cefoler4: "test5"
-  cefoler5:
-    cefoler6: "test6"

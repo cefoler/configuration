@@ -2,9 +2,11 @@ package com.cefoler.configuration.factory;
 
 import com.cefoler.configuration.model.properties.Resources;
 import com.cefoler.configuration.util.Streams;
-import com.cefoler.configuration.model.provider.Configuration;
-import com.cefoler.configuration.model.provider.type.ConfigurationType;
+import com.cefoler.configuration.model.provider.impl.configuration.Configuration;
+import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
+import com.google.common.annotations.Beta;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -29,7 +31,7 @@ public final class ConfigurationFactory {
     REGEX = Pattern.compile(".*[$.]");
   }
 
-  public Configuration start(final Resources resources) {
+  public Configuration create(final Resources resources) throws FileNotFoundException {
     @Nullable
     final String driver = resources.find("driver", null);
 
@@ -37,44 +39,46 @@ public final class ConfigurationFactory {
     final String resource = resources.find("resource");
 
     final boolean replace = resources.find("replace", false);
-//    final String converted = driver.isEmpty()
+
+    if (driver == null) {
+      return create(path, resource, replace);
+    }
 
     final ConfigurationType type = ConfigurationType.getConfiguration(driver);
-
-    return start(type, path, resource, replace);
+    return create(type, path, resource, replace);
   }
 
-  public Configuration start(final File file) {
-    final String path = file.getParent();
-    final String name = file.getName();
-
-    return start(path, name);
+  @Beta
+  public Configuration create(final File file) {
+    return null;
   }
 
-  public Configuration start(final String path, final String resource) {
-    return start(path, resource, false);
+  public Configuration create(final String path, final String resource)
+      throws FileNotFoundException {
+    return create(path, resource, false);
   }
 
-  public Configuration start(final String path, final String resource, final boolean replace) {
+  public Configuration create(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     final Matcher matcher = REGEX.matcher(resource);
     final String extension = matcher.replaceFirst("");
 
     final ConfigurationType configuration = ConfigurationType.getConfiguration(extension);
-    return start(extension, path, resource, replace);
+    return create(configuration, path, resource, replace);
   }
 
-  public Configuration start(final String driver, final String path, final String resource,
-      final boolean replace) {
+  public Configuration create(final String driver, final String path, final String resource,
+      final boolean replace) throws FileNotFoundException {
     final ConfigurationType configuration = ConfigurationType.getConfiguration(driver);
-    return start(configuration, path, resource, replace);
+    return create(configuration, path, resource, replace);
   }
 
-  public Configuration start(final ConfigurationType type, final String path, final String resource,
-      final boolean replace) {
+  public Configuration create(final ConfigurationType type, final String path, final String resource,
+      final boolean replace) throws FileNotFoundException {
     return type.create(path, resource, replace);
   }
 
-  public Set<Configuration> startByFolder(final File folder, final String... ignored) {
+  public Set<Configuration> createByFolder(final File folder, final String... ignored) {
     if (!folder.exists()) {
       return new LinkedHashSet<>(0);
     }
@@ -94,7 +98,7 @@ public final class ConfigurationFactory {
           final String converted = split[0];
           return Streams.toStream(ignored).anyMatch(candidate -> candidate.startsWith(converted));
         })
-        .map(this::start)
+        .map(this::create)
         .collect(Collectors.toSet());
   }
 

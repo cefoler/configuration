@@ -1,9 +1,11 @@
-package com.cefoler.configuration.model.provider.impl.properties;
+package com.cefoler.configuration.model.provider.impl.configuration.impl.properties;
 
-import com.cefoler.configuration.model.provider.AbstractConfiguration;
-import com.cefoler.configuration.model.provider.type.ConfigurationType;
+import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsFactory;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
+import java.io.File;
+import java.io.FileNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -21,8 +23,13 @@ public final class PropertiesProvider extends AbstractConfiguration {
     PROPERTIES_MAPPER = new JavaPropsMapper(PROPERTIES_FACTORY);
   }
 
-  private PropertiesProvider(final String path, final String resource, final boolean replace) {
+  private PropertiesProvider(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     super(path, resource, replace);
+  }
+
+  private PropertiesProvider(final File file) throws FileNotFoundException {
+    super(file);
   }
 
   @Override
@@ -40,12 +47,13 @@ public final class PropertiesProvider extends AbstractConfiguration {
     return PROPERTIES_MAPPER;
   }
 
-  public static PropertiesProvider of(final String path, final String resource) {
+  public static PropertiesProvider of(final String path, final String resource)
+      throws FileNotFoundException {
     return of(path, resource, false);
   }
 
   public static PropertiesProvider of(final String path, final String resource,
-      final boolean replace) {
+      final boolean replace) throws FileNotFoundException {
     return new PropertiesProvider(path, resource, replace);
   }
 

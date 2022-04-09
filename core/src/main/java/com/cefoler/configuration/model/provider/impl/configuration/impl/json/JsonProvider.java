@@ -1,12 +1,12 @@
-package com.cefoler.configuration.model.provider.impl.json;
+package com.cefoler.configuration.model.provider.impl.configuration.impl.json;
 
-import com.cefoler.configuration.model.provider.AbstractConfiguration;
-import com.cefoler.configuration.model.provider.type.ConfigurationType;
+import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import java.io.File;
+import java.io.FileNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -26,8 +26,13 @@ public final class JsonProvider extends AbstractConfiguration {
     JSON_FACTORY.enable(Feature.ALLOW_COMMENTS);
   }
 
-  private JsonProvider(final String path, final String resource, final boolean replace) {
+  private JsonProvider(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     super(path, resource, replace);
+  }
+
+  private JsonProvider(final File file) throws FileNotFoundException {
+    super(file);
   }
 
   @Override
@@ -45,11 +50,13 @@ public final class JsonProvider extends AbstractConfiguration {
     return JSON_MAPPER;
   }
 
-  public static JsonProvider of(final String path, final String resource) {
+  public static JsonProvider of(final String path, final String resource)
+      throws FileNotFoundException {
     return of(path, resource, false);
   }
 
-  public static JsonProvider of(final String path, final String resource, final boolean replace) {
+  public static JsonProvider of(final String path, final String resource, final boolean replace)
+      throws FileNotFoundException {
     return new JsonProvider(path, resource, replace);
   }
 
