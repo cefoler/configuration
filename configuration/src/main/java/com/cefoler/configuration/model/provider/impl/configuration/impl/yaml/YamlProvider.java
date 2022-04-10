@@ -1,6 +1,7 @@
 package com.cefoler.configuration.model.provider.impl.configuration.impl.yaml;
 
 import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.configuration.impl.toml.TomlProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
@@ -50,14 +51,18 @@ public final class YamlProvider extends AbstractConfiguration {
     return YAML_MAPPER;
   }
 
-  public static YamlProvider of(final String path, final String resource)
+  public static YamlProvider create(final String path, final String resource)
       throws FileNotFoundException {
-    return of(path, resource, false);
+    return create(path, resource, false);
   }
 
-  public static YamlProvider of(final String path, final String resource, final boolean replace)
+  public static YamlProvider create(final String path, final String resource, final boolean replace)
       throws FileNotFoundException {
     return new YamlProvider(path, resource, replace);
+  }
+
+  public static YamlProvider of(final File file) throws FileNotFoundException {
+    return new YamlProvider(file);
   }
 
 }

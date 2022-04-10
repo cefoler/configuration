@@ -7,6 +7,7 @@ import com.cefoler.configuration.model.provider.impl.configuration.impl.toml.Tom
 import com.cefoler.configuration.model.provider.impl.configuration.impl.yaml.YamlProvider;
 import com.cefoler.configuration.core.util.Streams;
 import com.google.common.collect.ImmutableList;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -23,28 +24,48 @@ public enum ConfigurationType {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace)
         throws FileNotFoundException {
-      return JsonProvider.of(path, resource, replace);
+      return JsonProvider.create(path, resource, replace);
+    }
+
+    @Override
+    public Configuration of(final File file) throws FileNotFoundException {
+      return JsonProvider.of(file);
     }
   },
   YAML(YamlProvider.class, "YAML", "YML") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace)
         throws FileNotFoundException {
-      return YamlProvider.of(path, resource, replace);
+      return YamlProvider.create(path, resource, replace);
+    }
+
+    @Override
+    public Configuration of(final File file) throws FileNotFoundException {
+      return YamlProvider.of(file);
     }
   },
   TOML(TomlProvider.class, "TOML", "TML") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace)
         throws FileNotFoundException {
-      return TomlProvider.of(path, resource, replace);
+      return TomlProvider.create(path, resource, replace);
+    }
+
+    @Override
+    public Configuration of(final File file) throws FileNotFoundException {
+      return TomlProvider.of(file);
     }
   },
   PROPERTIES(PropertiesProvider.class, "PROPERTIES") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace)
         throws FileNotFoundException {
-      return PropertiesProvider.of(path, resource, replace);
+      return PropertiesProvider.create(path, resource, replace);
+    }
+
+    @Override
+    public Configuration of(final File file) throws FileNotFoundException {
+      return PropertiesProvider.of(file);
     }
   };
 
@@ -63,6 +84,8 @@ public enum ConfigurationType {
       throws FileNotFoundException {
     return create(path, resource, false);
   }
+
+  public abstract Configuration of(final File file) throws FileNotFoundException;
 
   public static ConfigurationType getConfiguration(final String driver) {
     final ConfigurationType[] values = values();

@@ -1,6 +1,7 @@
 package com.cefoler.configuration.model.provider.impl.configuration.impl.toml;
 
 import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.configuration.impl.json.JsonProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.dataformat.toml.TomlFactory;
 import com.fasterxml.jackson.dataformat.toml.TomlMapper;
@@ -47,14 +48,18 @@ public final class TomlProvider extends AbstractConfiguration {
     return TOML_MAPPER;
   }
 
-  public static TomlProvider of(final String path, final String resource)
+  public static TomlProvider create(final String path, final String resource)
       throws FileNotFoundException {
-    return of(path, resource, false);
+    return create(path, resource, false);
   }
 
-  public static TomlProvider of(final String path, final String resource, final boolean replace)
+  public static TomlProvider create(final String path, final String resource, final boolean replace)
       throws FileNotFoundException {
     return new TomlProvider(path, resource, replace);
+  }
+
+  public static TomlProvider of(final File file) throws FileNotFoundException {
+    return new TomlProvider(file);
   }
 
 }

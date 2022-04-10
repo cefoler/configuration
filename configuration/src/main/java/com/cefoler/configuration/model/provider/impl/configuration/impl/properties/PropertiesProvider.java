@@ -47,14 +47,18 @@ public final class PropertiesProvider extends AbstractConfiguration {
     return PROPERTIES_MAPPER;
   }
 
-  public static PropertiesProvider of(final String path, final String resource)
+  public static PropertiesProvider create(final String path, final String resource)
       throws FileNotFoundException {
-    return of(path, resource, false);
+    return create(path, resource, false);
   }
 
-  public static PropertiesProvider of(final String path, final String resource,
+  public static PropertiesProvider create(final String path, final String resource,
       final boolean replace) throws FileNotFoundException {
     return new PropertiesProvider(path, resource, replace);
+  }
+
+  public static PropertiesProvider of(final File file) throws FileNotFoundException {
+    return new PropertiesProvider(file);
   }
 
 }

@@ -40,7 +40,7 @@ public class Resources extends Properties {
     return Objects.cast(value);
   }
 
-  public synchronized <T> T find(final String key, final @Nullable T orElse) {
+  public synchronized <T> T find(final String key, @Nullable final T orElse) {
     final Object value = getOrDefault(key, orElse);
     return Objects.cast(value);
   }

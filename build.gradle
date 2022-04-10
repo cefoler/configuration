@@ -29,8 +29,6 @@ allprojects {
     targetCompatibility = javaVersion
 
     ext {
-        jacksonVersion = "2.13.2"
-
         guavaVersion = "31.1-jre"
         floggerVersion = "0.7.4"
 
@@ -48,12 +46,6 @@ allprojects {
     }
 
     dependencies {
-        implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-        implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
-
-        implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:$jacksonVersion"
-        implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jacksonVersion"
-
         implementation "com.google.guava:guava:$guavaVersion"
         implementation "com.google.flogger:flogger:$floggerVersion"
 

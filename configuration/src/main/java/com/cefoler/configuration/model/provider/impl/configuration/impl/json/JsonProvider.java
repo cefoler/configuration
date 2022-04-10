@@ -1,6 +1,7 @@
 package com.cefoler.configuration.model.provider.impl.configuration.impl.json;
 
 import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
+import com.cefoler.configuration.model.provider.impl.configuration.impl.properties.PropertiesProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser.Feature;
@@ -50,14 +51,18 @@ public final class JsonProvider extends AbstractConfiguration {
     return JSON_MAPPER;
   }
 
-  public static JsonProvider of(final String path, final String resource)
+  public static JsonProvider create(final String path, final String resource)
       throws FileNotFoundException {
-    return of(path, resource, false);
+    return create(path, resource, false);
   }
 
-  public static JsonProvider of(final String path, final String resource, final boolean replace)
+  public static JsonProvider create(final String path, final String resource, final boolean replace)
       throws FileNotFoundException {
     return new JsonProvider(path, resource, replace);
+  }
+
+  public static JsonProvider of(final File file) throws FileNotFoundException {
+    return new JsonProvider(file);
   }
 
 }
