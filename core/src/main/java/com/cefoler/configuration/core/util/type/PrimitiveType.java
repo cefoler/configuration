@@ -1,8 +1,8 @@
 package com.cefoler.configuration.core.util.type;
 
+import com.cefoler.configuration.core.util.Objects;
 import com.cefoler.configuration.core.util.Reflection;
 import com.cefoler.configuration.core.util.Streams;
-import com.cefoler.configuration.core.util.Objects;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
 import lombok.Getter;

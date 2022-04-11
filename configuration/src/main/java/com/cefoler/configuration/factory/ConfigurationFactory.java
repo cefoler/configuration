@@ -9,6 +9,7 @@ import com.cefoler.configuration.model.provider.impl.configuration.type.Configur
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,7 +82,10 @@ public final class ConfigurationFactory {
 
   public Configuration start(final ConfigurationType type, final String path, final String resource,
       final boolean replace) throws FileNotFoundException {
-    return type.create(path, resource, replace);
+    final Matcher matcher = REGEX.matcher(resource);
+    final String newResource = !matcher.find() ? resource + type.getExtension() : resource;
+
+    return type.create(path, newResource, replace);
   }
 
   public Configuration start(final File file) throws FileNotFoundException {

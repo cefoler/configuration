@@ -1,7 +1,7 @@
 package com.cefoler.configuration.core.exception.unchecked.unchecked.impl.server;
 
-import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
 import com.cefoler.configuration.core.exception.checked.server.ServerException;
+import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
 
 public class UncheckedServerException extends UncheckedException {
 

@@ -2,10 +2,10 @@ package com.cefoler.configuration.model.provider.impl.configuration;
 
 import com.cefoler.configuration.core.exception.unchecked.file.impl.impl.FileNotPermissionException;
 import com.cefoler.configuration.core.exception.unchecked.serialize.impl.FailedToSerializeException;
+import com.cefoler.configuration.core.util.Objects;
 import com.cefoler.configuration.model.provider.AbstractModule;
 import com.cefoler.configuration.model.provider.Module;
 import com.cefoler.configuration.model.provider.impl.module.SubModule;
-import com.cefoler.configuration.core.util.Objects;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;

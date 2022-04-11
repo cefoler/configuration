@@ -1,13 +1,14 @@
 package com.cefoler.configuration.core.util.type;
 
-import com.cefoler.configuration.core.util.Streams;
 import com.cefoler.configuration.core.util.Primitives;
+import com.cefoler.configuration.core.util.Streams;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Locale;
 import lombok.Getter;
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 @Getter
 @ToString
@@ -806,6 +807,7 @@ public enum TimeType {
     }
   };
 
+  @Unmodifiable
   private final List<String> names;
 
   TimeType(final String... names) {

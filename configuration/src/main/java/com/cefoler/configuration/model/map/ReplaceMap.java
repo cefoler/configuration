@@ -1,8 +1,8 @@
 package com.cefoler.configuration.model.map;
 
+import com.cefoler.configuration.core.util.Objects;
 import com.cefoler.configuration.model.entity.ReplaceValue;
 import com.cefoler.configuration.model.entity.type.ReplaceType;
-import com.cefoler.configuration.core.util.Objects;
 import com.google.common.collect.ForwardingMap;
 import java.io.Serializable;
 import java.util.Collection;

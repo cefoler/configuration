@@ -1,7 +1,6 @@
 package com.cefoler.configuration.model.provider.impl.configuration.impl.json;
 
 import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
-import com.cefoler.configuration.model.provider.impl.configuration.impl.properties.PropertiesProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser.Feature;

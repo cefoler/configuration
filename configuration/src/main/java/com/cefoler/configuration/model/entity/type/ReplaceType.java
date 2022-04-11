@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import lombok.Getter;
 import lombok.ToString;
+import org.jetbrains.annotations.Unmodifiable;
 
 @Getter
 @ToString
@@ -16,6 +17,7 @@ public enum ReplaceType {
   SET("SET"),
   GET("GET");
 
+  @Unmodifiable
   private final List<String> names;
 
   ReplaceType(final String... names) {

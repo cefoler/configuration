@@ -1,7 +1,6 @@
 package com.cefoler.configuration.model.provider.impl.configuration.impl.yaml;
 
 import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
-import com.cefoler.configuration.model.provider.impl.configuration.impl.toml.TomlProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
