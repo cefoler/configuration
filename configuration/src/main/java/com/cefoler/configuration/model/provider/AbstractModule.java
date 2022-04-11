@@ -507,7 +507,7 @@ public abstract class AbstractModule implements Module {
     return replace(converted, type);
   }
 
-  private Object convert(final Object value) {
+  protected Object convert(final Object value) {
     final Set<Entry<Predicate<Object>, Function<Object, Object>>> entries = converters.entrySet();
 
     final Optional<Function<Object, Object>> optional = entries.stream()
@@ -523,7 +523,7 @@ public abstract class AbstractModule implements Module {
     return function.apply(value);
   }
 
-  private Object replace(final Object value, final ReplaceType type) {
+  protected Object replace(final Object value, final ReplaceType type) {
     if (value instanceof CharSequence) {
       CharSequence converted = Objects.cast(value);
 
