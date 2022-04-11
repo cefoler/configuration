@@ -96,9 +96,7 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       throw exception;
     } catch (final StreamReadException | DatabindException exception) {
       final String path = file.getAbsolutePath();
-      final String error = "Failed to get data from: " + path;
-
-      throw new FailedToSerializeException(error, exception);
+      throw new FailedToSerializeException("Failed to get data from: " + path, exception);
     } catch (final IOException exception) {
       exception.printStackTrace();
     }
@@ -122,9 +120,7 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       throw exception;
     } catch (final StreamWriteException | DatabindException exception) {
       final String path = file.getAbsolutePath();
-      final String error = "Failed to save data to: " + path;
-
-      throw new FailedToSerializeException(error, exception);
+      throw new FailedToSerializeException("Failed to save data to: " + path, exception);
     } catch (final IOException exception) {
       exception.printStackTrace();
     }

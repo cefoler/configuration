@@ -1,22 +1,23 @@
 package com.cefoler.configuration.factory;
 
+import com.cefoler.configuration.core.exception.unchecked.file.impl.InvalidFileException;
+import com.cefoler.configuration.core.model.lambda.function.ThrowFunction;
 import com.cefoler.configuration.core.model.properties.Resources;
 import com.cefoler.configuration.core.util.Streams;
 import com.cefoler.configuration.model.provider.impl.configuration.Configuration;
 import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
-import com.google.common.annotations.Beta;
+import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
@@ -28,10 +29,15 @@ public final class ConfigurationFactory {
 
   static {
     INSTANCE = new ConfigurationFactory();
-    REGEX = Pattern.compile(".*[$.]");
+    REGEX = Pattern.compile(".*[$.](?=.+)");
   }
 
-  public Configuration create(final Resources resources) throws FileNotFoundException {
+  public Configuration start(final Resources resources) throws FileNotFoundException {
+    if (resources.contains("file")) {
+      final File file = resources.find("file");
+      return start(file);
+    }
+
     @Nullable
     final String driver = resources.find("driver", null);
 
@@ -41,65 +47,105 @@ public final class ConfigurationFactory {
     final boolean replace = resources.find("replace", false);
 
     if (driver == null) {
-      return create(path, resource, replace);
+      return start(path, resource, replace);
     }
 
     final ConfigurationType type = ConfigurationType.getConfiguration(driver);
-    return create(type, path, resource, replace);
+    return start(type, path, resource, replace);
   }
 
-  @Beta
-  public Configuration create(final File file) {
-    return null;
-  }
-
-  public Configuration create(final String path, final String resource)
+  public Configuration start(final String path, final String resource)
       throws FileNotFoundException {
-    return create(path, resource, false);
+    return start(path, resource, false);
   }
 
-  public Configuration create(final String path, final String resource, final boolean replace)
+  public Configuration start(final String path, final String resource, final boolean replace)
       throws FileNotFoundException {
     final Matcher matcher = REGEX.matcher(resource);
-    final String extension = matcher.replaceFirst("");
 
-    final ConfigurationType configuration = ConfigurationType.getConfiguration(extension);
-    return create(configuration, path, resource, replace);
+    if (!matcher.find()) {
+      throw new InvalidFileException("File does not have a valid extension: " + resource);
+    }
+
+    final String extension = matcher.replaceAll("");
+    final ConfigurationType type = ConfigurationType.getConfiguration(extension);
+
+    return start(type, path, resource, replace);
   }
 
-  public Configuration create(final String driver, final String path, final String resource,
+  public Configuration start(final String driver, final String path, final String resource,
       final boolean replace) throws FileNotFoundException {
-    final ConfigurationType configuration = ConfigurationType.getConfiguration(driver);
-    return create(configuration, path, resource, replace);
+    final ConfigurationType type = ConfigurationType.getConfiguration(driver);
+    return start(type, path, resource, replace);
   }
 
-  public Configuration create(final ConfigurationType type, final String path, final String resource,
+  public Configuration start(final ConfigurationType type, final String path, final String resource,
       final boolean replace) throws FileNotFoundException {
     return type.create(path, resource, replace);
   }
 
-  public Set<Configuration> createByFolder(final File folder, final String... ignored) {
+  public Configuration start(final File file) throws FileNotFoundException {
+    if (file.isDirectory()) {
+      throw new InvalidFileException("File cannot be a directory");
+    }
+
+    final String name = file.getName();
+    final Matcher matcher = REGEX.matcher(name);
+
+    if (!matcher.find()) {
+      throw new InvalidFileException("File does not have a valid extension: " + name);
+    }
+
+    final String extension = matcher.replaceAll("");
+    final ConfigurationType type = ConfigurationType.getConfiguration(extension);
+
+    return type.of(file);
+  }
+
+  @Unmodifiable
+  public Set<Configuration> startByFolder(final File folder) {
     if (!folder.exists()) {
-      return new LinkedHashSet<>(0);
+      return ImmutableSet.of();
     }
 
     final File[] files = folder.listFiles();
     final int length = files.length;
 
     if (length == 0) {
-      return new LinkedHashSet<>(0);
+      return ImmutableSet.of();
+    }
+
+    return Streams.toStream(files)
+        .map(ThrowFunction.convert(this::start))
+        .collect(ImmutableSet.toImmutableSet());
+  }
+
+  @Unmodifiable
+  public Set<Configuration> startByFolder(final File folder, final String... excluded) {
+    if (!folder.exists()) {
+      return ImmutableSet.of();
+    }
+
+    final File[] files = folder.listFiles();
+    final int length = files.length;
+
+    if (length == 0) {
+      return ImmutableSet.of();
     }
 
     return Streams.toStream(files)
         .filter(file -> {
           final String name = file.getName();
-          final String[] split = name.split("\\.", 2);
+          final String pattern = "(?i)\\b" + name + "\\b";
 
-          final String converted = split[0];
-          return Streams.toStream(ignored).anyMatch(candidate -> candidate.startsWith(converted));
+          final Pattern regex = Pattern.compile(pattern);
+
+          return Streams.toStream(excluded)
+              .map(regex::matcher)
+              .anyMatch(Matcher::find);
         })
-        .map(this::create)
-        .collect(Collectors.toSet());
+        .map(ThrowFunction.convert(this::start))
+        .collect(ImmutableSet.toImmutableSet());
   }
 
   public static ConfigurationFactory getInstance() {
