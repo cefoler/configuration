@@ -155,7 +155,10 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
           return;
         }
 
+        final ReplaceType type = ReplaceType.SET;
+
         final Object converted = convert(value);
+        final Object replaced = replace(converted, type);
 
         if (value instanceof Module) {
           final Module module = Objects.cast(value);
@@ -166,9 +169,6 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
           newValues.put(last, newValue);
           return;
         }
-
-        final ReplaceType type = ReplaceType.SET;
-        final Object replaced = replace(converted, type);
 
         newValues.put(last, replaced);
         return;
