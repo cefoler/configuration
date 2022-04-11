@@ -3,6 +3,7 @@ package com.cefoler.configuration.model.provider.impl.configuration;
 import com.cefoler.configuration.core.exception.unchecked.file.impl.impl.FileNotPermissionException;
 import com.cefoler.configuration.core.exception.unchecked.serialize.impl.FailedToSerializeException;
 import com.cefoler.configuration.core.util.Objects;
+import com.cefoler.configuration.model.entity.type.ReplaceType;
 import com.cefoler.configuration.model.provider.AbstractModule;
 import com.cefoler.configuration.model.provider.Module;
 import com.cefoler.configuration.model.provider.impl.module.SubModule;
@@ -164,7 +165,12 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
           return;
         }
 
-        values.put(last, value);
+        final Object converted = convert(value);
+        final ReplaceType type = ReplaceType.SET;
+
+        final Object replaced = replace(converted, type);
+        values.put(last, replaced);
+
         return;
       }
 
