@@ -37,7 +37,7 @@ public abstract class AbstractModule implements Module {
 
   private static final long serialVersionUID = -1789125045200316519L;
 
-  protected Map<?, ?> configuration;
+  protected Map<?, ?> values;
 
   protected final ConvertMap converters;
   protected final ReplaceMap replacers;
@@ -50,8 +50,8 @@ public abstract class AbstractModule implements Module {
     this(supplier.get());
   }
 
-  protected AbstractModule(final Map<?, ?> configuration) {
-    this.configuration = configuration;
+  protected AbstractModule(final Map<?, ?> values) {
+    this.values = values;
 
     this.converters = ConvertMap.create();
     this.replacers = ReplaceMap.create();
@@ -391,7 +391,7 @@ public abstract class AbstractModule implements Module {
 
   @Override
   public Set<String> getKeys() {
-    final Set<?> keys = configuration.keySet();
+    final Set<?> keys = values.keySet();
 
     return keys.stream()
         .map(Object::toString)
@@ -400,7 +400,7 @@ public abstract class AbstractModule implements Module {
 
   @Override
   public Set<String> getKeys(final String path) {
-    Object result = configuration;
+    Object result = values;
 
     for (final String key : path.split("\\.")) {
       if (!(result instanceof Map)) {
@@ -439,10 +439,9 @@ public abstract class AbstractModule implements Module {
     throw new InvalidDataException("Path " + path + " was not found");
   }
 
-  @Override
   @Unmodifiable
-  public Map<?, ?> getConfiguration() {
-    return ImmutableMap.copyOf(configuration);
+  public Map<?, ?> getValues() {
+    return ImmutableMap.copyOf(values);
   }
 
   @Override
@@ -490,7 +489,7 @@ public abstract class AbstractModule implements Module {
 
   @Nullable
   protected Object getValue(final String path) {
-    Object value = configuration;
+    Object value = values;
 
     for (final String key : path.split("\\.")) {
       if (!(value instanceof Map)) {

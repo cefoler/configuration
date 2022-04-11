@@ -87,12 +87,12 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       final long length = file.length();
 
       if (length == 0) {
-        this.configuration = new LinkedHashMap<>(0);
+        this.values = new LinkedHashMap<>(0);
         return;
       }
 
       final ObjectMapper mapper = getMapper();
-      this.configuration = mapper.readValue(reader, LinkedHashMap.class);
+      this.values = mapper.readValue(reader, LinkedHashMap.class);
     } catch (final FileNotFoundException exception) {
       throw exception;
     } catch (final StreamReadException | DatabindException exception) {
@@ -116,7 +116,7 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
       final ObjectWriter object = mapper.writer(printer);
 
-      object.writeValue(writer, configuration);
+      object.writeValue(writer, values);
     } catch (final FileNotFoundException exception) {
       throw exception;
     } catch (final StreamWriteException | DatabindException exception) {
@@ -141,41 +141,41 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
     final int index = length - 1;
     final String last = split[index];
 
-    Map<Object, Object> values = Objects.cast(configuration);
+    Map<Object, Object> newValues = Objects.cast(values);
 
     for (@NonNls final String key : split) {
-      if (!values.containsKey(key)) {
-        final Map<?, ?> newValues = new LinkedHashMap<>(1);
-        values.put(key, newValues);
+      if (!newValues.containsKey(key)) {
+        final Map<?, ?> sub = new LinkedHashMap<>(1);
+        newValues.put(key, sub);
       }
 
       if (key.equals(last)) {
         if (value == null) {
-          values.remove(last);
-          return;
-        }
-
-        if (value instanceof Module) {
-          final Configuration converted = Objects.cast(value);
-          final Map<?, ?> configuration = converted.getConfiguration();
-
-          final Map<?, ?> newValue = new LinkedHashMap<>(configuration);
-          values.put(last, newValue);
-
+          newValues.remove(last);
           return;
         }
 
         final Object converted = convert(value);
+
+        if (value instanceof Module) {
+          final Module module = Objects.cast(value);
+
+          final Map<?, ?> values = module.getValues();
+          final Map<?, ?> newValue = new LinkedHashMap<>(values);
+
+          newValues.put(last, newValue);
+          return;
+        }
+
         final ReplaceType type = ReplaceType.SET;
-
         final Object replaced = replace(converted, type);
-        values.put(last, replaced);
 
+        newValues.put(last, replaced);
         return;
       }
 
-      final Object sub = values.get(key);
-      values = Objects.cast(sub);
+      final Object sub = newValues.get(key);
+      newValues = Objects.cast(sub);
     }
   }
 
