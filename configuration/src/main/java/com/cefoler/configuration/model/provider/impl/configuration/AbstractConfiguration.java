@@ -160,8 +160,8 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
         final Object converted = convert(value);
         final Object replaced = replace(converted, type);
 
-        if (value instanceof Module) {
-          final Module module = Objects.cast(value);
+        if (replaced instanceof Module) {
+          final Module module = Objects.cast(replaced);
 
           final Map<?, ?> values = module.getValues();
           final Map<?, ?> newValue = new LinkedHashMap<>(values);
