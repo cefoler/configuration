@@ -1,7 +1,6 @@
 package com.cefoler.configuration.model.provider.impl.configuration.impl.toml;
 
 import com.cefoler.configuration.model.provider.impl.configuration.AbstractConfiguration;
-import com.cefoler.configuration.model.provider.impl.configuration.impl.json.JsonProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.type.ConfigurationType;
 import com.fasterxml.jackson.dataformat.toml.TomlFactory;
 import com.fasterxml.jackson.dataformat.toml.TomlMapper;

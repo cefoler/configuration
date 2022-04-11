@@ -2,7 +2,7 @@ ext {
     projectName = project.name
 
     projectGroup = "com.cefoler.configuration"
-    projectVersion = "1.1.4-SNAPSHOT"
+    projectVersion = "1.1.5-SNAPSHOT"
 
     projectDescription = "A Configuration wrapper for YAML, JSON and Properties."
 

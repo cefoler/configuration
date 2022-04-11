@@ -1,11 +1,11 @@
 package com.cefoler.configuration.model.provider.impl.configuration.type;
 
+import com.cefoler.configuration.core.util.Streams;
 import com.cefoler.configuration.model.provider.impl.configuration.Configuration;
 import com.cefoler.configuration.model.provider.impl.configuration.impl.json.JsonProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.impl.properties.PropertiesProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.impl.toml.TomlProvider;
 import com.cefoler.configuration.model.provider.impl.configuration.impl.yaml.YamlProvider;
-import com.cefoler.configuration.core.util.Streams;
 import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +15,7 @@ import java.util.Locale;
 import lombok.Getter;
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 @Getter
 @ToString
@@ -44,7 +45,7 @@ public enum ConfigurationType {
       return YamlProvider.of(file);
     }
   },
-  TOML(TomlProvider.class, "TOML", "TML") {
+  TOML(TomlProvider.class, "TOML") {
     @Override
     public Configuration create(final String path, final String resource, final boolean replace)
         throws FileNotFoundException {
@@ -70,6 +71,8 @@ public enum ConfigurationType {
   };
 
   private final Class<? extends Configuration> clazz;
+
+  @Unmodifiable
   private final List<String> names;
 
   ConfigurationType(final Class<? extends Configuration> clazz, final String... names) {
@@ -86,6 +89,11 @@ public enum ConfigurationType {
   }
 
   public abstract Configuration of(final File file) throws FileNotFoundException;
+
+  public String getExtension() {
+    final String extension = names.get(0);
+    return extension.toLowerCase(Locale.ROOT);
+  }
 
   public static ConfigurationType getConfiguration(final String driver) {
     final ConfigurationType[] values = values();

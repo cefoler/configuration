@@ -1,14 +1,14 @@
 package com.cefoler.configuration.model.provider;
 
 import com.cefoler.configuration.core.exception.unchecked.data.impl.InvalidDataException;
-import com.cefoler.configuration.model.entity.ReplaceValue;
-import com.cefoler.configuration.model.entity.type.ReplaceType;
 import com.cefoler.configuration.core.model.lambda.supplier.ThrowSupplier;
-import com.cefoler.configuration.model.map.ConvertMap;
-import com.cefoler.configuration.model.map.ReplaceMap;
 import com.cefoler.configuration.core.util.Objects;
 import com.cefoler.configuration.core.util.Reflection;
 import com.cefoler.configuration.core.util.Streams;
+import com.cefoler.configuration.model.entity.ReplaceValue;
+import com.cefoler.configuration.model.entity.type.ReplaceType;
+import com.cefoler.configuration.model.map.ConvertMap;
+import com.cefoler.configuration.model.map.ReplaceMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
