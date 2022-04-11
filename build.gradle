@@ -91,5 +91,4 @@ allprojects {
     shadowJar {
         archiveFileName = fileComplete
     }
-
 }
