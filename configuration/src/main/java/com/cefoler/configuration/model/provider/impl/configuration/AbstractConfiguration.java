@@ -145,8 +145,8 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
 
     for (@NonNls final String key : split) {
       if (!newValues.containsKey(key)) {
-        final Map<?, ?> sub = new LinkedHashMap<>(1);
-        newValues.put(key, sub);
+        final Map<?, ?> newValue = new LinkedHashMap<>(1);
+        newValues.put(key, newValue);
       }
 
       if (key.equals(last)) {
