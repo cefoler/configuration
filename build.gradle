@@ -1,74 +1,95 @@
-plugins {
-    id "com.github.johnrengelman.shadow" version "7.0.0"
-    id "maven-publish"
-    id "java"
-}
+buildscript {
+    ext {
+        shadowVersion = "7.0.0"
+    }
 
-group "com.celeste.configuration"
-version "1.1.2-SNAPSHOT"
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-dependencies {
-    /**
-     * Jackson configuration dependencies
-     */
-    def jackson = "2.13.0"
-
-    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jackson"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:$jackson"
-
-    /**
-     * Annotations processors
-     */
-    def lombok = "org.projectlombok:lombok:1.18.22"
-    def annotations = "org.jetbrains:annotations:22.0.0"
-
-    compileOnly lombok, annotations
-    annotationProcessor lombok, annotations
-
-    /**
-     * Testing dependencies
-     */
-    def junit = "5.8.2"
-
-    testCompileOnly "org.junit.jupiter:junit-jupiter-api:$junit"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
-
-    /**
-     * General
-     */
-    implementation 'com.google.guava:guava:31.0.1-jre'
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-
-tasks.withType(Jar) {
-    from "LICENSE.md"
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
+    }
+
+    dependencies {
+        classpath "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:$shadowVersion"
     }
 }
 
-shadowJar {
-    relocate "com.fasterxml.jackson", "com.celeste.configuration.jackson"
-    relocate "org.yaml.snakeyaml", "com.celeste.configuration.snakeyaml"
+allprojects {
+    apply plugin: "java"
+    apply plugin: "java-library"
+    apply plugin: "com.github.johnrengelman.shadow"
+    apply from: "$rootDir/variable.gradle"
+    apply from: "$rootDir/test.gradle"
+    apply from: "$rootDir/publish.gradle"
 
-    relocate "com.google.common", "com.celeste.configuration.guava"
+    group projectGroup
+    version projectVersion
 
-    archiveFileName = "Configuration-${project.version}.jar"
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+
+    ext {
+        guavaVersion = "31.1-jre"
+        floggerVersion = "0.7.4"
+
+        lombokVersion = "1.18.22"
+        jetbrainsVersion = "23.0.0"
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+
+    dependencies {
+        implementation "com.google.guava:guava:$guavaVersion"
+        implementation "com.google.flogger:flogger:$floggerVersion"
+
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+        compileOnly "org.jetbrains:annotations:$jetbrainsVersion"
+        annotationProcessor "org.jetbrains:annotations:$jetbrainsVersion"
+
+        compileOnly fileTree("$rootDir/libs") {
+            include "*.jar"
+            exclude "*-sources.jar"
+            exclude "*-tests.jar"
+            exclude "*-javadoc.jar"
+        }
+
+        compileOnly fileTree("libs") {
+            include "*.jar"
+            exclude "*-sources.jar"
+            exclude "*-tests.jar"
+            exclude "*-javadoc.jar"
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += [
+                "-Xlint:all",
+                "-Xlint:-options",
+                "-Xlint:-path",
+                "-Xlint:-try"
+        ]
+
+        options.encoding = "UTF-8"
+        options.fork = true
+
+        buildDir = file(outputPath)
+    }
+
+    tasks.withType(Jar) {
+        from "$rootDir/LICENSE.md"
+    }
+
+    shadowJar {
+        archiveFileName = fileComplete
+    }
+
 }

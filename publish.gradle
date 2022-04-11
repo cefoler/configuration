@@ -1,0 +1,44 @@
+apply plugin: "maven-publish"
+
+ext {
+    connectionUrl = "scm:git:git://$projectGit"
+    developerUrl = "scm:git:git@$projectGit"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = projectName
+            from components.java
+
+            pom {
+                name = projectName
+                description = projectDescription
+                url = projectUrl
+
+                licenses {
+                    license {
+                        name = licenseName
+                        url = licenseUrl
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "DeserRC"
+                        name = "Diego Cruz"
+                        email = "deserrc@gmail.com"
+                        organization = organizationName
+                        organizationUrl = organizationUrl
+                    }
+                }
+
+                scm {
+                    connection = connectionUrl
+                    developerConnection = developerUrl
+                    url = projectUrl
+                }
+            }
+        }
+    }
+}

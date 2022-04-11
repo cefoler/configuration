@@ -1,0 +1,13 @@
+ext {
+    jacksonVersion = "2.13.2"
+}
+
+dependencies {
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
+
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-properties:$jacksonVersion"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:$jacksonVersion"
+
+    implementation project(":configuration-core")
+}

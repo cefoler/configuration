@@ -1,1 +1,12 @@
-rootProject.name = "configuration"
+ext {
+    projectName = "configuration"
+    prefix = ":$projectName"
+}
+
+rootProject.name = projectName
+
+include "$prefix-core"
+include "$prefix-configuration"
+
+project("$prefix-core").projectDir = file("$rootDir/core")
+project("$prefix-configuration").projectDir = file("$rootDir/configuration")
