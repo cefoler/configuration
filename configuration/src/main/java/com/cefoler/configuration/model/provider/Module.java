@@ -116,7 +116,7 @@ public interface Module extends Serializable {
   Set<String> getKeys(final String path);
 
   @Unmodifiable
-  Map<?, ?> getConfiguration();
+  Map<?, ?> getValues();
 
   @Unmodifiable
   Map<Predicate<Object>, Function<Object, Object>> getConverters();
