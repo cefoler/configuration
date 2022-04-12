@@ -225,6 +225,9 @@ nbdist/
 
 ### Gradle template
 
+# Security files
+gradle.properties
+
 # Temporary files
 .gradle
 .gradletasknamecache
@@ -238,6 +241,7 @@ nbdist/
 
 # Gui files
 gradle-app.setting
+
 
 ### Maven template
 

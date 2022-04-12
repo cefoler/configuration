@@ -1,20 +1,42 @@
 apply plugin: "maven-publish"
+apply plugin: "signing"
 
 ext {
+    issueUrl = "$projectUrl/issues"
+
     connectionUrl = "scm:git:git://$projectGit"
     developerUrl = "scm:git:git@$projectGit"
 }
 
 publishing {
+    repositories {
+        maven {
+            url = version.endsWith("SNAPSHOT") ? snapshotUrl : releaseUrl
+
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+
     publications {
         mavenJava(MavenPublication) {
-            artifactId = projectName
-            from components.java
+            groupId projectGroup
+            artifactId projectArtifact
+
+            version projectVersion
 
             pom {
-                name = projectName
+                name = projectArtifact
                 description = projectDescription
+
                 url = projectUrl
+
+                issueManagement {
+                    system = projectSystem
+                    url = issueUrl
+                }
 
                 licenses {
                     license {
@@ -28,17 +50,23 @@ publishing {
                         id = "DeserRC"
                         name = "Diego Cruz"
                         email = "deserrc@gmail.com"
-                        organization = organizationName
-                        organizationUrl = organizationUrl
+                        organization = incorporationName
+                        organizationUrl = incorporationUrl
                     }
                 }
 
                 scm {
+                    url = projectUrl
                     connection = connectionUrl
                     developerConnection = developerUrl
-                    url = projectUrl
                 }
             }
+
+            from components.java
         }
     }
+}
+
+signing {
+    sign configurations.shadow
 }

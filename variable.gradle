@@ -1,10 +1,13 @@
 ext {
-    projectName = project.name
+    projectName = "configuration"
 
     projectGroup = "com.cefoler.configuration"
-    projectVersion = "1.1.5-SNAPSHOT"
+    projectArtifact = project.name
 
+    projectVersion = "1.1.6"
     projectDescription = "A Configuration wrapper for YAML, JSON and Properties."
+
+    projectSystem = "github"
 
     projectUrl = "https://github.com/cefoler/configuration"
     projectGit = "github.com/cefoler/configuration.git"
@@ -12,17 +15,18 @@ ext {
     javaMain = "src/main/java"
     javaTest = "src/test/java"
 
+    javaDoc = javadoc
     javaVersion = JavaVersion.VERSION_1_8
 
     licenseName = "Apache License, Version 2.0"
     licenseUrl = "https://www.apache.org/licenses/LICENSE-2.0.txt"
 
-    organizationName = "Cefoler Studios"
-    organizationUrl = "https://cefoler.com"
+    incorporationName = "Cefoler Studios"
+    incorporationUrl = "https://cefoler.com"
 
-    fileName = "$projectName-$projectVersion"
+    fileName = "$projectArtifact-$projectVersion"
     fileComplete = "${fileName}.jar"
 
-    outputPath = "$rootDir/build/$projectName"
+    outputPath = "$rootDir/build/$projectArtifact"
     configPath = "$rootDir/config"
 }

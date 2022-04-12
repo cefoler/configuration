@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        shadowVersion = "7.0.0"
+        shadowVersion = "7.1.2"
     }
 
     repositories {
@@ -10,11 +10,11 @@ buildscript {
     }
 
     dependencies {
-        classpath "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:$shadowVersion"
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:$shadowVersion"
     }
 }
 
-allprojects {
+subprojects {
     apply plugin: "java"
     apply plugin: "java-library"
     apply plugin: "com.github.johnrengelman.shadow"
@@ -70,6 +70,16 @@ allprojects {
         }
     }
 
+    task javadocJar(type: Jar, dependsOn: classes) {
+        archiveClassifier = "javadoc"
+        from javaDoc
+    }
+
+    task sourcesJar(type: Jar, dependsOn: javadoc) {
+        archiveClassifier = "sources"
+        from javaMain
+    }
+
     tasks.withType(JavaCompile) {
         options.compilerArgs += [
                 "-Xlint:all",
@@ -90,6 +100,10 @@ allprojects {
 
     shadowJar {
         archiveFileName = fileComplete
+    }
+
+    artifacts {
+        archives shadowJar, sourcesJar, javadocJar
     }
 
 }
