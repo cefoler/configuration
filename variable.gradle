@@ -4,7 +4,7 @@ ext {
     projectGroup = "com.cefoler.configuration"
     projectArtifact = project.name
 
-    projectVersion = "1.1.6"
+    projectVersion = "1.1.7"
     projectDescription = "A Configuration wrapper for YAML, JSON and Properties."
 
     projectSystem = "github"
@@ -29,4 +29,14 @@ ext {
 
     outputPath = "$rootDir/build/$projectArtifact"
     configPath = "$rootDir/config"
+}
+
+task sourcesJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = "sources"
+    from javaMain
+}
+
+task javadocJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = "javadoc"
+    from javaDoc
 }

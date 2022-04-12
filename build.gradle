@@ -57,27 +57,17 @@ subprojects {
 
         compileOnly fileTree("$rootDir/libs") {
             include "*.jar"
-            exclude "*-sources.jar"
             exclude "*-tests.jar"
+            exclude "*-sources.jar"
             exclude "*-javadoc.jar"
         }
 
         compileOnly fileTree("libs") {
             include "*.jar"
-            exclude "*-sources.jar"
             exclude "*-tests.jar"
+            exclude "*-sources.jar"
             exclude "*-javadoc.jar"
         }
-    }
-
-    task javadocJar(type: Jar, dependsOn: classes) {
-        archiveClassifier = "javadoc"
-        from javaDoc
-    }
-
-    task sourcesJar(type: Jar, dependsOn: javadoc) {
-        archiveClassifier = "sources"
-        from javaMain
     }
 
     tasks.withType(JavaCompile) {
@@ -100,10 +90,6 @@ subprojects {
 
     shadowJar {
         archiveFileName = fileComplete
-    }
-
-    artifacts {
-        archives shadowJar, sourcesJar, javadocJar
     }
 
 }

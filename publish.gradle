@@ -1,5 +1,5 @@
-apply plugin: "maven-publish"
 apply plugin: "signing"
+apply plugin: "maven-publish"
 
 ext {
     issueUrl = "$projectUrl/issues"
@@ -8,18 +8,18 @@ ext {
     developerUrl = "scm:git:git@$projectGit"
 }
 
+signing {
+    sign configurations.archives
+}
+
 publishing {
     repositories {
         maven {
-            if (hasProperty("snaphotUrl") && hasProperty("releaseUrl")) {
-                url = version.endsWith("SNAPSHOT") ? snapshotUrl : releaseUrl
+            url = projectVersion.endsWith('-SNAPSHOT') ? snapshotUrl : releaseUrl
 
-                credentials {
-                    if (hasProperty("username") && hasProperty("password")) {
-                        username = username
-                        password = password
-                    }
-                }
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
             }
         }
     }
@@ -71,6 +71,6 @@ publishing {
     }
 }
 
-signing {
-    sign configurations.shadow
+artifacts {
+    archives javadocJar, sourcesJar
 }
