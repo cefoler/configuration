@@ -17,13 +17,13 @@ final Configuration configuration = ConfigurationFactory.start(
 ``` 
 
 For the **DRIVER** value, you must use the **JSON**, **YAML**, **TOML** and **PROPERTIES** type
-from the ConfigurationType enum.
-For the **PATH** value, you must use the file's destination path.
-For the **RESOURCE** value, you must use the path of the internal configuration file.
+from the ConfigurationType enum.</br>
+For the **PATH** value, you must use the file's destination path.</br>
+For the **RESOURCE** value, you must use the path of the internal configuration file.</br>
 
 ## Replace
 
-Want to use universal replaces to when you get or set a value at the configuration?
+Want to use universal replaces to when you get or set a value at the configuration?</br>
 Our ReplaceValue is here to help you!
 
 ```
@@ -35,10 +35,10 @@ final ReplaceValue replace = ReplaceValue.builder()
 configuration.addReplacer(VALUE_TO_REPLACE, replace);
 ```
 
-For the **VALUE_TO_BE_REPLACED** value, you must use the value that will be replaced
+For the **VALUE_TO_BE_REPLACED** value, you must use the value that will be replaced.</br>
 For the **TYPE_OF_SUBSTITUTE** value, you can use the **ALL**, **GET** and **SET** type
-from the ReplaceType enum.
-For the **VALUE_TO_REPLACE** value, you must use the value that will be the replacement.
+from the ReplaceType enum.</br>
+For the **VALUE_TO_REPLACE** value, you must use the value that will be the replacement.</br>
 
 Have more questions? Feel free to create a issue and help us out!
 
