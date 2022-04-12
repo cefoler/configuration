@@ -6,7 +6,7 @@ ext {
 rootProject.name = projectName
 
 include "$prefix-core"
-include "$prefix-configuration"
+include "$prefix"
 
 project("$prefix-core").projectDir = file("$rootDir/core")
-project("$prefix-configuration").projectDir = file("$rootDir/configuration")
+project("$prefix").projectDir = file("$rootDir/configuration")

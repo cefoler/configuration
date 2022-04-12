@@ -74,7 +74,7 @@ test {
 
     ignoreFailures = true
 
-    finalizedBy "jacocoTestReport", "pmdMain", "pmdTest", "checkstyleMain", "checkstyleTest"
+    finalizedBy "checkstyleMain", "checkstyleTest", "pmdMain", "pmdTest", "jacocoTestReport"
 }
 
 jacoco {
