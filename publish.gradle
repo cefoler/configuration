@@ -11,11 +11,15 @@ ext {
 publishing {
     repositories {
         maven {
-            url = version.endsWith("SNAPSHOT") ? snapshotUrl : releaseUrl
+            if (hasProperty("snaphotUrl") && hasProperty("releaseUrl")) {
+                url = version.endsWith("SNAPSHOT") ? snapshotUrl : releaseUrl
 
-            credentials {
-                username = ossrhUsername
-                password = ossrhPassword
+                credentials {
+                    if (hasProperty("username") && hasProperty("password")) {
+                        username = username
+                        password = password
+                    }
+                }
             }
         }
     }
