@@ -15,11 +15,15 @@ signing {
 publishing {
     repositories {
         maven {
-            url = projectVersion.endsWith('-SNAPSHOT') ? snapshotUrl : releaseUrl
+            if (project.hasProperty("snapshotUrl") && project.hasProperty("releaseUrl")) {
+                url = projectVersion.endsWith('-SNAPSHOT') ? snapshotUrl : releaseUrl
 
-            credentials {
-                username = ossrhUsername
-                password = ossrhPassword
+                if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
+                    credentials {
+                        username = ossrhUsername
+                        password = ossrhPassword
+                    }
+                }
             }
         }
     }
