@@ -9,19 +9,25 @@ ext {
 }
 
 signing {
-    sign configurations.archives
+    if (project.hasProperty("signing.keyId") && project.hasProperty("signing.password")
+            && project.hasProperty("signing.secretKeyRingFile")) {
+        sign configurations.archives
+    }
 }
 
 publishing {
     repositories {
         maven {
-            if (project.hasProperty("snapshotUrl") && project.hasProperty("releaseUrl")) {
-                url = projectVersion.endsWith('-SNAPSHOT') ? snapshotUrl : releaseUrl
+            if (project.hasProperty("url.snapshot") && project.hasProperty("url.release")) {
+                url = projectVersion.endsWith("-SNAPSHOT")
+                        ? project.property("url.snapshot")
+                        : project.property("url.release")
 
-                if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
+                if (project.hasProperty("ossrh.username")
+                        && project.hasProperty("ossrh.password")) {
                     credentials {
-                        username = ossrhUsername
-                        password = ossrhPassword
+                        username = project.property("ossrh.username")
+                        password = project.property("ossrh.password")
                     }
                 }
             }
