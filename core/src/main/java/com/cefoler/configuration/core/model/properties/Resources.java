@@ -35,12 +35,12 @@ public class Resources extends Properties {
     return this;
   }
 
-  public synchronized <T> T find(final String key) {
+  public synchronized <T> T find(final Object key) {
     final Object value = get(key);
     return Objects.cast(value);
   }
 
-  public synchronized <T> T find(final String key, @Nullable final T orElse) {
+  public synchronized <T> T find(final Object key, @Nullable final T orElse) {
     final Object value = getOrDefault(key, orElse);
     return Objects.cast(value);
   }
