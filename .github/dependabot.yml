@@ -5,12 +5,12 @@ updates:
     schedule:
       interval: "daily"
     labels:
-      - "dependencies"
+      - "dependency"
     open-pull-requests-limit: 10
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
       interval: "daily"
     labels:
-      - "dependencies"
+      - "dependency"
     open-pull-requests-limit: 10
