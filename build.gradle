@@ -32,7 +32,7 @@ subprojects {
         guavaVersion = "31.1-jre"
         floggerVersion = "0.7.4"
 
-        lombokVersion = "1.18.22"
+        lombokVersion = "1.18.24"
         jetbrainsVersion = "23.0.0"
     }
 
