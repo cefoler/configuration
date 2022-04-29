@@ -41,7 +41,6 @@ public final class ConfigurationFactory {
       return start(file);
     }
 
-    @Nullable
     final String driver = resources.find("driver", null);
 
     final String path = resources.find("path");

@@ -15,7 +15,7 @@ ext {
     javaMain = "src/main/java"
     javaTest = "src/test/java"
 
-    javaDoc = javadoc
+    javaDocument = javadoc
     javaVersion = JavaVersion.VERSION_1_8
 
     licenseName = "Apache License, Version 2.0"
@@ -38,5 +38,5 @@ task sourcesJar(type: Jar, dependsOn: javadoc) {
 
 task javadocJar(type: Jar, dependsOn: classes) {
     archiveClassifier = "javadoc"
-    from javaDoc
+    from javaDocument
 }
