@@ -1,10 +1,7 @@
 package com.cefoler.configuration.core.model.lambda.predicate;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
-import com.cefoler.configuration.core.model.lambda.function.ThrowBiFunction;
-import com.cefoler.configuration.core.util.Streams;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Nullable;
 

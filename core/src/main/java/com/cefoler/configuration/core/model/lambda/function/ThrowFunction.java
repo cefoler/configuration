@@ -1,9 +1,7 @@
 package com.cefoler.configuration.core.model.lambda.function;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
-import com.cefoler.configuration.core.model.lambda.consumer.ThrowBiConsumer;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;

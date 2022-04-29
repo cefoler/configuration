@@ -9,7 +9,6 @@ import com.cefoler.configuration.model.provider.impl.configuration.type.Configur
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
