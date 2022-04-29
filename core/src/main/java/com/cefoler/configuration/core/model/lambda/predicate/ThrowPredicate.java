@@ -2,6 +2,7 @@ package com.cefoler.configuration.core.model.lambda.predicate;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
 import com.cefoler.configuration.core.model.lambda.function.ThrowBiFunction;
+import com.cefoler.configuration.core.util.Streams;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -45,7 +46,7 @@ public interface ThrowPredicate<T, U extends Exception> {
     };
   }
 
-  static <T, U> Predicate<Entry<T, U>> convert(final ThrowBiPredicate<? super T, ? super U,
+  static <T, U> Predicate<Entry<T, U>> convertToBi(final ThrowBiPredicate<? super T, ? super U,
       ?> predicate) {
     return entry -> {
       try {

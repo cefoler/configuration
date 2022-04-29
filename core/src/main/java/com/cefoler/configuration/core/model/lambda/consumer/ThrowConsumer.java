@@ -34,8 +34,8 @@ public interface ThrowConsumer<T, U extends Exception> {
     };
   }
 
-  static <T, U> Consumer<Entry<T, U>> convert(final ThrowBiConsumer<? super T, ? super U,
-      ?> consumer) {
+  static <T, U> Consumer<Entry<T, U>> convertToBi(final ThrowBiConsumer<? super T, ?
+      super U, ?> consumer) {
     return entry -> {
       try {
         final T key = entry.getKey();

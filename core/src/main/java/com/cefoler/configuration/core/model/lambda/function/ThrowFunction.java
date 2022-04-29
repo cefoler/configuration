@@ -61,7 +61,7 @@ public interface ThrowFunction<T, U, V extends Exception> {
     };
   }
 
-  static <T, U, V> Function<Entry<T, U>, V> convert(final ThrowBiFunction<? super T, ? super U,
+  static <T, U, V> Function<Entry<T, U>, V> convertToBi(final ThrowBiFunction<? super T, ? super U,
       ? extends V, ?> function) {
     return entry -> {
       try {
