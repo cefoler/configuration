@@ -44,10 +44,9 @@ public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
     final Set<Entry<String, ReplaceValue>> entries = entrySet();
 
     return entries.stream()
-        .filter(ThrowPredicate.convertToBi((key, value) -> {
-          final ReplaceType candidate = value.getType();
-          return type == candidate || candidate == ReplaceType.ALL;
-        })).collect(Collectors.toSet());
+        .filter(ThrowPredicate.convertToBi((key, value) -> value.getType() == type
+            || value.getType() == ReplaceType.ALL))
+        .collect(Collectors.toSet());
   }
 
   public Set<String> keySet(final ReplaceType type) {
