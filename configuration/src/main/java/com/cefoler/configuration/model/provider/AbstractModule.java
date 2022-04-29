@@ -1,6 +1,7 @@
 package com.cefoler.configuration.model.provider;
 
 import com.cefoler.configuration.core.exception.unchecked.data.impl.InvalidDataException;
+import com.cefoler.configuration.core.model.lambda.predicate.ThrowPredicate;
 import com.cefoler.configuration.core.model.lambda.supplier.ThrowSupplier;
 import com.cefoler.configuration.core.util.Objects;
 import com.cefoler.configuration.core.util.Reflection;
@@ -510,7 +511,7 @@ public abstract class AbstractModule implements Module {
     final Set<Entry<Predicate<Object>, Function<Object, Object>>> entries = converters.entrySet();
 
     final Optional<Function<Object, Object>> optional = entries.stream()
-        .filter(entry -> entry.getKey().test(value))
+        .filter(ThrowPredicate.convertToBi((predicate, function) -> predicate.test(value)))
         .map(Entry::getValue)
         .findFirst();
 

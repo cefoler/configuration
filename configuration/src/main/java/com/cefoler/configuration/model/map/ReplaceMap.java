@@ -1,5 +1,6 @@
 package com.cefoler.configuration.model.map;
 
+import com.cefoler.configuration.core.model.lambda.predicate.ThrowPredicate;
 import com.cefoler.configuration.core.util.Objects;
 import com.cefoler.configuration.model.entity.ReplaceValue;
 import com.cefoler.configuration.model.entity.type.ReplaceType;
@@ -43,12 +44,10 @@ public class ReplaceMap extends ForwardingMap<String, ReplaceValue>
     final Set<Entry<String, ReplaceValue>> entries = entrySet();
 
     return entries.stream()
-        .filter(entry -> {
-          final ReplaceValue value = entry.getValue();
+        .filter(ThrowPredicate.convertToBi((key, value) -> {
           final ReplaceType candidate = value.getType();
-
           return type == candidate || candidate == ReplaceType.ALL;
-        }).collect(Collectors.toSet());
+        })).collect(Collectors.toSet());
   }
 
   public Set<String> keySet(final ReplaceType type) {
