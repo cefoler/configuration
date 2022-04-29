@@ -80,10 +80,10 @@ public class IteratorSpliterator<T> implements Spliterator<T> {
     }
 
     int newBatch = batch + UNIT_BATCH;
-    final int convertedSize = Primitives.toInt(size);
+    final int converted = Primitives.toInt(size);
 
-    if (newBatch > convertedSize) {
-      newBatch = convertedSize;
+    if (newBatch > converted) {
+      newBatch = converted;
     }
 
     if (newBatch > MAXIMUM_BATCH) {
