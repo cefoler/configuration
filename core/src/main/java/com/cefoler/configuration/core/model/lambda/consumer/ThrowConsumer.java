@@ -1,7 +1,6 @@
 package com.cefoler.configuration.core.model.lambda.consumer;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
-import java.io.Serializable;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
