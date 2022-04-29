@@ -1,6 +1,8 @@
 package com.cefoler.configuration.core.model.lambda.consumer;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
+import java.io.Serializable;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 @FunctionalInterface
@@ -26,6 +28,20 @@ public interface ThrowConsumer<T, U extends Exception> {
     return key -> {
       try {
         consumer.accept(key);
+      } catch (final Exception exception) {
+        throw new UncheckedException(exception);
+      }
+    };
+  }
+
+  static <T, U> Consumer<Entry<T, U>> convert(final ThrowBiConsumer<? super T, ? super U,
+      ?> consumer) {
+    return entry -> {
+      try {
+        final T key = entry.getKey();
+        final U value = entry.getValue();
+
+        consumer.accept(key, value);
       } catch (final Exception exception) {
         throw new UncheckedException(exception);
       }

@@ -1,6 +1,9 @@
 package com.cefoler.configuration.core.model.lambda.function;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
+import com.cefoler.configuration.core.model.lambda.consumer.ThrowBiConsumer;
+import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +57,20 @@ public interface ThrowFunction<T, U, V extends Exception> {
         return function.apply(key);
       } catch (final Exception exception) {
         return orElse.get();
+      }
+    };
+  }
+
+  static <T, U, V> Function<Entry<T, U>, V> convert(final ThrowBiFunction<? super T, ? super U,
+      ? extends V, ?> function) {
+    return entry -> {
+      try {
+        final T key = entry.getKey();
+        final U value = entry.getValue();
+
+        return function.apply(key, value);
+      } catch (final Exception exception) {
+        throw new UncheckedException(exception);
       }
     };
   }

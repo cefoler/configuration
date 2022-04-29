@@ -1,6 +1,9 @@
 package com.cefoler.configuration.core.model.lambda.predicate;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
+import com.cefoler.configuration.core.model.lambda.function.ThrowBiFunction;
+import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +41,20 @@ public interface ThrowPredicate<T, U extends Exception> {
         return predicate.test(key);
       } catch (final Exception exception) {
         return orElse;
+      }
+    };
+  }
+
+  static <T, U> Predicate<Entry<T, U>> convert(final ThrowBiPredicate<? super T, ? super U,
+      ?> predicate) {
+    return entry -> {
+      try {
+        final T key = entry.getKey();
+        final U value = entry.getValue();
+
+        return predicate.test(key, value);
+      } catch (final Exception exception) {
+        throw new UncheckedException(exception);
       }
     };
   }
