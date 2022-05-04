@@ -41,21 +41,21 @@ public abstract class AbstractLongSpliterator implements OfLong {
       return null;
     }
 
-    int newBatch = batch + UNIT_BATCH;
+    int summed = batch + UNIT_BATCH;
     final int converted = Primitives.toInt(size);
 
-    if (newBatch > converted) {
-      newBatch = converted;
+    if (summed > converted) {
+      summed = converted;
     }
 
-    if (newBatch > MAXIMUM_BATCH) {
-      newBatch = MAXIMUM_BATCH;
+    if (summed > MAXIMUM_BATCH) {
+      summed = MAXIMUM_BATCH;
     }
 
-    final long[] values = new long[newBatch];
+    final long[] values = new long[summed];
     int index = 0;
 
-    for (; index < newBatch; index++, tryAdvance(consumer)) {
+    for (; index < summed; index++, tryAdvance(consumer)) {
       values[index] = consumer.getValue();
     }
 

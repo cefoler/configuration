@@ -54,21 +54,21 @@ public class IteratorIntSpliterator implements OfInt {
       return null;
     }
 
-    int newBatch = batch + UNIT_BATCH;
+    int summed = batch + UNIT_BATCH;
     final int converted = Primitives.toInt(size);
 
-    if (newBatch > converted) {
-      newBatch = converted;
+    if (summed > converted) {
+      summed = converted;
     }
 
-    if (newBatch > MAXIMUM_BATCH) {
-      newBatch = MAXIMUM_BATCH;
+    if (summed > MAXIMUM_BATCH) {
+      summed = MAXIMUM_BATCH;
     }
 
-    final int[] values = new int[newBatch];
+    final int[] values = new int[summed];
     int index = 0;
 
-    for (; index < newBatch && iterator.hasNext(); index++) {
+    for (; index < summed && iterator.hasNext(); index++) {
       values[index] = iterator.next();
     }
 

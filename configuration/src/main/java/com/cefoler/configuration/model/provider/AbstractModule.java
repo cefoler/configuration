@@ -57,11 +57,11 @@ public abstract class AbstractModule implements Module {
     this.converters = ConvertMap.create();
     this.replacers = ReplaceMap.create();
 
-    final Map<Predicate<Object>, Function<Object, Object>> newConverters = loadConverters();
-    final Map<String, ReplaceValue> newReplacers = loadReplacers();
+    final Map<Predicate<Object>, Function<Object, Object>> initialConverters = loadConverters();
+    final Map<String, ReplaceValue> initialReplacers = loadReplacers();
 
-    converters.putAll(newConverters);
-    replacers.putAll(newReplacers);
+    converters.putAll(initialConverters);
+    replacers.putAll(initialReplacers);
   }
 
   @Override
