@@ -88,12 +88,23 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
+  public <T> T get(final String path, final Supplier<? extends T> orElse) {
+    final Object value = getValue(path);
+    return value != null ? Objects.cast(value) : orElse.get();
+  }
+
+  @Override
   public Object getObject(final String path) {
     return get(path);
   }
 
   @Override
   public Object getObject(final String path, @Nullable final Object orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
+  public Object getObject(final String path, final Supplier<?> orElse) {
     return get(path, orElse);
   }
 
@@ -108,6 +119,11 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
+  public String getString(final String path, final Supplier<String> orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
   public Number getNumber(final String path) {
     return get(path);
   }
@@ -118,13 +134,24 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
+  public Number getNumber(final String path, final Supplier<? extends Number> orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
   public byte getByte(final String path) {
     final Number value = getNumber(path);
     return value.byteValue();
   }
 
   @Override
-  public byte getByte(final String path, @Nullable final Byte orElse) {
+  public byte getByte(final String path, @Nullable final Number orElse) {
+    final Number value = getNumber(path, orElse);
+    return value.byteValue();
+  }
+
+  @Override
+  public byte getByte(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumber(path, orElse);
     return value.byteValue();
   }
@@ -136,7 +163,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public short getShort(final String path, @Nullable final Short orElse) {
+  public short getShort(final String path, @Nullable final Number orElse) {
+    final Number value = getNumber(path, orElse);
+    return value.shortValue();
+  }
+
+  @Override
+  public short getShort(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumber(path, orElse);
     return value.shortValue();
   }
@@ -148,7 +181,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public int getInt(final String path, @Nullable final Integer orElse) {
+  public int getInt(final String path, @Nullable final Number orElse) {
+    final Number value = getNumber(path, orElse);
+    return value.intValue();
+  }
+
+  @Override
+  public int getInt(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumber(path, orElse);
     return value.intValue();
   }
@@ -160,7 +199,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public long getLong(final String path, @Nullable final Long orElse) {
+  public long getLong(final String path, @Nullable final Number orElse) {
+    final Number value = getNumber(path, orElse);
+    return value.longValue();
+  }
+
+  @Override
+  public long getLong(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumber(path, orElse);
     return value.longValue();
   }
@@ -172,7 +217,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public float getFloat(final String path, @Nullable final Float orElse) {
+  public float getFloat(final String path, @Nullable final Number orElse) {
+    final Number value = getNumber(path, orElse);
+    return value.floatValue();
+  }
+
+  @Override
+  public float getFloat(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumber(path, orElse);
     return value.floatValue();
   }
@@ -184,7 +235,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public double getDouble(final String path, @Nullable final Double orElse) {
+  public double getDouble(final String path, @Nullable final Number orElse) {
+    final Number value = getNumber(path, orElse);
+    return value.doubleValue();
+  }
+
+  @Override
+  public double getDouble(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumber(path, orElse);
     return value.doubleValue();
   }
@@ -200,12 +257,22 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
+  public boolean getBoolean(final String path, final Supplier<Boolean> orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
   public Module getModule(final String path) {
     return get(path);
   }
 
   @Override
   public Module getModule(final String path, @Nullable final Module orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
+  public Module getModule(final String path, final Supplier<? extends Module> orElse) {
     return get(path, orElse);
   }
 
@@ -222,14 +289,25 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
+  public List<?> getList(final String path, final Supplier<? extends List<?>> orElse) {
+    return get(path, orElse);
+  }
+
+  @Override
   public List<Object> getObjectList(final String path) {
     final List<Object> values = get(path);
     return ImmutableList.copyOf(values);
   }
 
   @Override
-  public List<Object> getObjectList(final String path, @Nullable final List<Object> orElse) {
-    final List<Object> values = get(path, orElse);
+  public List<Object> getObjectList(final String path, @Nullable final List<?> orElse) {
+    final List<?> values = get(path, orElse);
+    return ImmutableList.copyOf(values);
+  }
+
+  @Override
+  public List<Object> getObjectList(final String path, final Supplier<? extends List<?>> orElse) {
+    final List<?> values = get(path, orElse);
     return ImmutableList.copyOf(values);
   }
 
@@ -241,6 +319,13 @@ public abstract class AbstractModule implements Module {
 
   @Override
   public List<String> getStringList(final String path, @Nullable final List<String> orElse) {
+    final List<String> values = get(path, orElse);
+    return ImmutableList.copyOf(values);
+  }
+
+  @Override
+  public List<String> getStringList(final String path,
+      final Supplier<? extends List<String>> orElse) {
     final List<String> values = get(path, orElse);
     return ImmutableList.copyOf(values);
   }
@@ -259,6 +344,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
+  public List<? extends Number> getNumberList(final String path,
+      final Supplier<? extends List<? extends Number>> orElse) {
+    final List<? extends Number> values = get(path, orElse);
+    return ImmutableList.copyOf(values);
+  }
+
+  @Override
   public List<Byte> getByteList(final String path) {
     final List<? extends Number> numbers = getNumberList(path);
 
@@ -268,7 +360,17 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public List<Byte> getByteList(final String path, @Nullable final List<Byte> orElse) {
+  public List<Byte> getByteList(final String path, @Nullable final List<? extends Number> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::byteValue)
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  @Override
+  public List<Byte> getByteList(final String path,
+      final Supplier<? extends List<? extends Number>> orElse) {
     final List<? extends Number> numbers = getNumberList(path, orElse);
 
     return numbers.stream()
@@ -286,7 +388,18 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public List<Short> getShortList(final String path, @Nullable final List<Short> orElse) {
+  public List<Short> getShortList(final String path,
+      @Nullable final List<? extends Number> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::shortValue)
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  @Override
+  public List<Short> getShortList(final String path,
+      final Supplier<? extends List<? extends Number>> orElse) {
     final List<? extends Number> numbers = getNumberList(path, orElse);
 
     return numbers.stream()
@@ -304,7 +417,18 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public List<Integer> getIntegerList(final String path, @Nullable final List<Integer> orElse) {
+  public List<Integer> getIntegerList(final String path,
+      @Nullable final List<? extends Number> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::intValue)
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  @Override
+  public List<Integer> getIntegerList(final String path,
+      final Supplier<? extends List<? extends Number>> orElse) {
     final List<? extends Number> numbers = getNumberList(path, orElse);
 
     return numbers.stream()
@@ -322,7 +446,17 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public List<Long> getLongList(final String path, @Nullable final List<Long> orElse) {
+  public List<Long> getLongList(final String path, @Nullable final List<? extends Number> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::longValue)
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  @Override
+  public List<Long> getLongList(final String path,
+      final Supplier<? extends List<? extends Number>> orElse) {
     final List<? extends Number> numbers = getNumberList(path, orElse);
 
     return numbers.stream()
@@ -340,7 +474,18 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public List<Float> getFloatList(final String path, @Nullable final List<Float> orElse) {
+  public List<Float> getFloatList(final String path,
+      @Nullable final List<? extends Number> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::floatValue)
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  @Override
+  public List<Float> getFloatList(final String path,
+      final Supplier<? extends List<? extends Number>> orElse) {
     final List<? extends Number> numbers = getNumberList(path, orElse);
 
     return numbers.stream()
@@ -358,7 +503,18 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public List<Double> getDoubleList(final String path, @Nullable final List<Double> orElse) {
+  public List<Double> getDoubleList(final String path,
+      @Nullable final List<? extends Number> orElse) {
+    final List<? extends Number> numbers = getNumberList(path, orElse);
+
+    return numbers.stream()
+        .map(Number::doubleValue)
+        .collect(ImmutableList.toImmutableList());
+  }
+
+  @Override
+  public List<Double> getDoubleList(final String path,
+      final Supplier<? extends List<? extends Number>> orElse) {
     final List<? extends Number> numbers = getNumberList(path, orElse);
 
     return numbers.stream()
@@ -379,14 +535,29 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public List<Module> getModuleList(final String path) {
-    final List<Module> results = get(path);
+  public List<Boolean> getBooleanList(final String path,
+      final Supplier<? extends List<Boolean>> orElse) {
+    final List<Boolean> results = get(path, orElse);
     return ImmutableList.copyOf(results);
   }
 
   @Override
-  public List<Module> getModuleList(final String path, @Nullable final List<Module> orElse) {
-    final List<Module> results = get(path, orElse);
+  public List<? extends Module> getModuleList(final String path) {
+    final List<? extends Module> results = get(path);
+    return ImmutableList.copyOf(results);
+  }
+
+  @Override
+  public List<? extends Module> getModuleList(final String path,
+      @Nullable final List<? extends Module> orElse) {
+    final List<? extends Module> results = get(path, orElse);
+    return ImmutableList.copyOf(results);
+  }
+
+  @Override
+  public List<? extends Module> getModuleList(final String path,
+      final Supplier<? extends List<? extends Module>> orElse) {
+    final List<? extends Module> results = get(path, orElse);
     return ImmutableList.copyOf(results);
   }
 
