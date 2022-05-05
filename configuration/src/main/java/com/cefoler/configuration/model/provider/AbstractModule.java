@@ -683,7 +683,7 @@ public abstract class AbstractModule implements Module {
     final Set<Entry<Predicate<Object>, Function<Object, Object>>> entries = converters.entrySet();
 
     final Optional<Function<Object, Object>> optional = entries.stream()
-        .filter(ThrowPredicate.convertToBi((predicate, function) -> predicate.test(value)))
+        .filter(ThrowPredicate.convertToKey(predicate -> predicate.test(value)))
         .map(Entry::getValue)
         .findFirst();
 
