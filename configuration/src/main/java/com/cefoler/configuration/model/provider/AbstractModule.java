@@ -580,13 +580,13 @@ public abstract class AbstractModule implements Module {
         throw new InvalidDataException("Path " + path + " was not found");
       }
 
-      final Map<?, ?> converted = Objects.cast(result);
-      result = converted.get(key);
+      final Map<?, ?> casted = Objects.cast(result);
+      result = casted.get(key);
     }
 
     if (result instanceof Map) {
-      final Map<?, ?> converted = Objects.cast(result);
-      final Set<?> keys = converted.keySet();
+      final Map<?, ?> casted = Objects.cast(result);
+      final Set<?> keys = casted.keySet();
 
       return keys.stream()
           .map(Object::toString)
@@ -594,17 +594,17 @@ public abstract class AbstractModule implements Module {
     }
 
     if (result instanceof Collection) {
-      final Collection<?> converted = Objects.cast(result);
+      final Collection<?> casted = Objects.cast(result);
 
-      return converted.stream()
+      return casted.stream()
           .map(Object::toString)
           .collect(ImmutableSet.toImmutableSet());
     }
 
     if (result instanceof Object[]) {
-      final Object[] converted = Objects.cast(result);
+      final Object[] casted = Objects.cast(result);
 
-      return Streams.toStream(converted)
+      return Streams.toStream(casted)
           .map(Object::toString)
           .collect(ImmutableSet.toImmutableSet());
     }
@@ -669,8 +669,8 @@ public abstract class AbstractModule implements Module {
         return null;
       }
 
-      final Map<?, ?> converted = Objects.cast(value);
-      value = converted.get(key);
+      final Map<?, ?> casted = Objects.cast(value);
+      value = casted.get(key);
     }
 
     final Object converted = convert(value);
@@ -697,7 +697,7 @@ public abstract class AbstractModule implements Module {
 
   protected Object replace(final Object value, final ReplaceType type) {
     if (value instanceof CharSequence) {
-      CharSequence converted = Objects.cast(value);
+      CharSequence casted = Objects.cast(value);
 
       for (final Entry<String, ReplaceValue> entry : replacers.entrySet(type)) {
         final String key = entry.getKey();
@@ -707,22 +707,22 @@ public abstract class AbstractModule implements Module {
         final String pattern = "(?i)" + key;
 
         final Pattern regex = Pattern.compile(pattern);
-        final Matcher matcher = regex.matcher(converted);
+        final Matcher matcher = regex.matcher(casted);
 
-        converted = matcher.replaceAll(replacer);
+        casted = matcher.replaceAll(replacer);
       }
 
-      return Objects.cast(converted);
+      return Objects.cast(casted);
     }
 
     if (value instanceof Collection) {
-      final Collection<?> converted = Objects.cast(value);
+      final Collection<?> casted = Objects.cast(value);
 
-      if (converted.isEmpty()) {
+      if (casted.isEmpty()) {
         return value;
       }
 
-      final Collection<?> collection = converted.stream()
+      final Collection<?> collection = casted.stream()
           .map(candidate -> replace(candidate, type))
           .collect(Collectors.toCollection(ThrowSupplier.convert(() ->
               Reflection.instance(value), ArrayList::new)));
@@ -731,14 +731,14 @@ public abstract class AbstractModule implements Module {
     }
 
     if (value instanceof Object[]) {
-      final Object[] converted = Objects.cast(value);
-      final int length = converted.length;
+      final Object[] casted = Objects.cast(value);
+      final int length = casted.length;
 
       if (length == 0) {
         return value;
       }
 
-      final Object[] array = Streams.toStream(converted)
+      final Object[] array = Streams.toStream(casted)
           .map(candidate -> replace(candidate, type))
           .toArray();
 

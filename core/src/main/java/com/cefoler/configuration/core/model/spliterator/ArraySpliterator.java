@@ -46,8 +46,8 @@ public class ArraySpliterator<T> implements Spliterator<T> {
       final Object value = values[index];
       index++;
 
-      final T converted = Objects.cast(value);
-      consumer.accept(converted);
+      final T casted = Objects.cast(value);
+      consumer.accept(casted);
 
       return true;
     }
@@ -85,9 +85,9 @@ public class ArraySpliterator<T> implements Spliterator<T> {
 
     for (; oldIndex < index; oldIndex++) {
       final Object value = values[oldIndex];
-      final T converted = Objects.cast(value);
+      final T casted = Objects.cast(value);
 
-      consumer.accept(converted);
+      consumer.accept(casted);
     }
   }
 

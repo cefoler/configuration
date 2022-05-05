@@ -141,17 +141,17 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
     final int index = length - 1;
     final String last = split[index];
 
-    Map<Object, Object> newValues = Objects.cast(values);
+    Map<Object, Object> casted = Objects.cast(values);
 
     for (@NonNls final String key : split) {
-      if (!newValues.containsKey(key)) {
+      if (!casted.containsKey(key)) {
         final Map<?, ?> newValue = new LinkedHashMap<>(1);
-        newValues.put(key, newValue);
+        casted.put(key, newValue);
       }
 
       if (key.equals(last)) {
         if (value == null) {
-          newValues.remove(last);
+          casted.remove(last);
           return;
         }
 
@@ -166,16 +166,16 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
           final Map<?, ?> values = module.getValues();
           final Map<?, ?> newValue = new LinkedHashMap<>(values);
 
-          newValues.put(last, newValue);
+          casted.put(last, newValue);
           return;
         }
 
-        newValues.put(last, replaced);
+        casted.put(last, replaced);
         return;
       }
 
-      final Object sub = newValues.get(key);
-      newValues = Objects.cast(sub);
+      final Object sub = casted.get(key);
+      casted = Objects.cast(sub);
     }
   }
 
@@ -224,8 +224,8 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
   protected Map<Predicate<Object>, Function<Object, Object>> loadConverters() {
     return ImmutableMap.of(value -> {
       if (value instanceof Collection) {
-        final Collection<?> converted = Objects.cast(value);
-        final Iterator<?> iterator = converted.iterator();
+        final Collection<?> casted = Objects.cast(value);
+        final Iterator<?> iterator = casted.iterator();
 
         return !iterator.hasNext() || !(iterator.next() instanceof Map);
       }
@@ -233,13 +233,13 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       return value instanceof Map;
     }, value -> {
       if (value instanceof Map) {
-        final Map<?, ?> converted = Objects.cast(value);
-        return SubModule.of(converted, converters, replacers);
+        final Map<?, ?> casted = Objects.cast(value);
+        return SubModule.of(casted, converters, replacers);
       }
 
-      final Collection<?> converted = Objects.cast(value);
+      final Collection<?> casted = Objects.cast(value);
 
-      return converted.stream()
+      return casted.stream()
           .filter(Map.class::isInstance)
           .map(values -> Objects.cast(values, Map.class))
           .map(values -> SubModule.of(values, converters, replacers))
