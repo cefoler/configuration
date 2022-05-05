@@ -145,13 +145,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public byte getByte(final String path, @Nullable final Number orElse) {
+  public Byte getByte(final String path, @Nullable final Number orElse) {
     final Number value = getNumber(path, orElse);
     return value.byteValue();
   }
 
   @Override
-  public byte getByteOrGet(final String path, final Supplier<? extends Number> orElse) {
+  public Byte getByteOrGet(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumberOrGet(path, orElse);
     return value.byteValue();
   }
@@ -163,13 +163,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public short getShort(final String path, @Nullable final Number orElse) {
+  public Short getShort(final String path, @Nullable final Number orElse) {
     final Number value = getNumber(path, orElse);
     return value.shortValue();
   }
 
   @Override
-  public short getShortOrGet(final String path, final Supplier<? extends Number> orElse) {
+  public Short getShortOrGet(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumberOrGet(path, orElse);
     return value.shortValue();
   }
@@ -181,13 +181,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public int getInt(final String path, @Nullable final Number orElse) {
+  public Integer getInt(final String path, @Nullable final Number orElse) {
     final Number value = getNumber(path, orElse);
     return value.intValue();
   }
 
   @Override
-  public int getIntOrGet(final String path, final Supplier<? extends Number> orElse) {
+  public Integer getIntOrGet(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumberOrGet(path, orElse);
     return value.intValue();
   }
@@ -199,13 +199,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public long getLong(final String path, @Nullable final Number orElse) {
+  public Long getLong(final String path, @Nullable final Number orElse) {
     final Number value = getNumber(path, orElse);
     return value.longValue();
   }
 
   @Override
-  public long getLongOrGet(final String path, final Supplier<? extends Number> orElse) {
+  public Long getLongOrGet(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumberOrGet(path, orElse);
     return value.longValue();
   }
@@ -217,13 +217,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public float getFloat(final String path, @Nullable final Number orElse) {
+  public Float getFloat(final String path, @Nullable final Number orElse) {
     final Number value = getNumber(path, orElse);
     return value.floatValue();
   }
 
   @Override
-  public float getFloatOrGet(final String path, final Supplier<? extends Number> orElse) {
+  public Float getFloatOrGet(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumberOrGet(path, orElse);
     return value.floatValue();
   }
@@ -235,13 +235,13 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public double getDouble(final String path, @Nullable final Number orElse) {
+  public Double getDouble(final String path, @Nullable final Number orElse) {
     final Number value = getNumber(path, orElse);
     return value.doubleValue();
   }
 
   @Override
-  public double getDoubleOrGet(final String path, final Supplier<? extends Number> orElse) {
+  public Double getDoubleOrGet(final String path, final Supplier<? extends Number> orElse) {
     final Number value = getNumberOrGet(path, orElse);
     return value.doubleValue();
   }
@@ -252,12 +252,12 @@ public abstract class AbstractModule implements Module {
   }
 
   @Override
-  public boolean getBoolean(final String path, @Nullable final Boolean orElse) {
+  public Boolean getBoolean(final String path, @Nullable final Boolean orElse) {
     return get(path, orElse);
   }
 
   @Override
-  public boolean getBooleanOrGet(final String path, final Supplier<Boolean> orElse) {
+  public Boolean getBooleanOrGet(final String path, final Supplier<Boolean> orElse) {
     return getOrGet(path, orElse);
   }
 
