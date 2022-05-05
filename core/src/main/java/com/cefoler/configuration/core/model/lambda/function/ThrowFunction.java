@@ -59,6 +59,30 @@ public interface ThrowFunction<T, U, V extends Exception> {
     };
   }
 
+  static <T, U> Function<Entry<T, ?>, U> convertToKey(final ThrowFunction<? super T, ? extends U,
+      ?> function) {
+    return entry -> {
+      try {
+        final T key = entry.getKey();
+        return function.apply(key);
+      } catch (final Exception exception) {
+        throw new UncheckedException(exception);
+      }
+    };
+  }
+
+  static <T, U> Function<Entry<?, T>, U> convertToValue(final ThrowFunction<? super T, ? extends U,
+      ?> function) {
+    return entry -> {
+      try {
+        final T value = entry.getValue();
+        return function.apply(value);
+      } catch (final Exception exception) {
+        throw new UncheckedException(exception);
+      }
+    };
+  }
+
   static <T, U, V> Function<Entry<T, U>, V> convertToBi(final ThrowBiFunction<? super T, ? super U,
       ? extends V, ?> function) {
     return entry -> {

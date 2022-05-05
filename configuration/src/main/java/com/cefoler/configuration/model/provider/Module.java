@@ -41,45 +41,45 @@ public interface Module extends Serializable {
 
   byte getByte(final String path);
 
-  byte getByte(final String path, @Nullable final Number orElse);
+  Byte getByte(final String path, @Nullable final Number orElse);
 
-  byte getByteOrGet(final String path, final Supplier<? extends Number> orElse);
+  Byte getByteOrGet(final String path, final Supplier<? extends Number> orElse);
 
   short getShort(final String path);
 
-  short getShort(final String path, @Nullable final Number orElse);
+  Short getShort(final String path, @Nullable final Number orElse);
 
-  short getShortOrGet(final String path, final Supplier<? extends Number> orElse);
+  Short getShortOrGet(final String path, final Supplier<? extends Number> orElse);
 
   int getInt(final String path);
 
-  int getInt(final String path, @Nullable final Number orElse);
+  Integer getInt(final String path, @Nullable final Number orElse);
 
-  int getIntOrGet(final String path, final Supplier<? extends Number> orElse);
+  Integer getIntOrGet(final String path, final Supplier<? extends Number> orElse);
 
   long getLong(final String path);
 
-  long getLong(final String path, @Nullable final Number orElse);
+  Long getLong(final String path, @Nullable final Number orElse);
 
-  long getLongOrGet(final String path, final Supplier<? extends Number> orElse);
+  Long getLongOrGet(final String path, final Supplier<? extends Number> orElse);
 
   float getFloat(final String path);
 
-  float getFloat(final String path, @Nullable final Number orElse);
+  Float getFloat(final String path, @Nullable final Number orElse);
 
-  float getFloatOrGet(final String path, final Supplier<? extends Number> orElse);
+  Float getFloatOrGet(final String path, final Supplier<? extends Number> orElse);
 
   double getDouble(final String path);
 
-  double getDouble(final String path, @Nullable final Number orElse);
+  Double getDouble(final String path, @Nullable final Number orElse);
 
-  double getDoubleOrGet(final String path, final Supplier<? extends Number> orElse);
+  Double getDoubleOrGet(final String path, final Supplier<? extends Number> orElse);
 
   boolean getBoolean(final String path);
 
-  boolean getBoolean(final String path, @Nullable final Boolean orElse);
+  Boolean getBoolean(final String path, @Nullable final Boolean orElse);
 
-  boolean getBooleanOrGet(final String path, final Supplier<Boolean> orElse);
+  Boolean getBooleanOrGet(final String path, final Supplier<Boolean> orElse);
 
   Module getModule(final String path);
 

@@ -4,7 +4,7 @@ ext {
     projectGroup = "com.cefoler.configuration"
     projectArtifact = project.name
 
-    projectVersion = "1.2.1"
+    projectVersion = "1.2.2"
     projectDescription = "A Configuration wrapper for YAML, JSON and Properties."
 
     projectSystem = "github"
