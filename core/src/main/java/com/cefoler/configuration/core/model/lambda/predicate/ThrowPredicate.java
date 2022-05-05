@@ -1,7 +1,9 @@
 package com.cefoler.configuration.core.model.lambda.predicate;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
+import com.cefoler.configuration.core.model.lambda.consumer.ThrowConsumer;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +41,28 @@ public interface ThrowPredicate<T, U extends Exception> {
         return predicate.test(key);
       } catch (final Exception exception) {
         return orElse;
+      }
+    };
+  }
+
+  static <T> Predicate<Entry<T, ?>> convertToKey(final ThrowPredicate<? super T, ?> predicate) {
+    return entry -> {
+      try {
+        final T key = entry.getKey();
+        return predicate.test(key);
+      } catch (final Exception exception) {
+        throw new UncheckedException(exception);
+      }
+    };
+  }
+
+  static <T> Predicate<Entry<?, T>> convertToValue(final ThrowPredicate<? super T, ?> predicate) {
+    return entry -> {
+      try {
+        final T value = entry.getValue();
+        return predicate.test(value);
+      } catch (final Exception exception) {
+        throw new UncheckedException(exception);
       }
     };
   }
