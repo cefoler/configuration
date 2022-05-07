@@ -139,16 +139,9 @@ public final class ConfigurationFactory {
     }
 
     return Streams.toStream(files)
-        .filter(file -> {
-          final String name = file.getName();
-          final String pattern = "(?i)\\b" + name + "\\b";
-
-          final Pattern regex = Pattern.compile(pattern);
-
-          return Streams.toStream(excluded)
-              .map(regex::matcher)
-              .anyMatch(Matcher::find);
-        })
+        .filter(file -> Streams.toStream(excluded)
+            .map(Pattern.compile("(?i)\\b" + file.getName() + "\\b")::matcher)
+            .anyMatch(Matcher::find))
         .map(ThrowFunction.convert(this::start))
         .collect(ImmutableSet.toImmutableSet());
   }
