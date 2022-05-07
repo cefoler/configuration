@@ -16,8 +16,8 @@ public class Resources extends Properties {
 
   private static final long serialVersionUID = -1230180278120635806L;
 
-  protected Resources(final Properties properties) {
-    super(properties);
+  protected Resources(final Map<?, ?> values) {
+    addAll(values);
   }
 
   public synchronized Resources add(final Object key, final Object value) {
@@ -49,8 +49,8 @@ public class Resources extends Properties {
     return new Resources();
   }
 
-  public static Resources create(final Properties properties) {
-    return new Resources(properties);
+  public static Resources create(final Map<?, ?> values) {
+    return new Resources(values);
   }
 
   @Override
