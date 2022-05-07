@@ -18,9 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jetbrains.annotations.Unmodifiable;
 
-/**
- * Configuration factory
- */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
