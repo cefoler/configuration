@@ -227,7 +227,7 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
         final Collection<?> casted = Objects.cast(value);
         final Iterator<?> iterator = casted.iterator();
 
-        return !iterator.hasNext() || !(iterator.next() instanceof Map);
+        return iterator.hasNext() && iterator.next() instanceof Map;
       }
 
       return value instanceof Map;
