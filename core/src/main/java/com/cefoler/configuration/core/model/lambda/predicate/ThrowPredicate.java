@@ -1,9 +1,7 @@
 package com.cefoler.configuration.core.model.lambda.predicate;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
-import com.cefoler.configuration.core.model.lambda.consumer.ThrowConsumer;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,10 +1,8 @@
 package com.cefoler.configuration.core.model.lambda.consumer;
 
 import com.cefoler.configuration.core.exception.unchecked.unchecked.UncheckedException;
-import com.cefoler.configuration.core.model.lambda.function.ThrowFunction;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 @FunctionalInterface
 public interface ThrowConsumer<T, U extends Exception> {

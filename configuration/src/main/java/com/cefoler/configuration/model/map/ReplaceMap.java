@@ -7,7 +7,6 @@ import com.cefoler.configuration.model.entity.type.ReplaceType;
 import com.google.common.collect.ForwardingMap;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;

@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -63,7 +64,7 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       } catch (final FileNotFoundException exception) {
         throw exception;
       } catch (final IOException exception) {
-        exception.printStackTrace();
+        LOGGER.atWarning().withCause(exception).log("Failed to copy resource to file", exception);
       }
     }
 
@@ -99,7 +100,7 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       final String path = file.getAbsolutePath();
       throw new FailedToSerializeException("Failed to get data from: " + path, exception);
     } catch (final IOException exception) {
-      exception.printStackTrace();
+      LOGGER.atWarning().withCause(exception).log("Failed to load configuration", exception);
     }
   }
 
@@ -123,7 +124,7 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
       final String path = file.getAbsolutePath();
       throw new FailedToSerializeException("Failed to save data to: " + path, exception);
     } catch (final IOException exception) {
-      exception.printStackTrace();
+      LOGGER.atWarning().withCause(exception).log("Failed to save configuration", exception);
     }
   }
 
@@ -180,13 +181,13 @@ public abstract class AbstractConfiguration extends AbstractModule implements Co
   }
 
   private InputStream getResource(final String resource) {
-    final Class<?> clazz = getClass();
+    final Thread thread = Thread.currentThread();
 
-    final ClassLoader loader = clazz.getClassLoader();
+    final ClassLoader loader = thread.getContextClassLoader();
     final InputStream input = loader.getResourceAsStream(resource);
 
     if (input == null) {
-      throw new NullPointerException("Resource " + resource + " not found");
+      throw new InvalidParameterException("Resource " + resource + " not found");
     }
 
     return input;

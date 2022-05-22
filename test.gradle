@@ -16,7 +16,7 @@ ext {
     jacocoReport = "$outputPath/reports/jacoco"
     jacocoClass = "$outputPath/classes/jacoco"
 
-    pmdVersion = "6.44.0"
+    pmdVersion = "6.45.0"
     pmdConfiguration = "$configPath/pmd"
 
     pmdReport = "$outputPath/reports/pmd"
@@ -95,7 +95,9 @@ pmd {
     toolVersion = pmdVersion
     consoleOutput = false
 
+    ruleSets = []
     ruleSetFiles = files("$pmdConfiguration/rules.xml")
+
     ignoreFailures = true
 }
 

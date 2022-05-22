@@ -2,17 +2,92 @@
 <ruleset name="rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
-  https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+   https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
 
-  <description>Rules from Java</description>
+  <description>Cefoler Rules</description>
 
-  <rule ref="category/java/bestpractices.xml" />
-  <rule ref="category/java/codestyle.xml" />
-  <rule ref="category/java/design.xml" />
-  <rule ref="category/java/documentation.xml" />
-  <rule ref="category/java/multithreading.xml" />
-  <rule ref="category/java/performance.xml" />
-  <rule ref="category/java/security.xml"/>
-  <rule ref="category/java/errorprone.xml" />
+  <rule ref="category/java/bestpractices.xml">
+    <exclude name="AbstractClassWithoutAbstractMethod" />
+    <exclude name="AvoidReassigningParameters" />
+    <exclude name="GuardLogStatement" />
+    <exclude name="JUnitAssertionsShouldIncludeMessage" />
+    <exclude name="JUnitTestContainsTooManyAsserts" />
+    <exclude name="JUnitTestsShouldIncludeAssert" />
+    <exclude name="SwitchStmtsShouldHaveDefault" />
+    <exclude name="UseVarargs" />
+  </rule>
 
+  <rule ref="category/java/codestyle.xml">
+    <exclude name="AtLeastOneConstructor" />
+    <exclude name="CallSuperInConstructor" />
+    <exclude name="ClassNamingConventions" />
+    <exclude name="CommentDefaultAccessModifier" />
+    <exclude name="DefaultPackage" />
+    <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" />
+    <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
+    <exclude name="FinalParameterInAbstractMethod" />
+    <exclude name="FormalParameterNamingConventions" />
+    <exclude name="LinguisticNaming" />
+    <exclude name="LocalVariableCouldBeFinal" />
+    <exclude name="LongVariable" />
+    <exclude name="MethodArgumentCouldBeFinal" />
+    <exclude name="OnlyOneReturn" />
+    <exclude name="ShortClassName" />
+    <exclude name="ShortMethodName" />
+    <exclude name="ShortVariable" />
+    <exclude name="TooManyStaticImports" />
+    <exclude name="UnnecessaryModifier" />
+  </rule>
+
+  <rule ref="category/java/design.xml">
+    <exclude name="AbstractClassWithoutAnyMethod" />
+    <exclude name="AvoidRethrowingException" />
+    <exclude name="CouplingBetweenObjects" />
+    <exclude name="CyclomaticComplexity" />
+    <exclude name="DoNotExtendJavaLangError" />
+    <exclude name="ExcessiveClassLength" />
+    <exclude name="ExcessiveImports" />
+    <exclude name="ExcessiveParameterList" />
+    <exclude name="ExcessivePublicCount" />
+    <exclude name="GodClass" />
+    <exclude name="LawOfDemeter" />
+    <exclude name="LoosePackageCoupling" />
+    <exclude name="ModifiedCyclomaticComplexity" />
+    <exclude name="SignatureDeclareThrowsException" />
+    <exclude name="TooManyFields" />
+    <exclude name="TooManyMethods" />
+  </rule>
+
+  <rule ref="category/java/documentation.xml">
+    <exclude name="CommentSize" />
+  </rule>
+
+  <rule ref="category/java/multithreading.xml">
+    <exclude name="AvoidSynchronizedAtMethodLevel" />
+    <exclude name="DoNotUseThreads" />
+    <exclude name="UseConcurrentHashMap" />
+  </rule>
+
+  <rule ref="category/java/performance.xml">
+    <exclude name="AvoidFileStream" />
+    <exclude name="AvoidInstantiatingObjectsInLoops" />
+  </rule>
+
+  <rule ref="category/java/security.xml" />
+
+  <rule ref="category/java/errorprone.xml">
+    <exclude name="AssignmentInOperand" />
+    <exclude name="AvoidCatchingThrowable" />
+    <exclude name="AvoidFieldNameMatchingMethodName" />
+    <exclude name="AvoidLiteralsInIfCondition" />
+    <exclude name="BeanMembersShouldSerialize" />
+    <exclude name="CloneThrowsCloneNotSupportedException" />
+    <exclude name="CloseResource" />
+    <exclude name="ConstructorCallsOverridableMethod" />
+    <exclude name="DataflowAnomalyAnalysis" />
+    <exclude name="EmptyIfStmt" />
+    <exclude name="MissingSerialVersionUID" />
+    <exclude name="NullAssignment" />
+    <exclude name="OverrideBothEqualsAndHashcode" />
+  </rule>
 </ruleset>

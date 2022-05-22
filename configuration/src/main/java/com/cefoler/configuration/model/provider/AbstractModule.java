@@ -13,6 +13,7 @@ import com.cefoler.configuration.model.map.ReplaceMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.flogger.FluentLogger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -37,6 +38,12 @@ import org.jetbrains.annotations.Unmodifiable;
 public abstract class AbstractModule implements Module {
 
   private static final long serialVersionUID = -1789125045200316519L;
+
+  protected static final FluentLogger LOGGER;
+
+  static {
+    LOGGER = FluentLogger.forEnclosingClass();
+  }
 
   protected Map<?, ?> values;
 

@@ -80,7 +80,7 @@ public final class ConfigurationFactory {
   public Configuration start(final ConfigurationType type, final String path, final String resource,
       final boolean replace) throws FileNotFoundException {
     final Matcher matcher = REGEX.matcher(resource);
-    final String concat = !matcher.find() ? resource + type.getExtension() : resource;
+    final String concat = matcher.find() ? resource : resource + type.getExtension();
 
     return type.create(path, concat, replace);
   }
