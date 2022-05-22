@@ -29,7 +29,7 @@ public abstract class AbstractLongSpliterator implements OfLong {
     this.size = size;
 
     final int hex = characteristic & Spliterator.SIZED;
-    this.characteristic = hex != 0 ? characteristic | Spliterator.SUBSIZED : characteristic;
+    this.characteristic = hex == 0 ? characteristic : characteristic | Spliterator.SUBSIZED;
   }
 
   @Override

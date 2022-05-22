@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Primitives {
 
-  private static final Class<?>[] PRIMITIVES;
+  private static final Class<?>[] TYPES;
 
   static {
     final PrimitiveType[] values = PrimitiveType.values();
 
-    PRIMITIVES = Streams.toStream(values)
+    TYPES = Streams.toStream(values)
         .map(PrimitiveType::getClazz)
         .toArray(Class[]::new);
   }
@@ -209,8 +209,8 @@ public final class Primitives {
     return Boolean.parseBoolean(value);
   }
 
-  public static Class<?>[] getPrimitives() {
-    return PRIMITIVES;
+  public static Class<?>[] getTypes() {
+    return TYPES.clone();
   }
 
 }

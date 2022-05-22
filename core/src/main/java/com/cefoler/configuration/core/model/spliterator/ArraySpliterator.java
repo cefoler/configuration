@@ -24,7 +24,7 @@ public class ArraySpliterator<T> implements Spliterator<T> {
   }
 
   public ArraySpliterator(final Object[] values, final int index, final int maximum) {
-    this.values = values;
+    this.values = values.clone();
     this.index = index;
 
     this.maximum = maximum;
@@ -33,7 +33,7 @@ public class ArraySpliterator<T> implements Spliterator<T> {
 
   public ArraySpliterator(final Object[] values, final int index, final int maximum,
       final int characteristic) {
-    this.values = values;
+    this.values = values.clone();
     this.index = index;
 
     this.maximum = maximum;

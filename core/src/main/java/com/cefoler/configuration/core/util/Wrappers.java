@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Wrappers {
 
-  private static final Class<?>[] WRAPPERS;
+  private static final Class<?>[] TYPES;
 
   static {
     final WrapperType[] values = WrapperType.values();
 
-    WRAPPERS = Streams.toStream(values)
+    TYPES = Streams.toStream(values)
         .map(WrapperType::getClazz)
         .toArray(Class[]::new);
   }
@@ -214,8 +214,8 @@ public final class Wrappers {
     return Boolean.valueOf(value);
   }
 
-  public static Class<?>[] getWrappers() {
-    return WRAPPERS;
+  public static Class<?>[] getTypes() {
+    return TYPES.clone();
   }
 
 }

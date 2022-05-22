@@ -25,7 +25,7 @@ public class ArrayIntSpliterator implements OfInt {
 
   public ArrayIntSpliterator(final int[] values, final int index, final int maximum,
       final int characteristic) {
-    this.values = values;
+    this.values = values.clone();
     this.index = index;
 
     this.maximum = maximum;

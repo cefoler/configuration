@@ -25,7 +25,7 @@ public class ArrayDoubleSpliterator implements OfDouble {
 
   public ArrayDoubleSpliterator(final double[] values, final int index, final int maximum,
       final int characteristic) {
-    this.values = values;
+    this.values = values.clone();
     this.index = index;
 
     this.maximum = maximum;
