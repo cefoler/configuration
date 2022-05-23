@@ -101,19 +101,9 @@ public final class Spliterators {
     return new IteratorSpliterator<>(iterator, size, characteristic);
   }
 
-  public static <T> Spliterator<T> spliteratorUnknownSize(final Iterator<T> iterator,
-      final int characteristic) {
-    return new IteratorSpliterator<>(iterator, characteristic);
-  }
-
   public static OfInt spliterator(final PrimitiveIterator.OfInt iterator, final long size,
       final int characteristic) {
     return new IteratorIntSpliterator(iterator, size, characteristic);
-  }
-
-  public static OfInt spliteratorUnknownSize(final PrimitiveIterator.OfInt iterator,
-      final int characteristic) {
-    return new IteratorIntSpliterator(iterator, characteristic);
   }
 
   public static OfLong spliterator(final PrimitiveIterator.OfLong iterator, final long size,
@@ -121,14 +111,24 @@ public final class Spliterators {
     return new IteratorLongSpliterator(iterator, size, characteristic);
   }
 
-  public static OfLong spliteratorUnknownSize(final PrimitiveIterator.OfLong iterator,
-      final int characteristic) {
-    return new IteratorLongSpliterator(iterator, characteristic);
-  }
-
   public static OfDouble spliterator(final PrimitiveIterator.OfDouble iterator, final long size,
       final int characteristic) {
     return new IteratorDoubleSpliterator(iterator, size, characteristic);
+  }
+
+  public static <T> Spliterator<T> spliteratorUnknownSize(final Iterator<T> iterator,
+      final int characteristic) {
+    return new IteratorSpliterator<>(iterator, characteristic);
+  }
+
+  public static OfInt spliteratorUnknownSize(final PrimitiveIterator.OfInt iterator,
+      final int characteristic) {
+    return new IteratorIntSpliterator(iterator, characteristic);
+  }
+
+  public static OfLong spliteratorUnknownSize(final PrimitiveIterator.OfLong iterator,
+      final int characteristic) {
+    return new IteratorLongSpliterator(iterator, characteristic);
   }
 
   public static OfDouble spliteratorUnknownSize(final PrimitiveIterator.OfDouble iterator,

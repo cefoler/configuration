@@ -145,12 +145,12 @@ public final class Reflection {
   }
 
   public static String getPackageName(final Class<?> clazz) {
-    final Package aPackage = getPackage(clazz);
-    return getPackageName(aPackage);
+    final Package pack = getPackage(clazz);
+    return getPackageName(pack);
   }
 
-  public static String getPackageName(final Package aPackage) {
-    return aPackage.getName();
+  public static String getPackageName(final Package pack) {
+    return pack.getName();
   }
 
   public static <T> Constructor<T> getConstructor(final Object object, final Object... objects)
