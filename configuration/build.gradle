@@ -1,5 +1,5 @@
 ext {
-    jacksonVersion = "2.13.2"
+    jacksonVersion = "2.13.3"
 }
 
 dependencies {
