@@ -1,6 +1,6 @@
 ext {
-    projectName = "configuration"
-    prefix = ":$projectName"
+  projectName = "configuration"
+  prefix = ":$projectName"
 }
 
 rootProject.name = projectName

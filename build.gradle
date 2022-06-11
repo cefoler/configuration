@@ -1,95 +1,95 @@
 buildscript {
-    ext {
-        shadowVersion = "7.1.2"
-    }
+  ext {
+    shadowVersion = "7.1.2"
+  }
 
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
     }
+  }
 
-    dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:$shadowVersion"
-    }
+  dependencies {
+    classpath "gradle.plugin.com.github.johnrengelman:shadow:$shadowVersion"
+  }
 }
 
 subprojects {
-    apply plugin: "java"
-    apply plugin: "java-library"
-    apply plugin: "com.github.johnrengelman.shadow"
-    apply from: "$rootDir/variable.gradle"
-    apply from: "$rootDir/test.gradle"
-    apply from: "$rootDir/publish.gradle"
+  apply plugin: "java"
+  apply plugin: "java-library"
+  apply plugin: "com.github.johnrengelman.shadow"
+  apply from: "$rootDir/variable.gradle"
+  apply from: "$rootDir/test.gradle"
+  apply from: "$rootDir/publish.gradle"
 
-    group projectGroup
-    version projectVersion
+  group projectGroup
+  version projectVersion
 
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
 
-    ext {
-        guavaVersion = "31.1-jre"
-        floggerVersion = "0.7.4"
+  ext {
+    guavaVersion = "31.1-jre"
+    floggerVersion = "0.7.4"
 
-        lombokVersion = "1.18.24"
-        jetbrainsVersion = "23.0.0"
+    lombokVersion = "1.18.24"
+    jetbrainsVersion = "23.0.0"
+  }
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+
+    maven {
+      url "https://jitpack.io"
+    }
+  }
+
+  dependencies {
+    implementation "com.google.guava:guava:$guavaVersion"
+    implementation "com.google.flogger:flogger:$floggerVersion"
+
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    compileOnly "org.jetbrains:annotations:$jetbrainsVersion"
+    annotationProcessor "org.jetbrains:annotations:$jetbrainsVersion"
+
+    compileOnly fileTree("$rootDir/libs") {
+      include "*.jar"
+      exclude "*-tests.jar"
+      exclude "*-sources.jar"
+      exclude "*-javadoc.jar"
     }
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-
-        maven {
-            url "https://jitpack.io"
-        }
+    compileOnly fileTree("libs") {
+      include "*.jar"
+      exclude "*-tests.jar"
+      exclude "*-sources.jar"
+      exclude "*-javadoc.jar"
     }
+  }
 
-    dependencies {
-        implementation "com.google.guava:guava:$guavaVersion"
-        implementation "com.google.flogger:flogger:$floggerVersion"
+  tasks.withType(JavaCompile) {
+    options.compilerArgs += [
+        "-Xlint:all",
+        "-Xlint:-options",
+        "-Xlint:-path",
+        "-Xlint:-try"
+    ]
 
-        compileOnly "org.projectlombok:lombok:$lombokVersion"
-        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    options.encoding = "UTF-8"
+    options.fork = true
 
-        compileOnly "org.jetbrains:annotations:$jetbrainsVersion"
-        annotationProcessor "org.jetbrains:annotations:$jetbrainsVersion"
+    buildDir = file(outputPath)
+  }
 
-        compileOnly fileTree("$rootDir/libs") {
-            include "*.jar"
-            exclude "*-tests.jar"
-            exclude "*-sources.jar"
-            exclude "*-javadoc.jar"
-        }
+  tasks.withType(Jar) {
+    from "$rootDir/LICENSE.md"
+  }
 
-        compileOnly fileTree("libs") {
-            include "*.jar"
-            exclude "*-tests.jar"
-            exclude "*-sources.jar"
-            exclude "*-javadoc.jar"
-        }
-    }
-
-    tasks.withType(JavaCompile) {
-        options.compilerArgs += [
-                "-Xlint:all",
-                "-Xlint:-options",
-                "-Xlint:-path",
-                "-Xlint:-try"
-        ]
-
-        options.encoding = "UTF-8"
-        options.fork = true
-
-        buildDir = file(outputPath)
-    }
-
-    tasks.withType(Jar) {
-        from "$rootDir/LICENSE.md"
-    }
-
-    shadowJar {
-        archiveFileName = fileComplete
-    }
+  shadowJar {
+    archiveFileName = fileComplete
+  }
 
 }

@@ -1,42 +1,42 @@
 ext {
-    projectName = "configuration"
+  projectName = "configuration"
 
-    projectGroup = "com.cefoler.configuration"
-    projectArtifact = project.name
+  projectGroup = "com.cefoler.configuration"
+  projectArtifact = project.name
 
-    projectVersion = "1.2.4"
-    projectDescription = "A Configuration wrapper for YAML, JSON and Properties."
+  projectVersion = "1.2.4"
+  projectDescription = "A Configuration wrapper for YAML, JSON and Properties."
 
-    projectSystem = "github"
+  projectSystem = "github"
 
-    projectUrl = "https://github.com/cefoler/configuration"
-    projectGit = "github.com/cefoler/configuration.git"
+  projectUrl = "https://github.com/cefoler/configuration"
+  projectGit = "github.com/cefoler/configuration.git"
 
-    javaMain = "src/main/java"
-    javaTest = "src/test/java"
+  javaMain = "src/main/java"
+  javaTest = "src/test/java"
 
-    javaDocument = javadoc
-    javaVersion = JavaVersion.VERSION_1_8
+  javaDocument = javadoc
+  javaVersion = JavaVersion.VERSION_1_8
 
-    licenseName = "Apache License, Version 2.0"
-    licenseUrl = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+  licenseName = "Apache License, Version 2.0"
+  licenseUrl = "https://www.apache.org/licenses/LICENSE-2.0.txt"
 
-    incorporationName = "Cefoler Studios"
-    incorporationUrl = "https://cefoler.com"
+  incorporationName = "Cefoler Studios"
+  incorporationUrl = "https://cefoler.com"
 
-    fileName = "$projectArtifact-$projectVersion"
-    fileComplete = "${fileName}.jar"
+  fileName = "$projectArtifact-$projectVersion"
+  fileComplete = "${fileName}.jar"
 
-    outputPath = "$rootDir/build/$projectArtifact"
-    configPath = "$rootDir/config"
+  outputPath = "$rootDir/build/$projectArtifact"
+  configPath = "$rootDir/config"
 }
 
 task sourcesJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier = "sources"
-    from javaMain
+  archiveClassifier = "sources"
+  from javaMain
 }
 
 task javadocJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = "javadoc"
-    from javaDocument
+  archiveClassifier = "javadoc"
+  from javaDocument
 }

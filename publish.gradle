@@ -2,85 +2,87 @@ apply plugin: "signing"
 apply plugin: "maven-publish"
 
 ext {
-    issueUrl = "$projectUrl/issues"
+  issueUrl = "$projectUrl/issues"
 
-    connectionUrl = "scm:git:git://$projectGit"
-    developerUrl = "scm:git:git@$projectGit"
+  connectionUrl = "scm:git:git://$projectGit"
+  developerUrl = "scm:git:git@$projectGit"
 }
 
 signing {
-    if (project.hasProperty("signing.keyId") && project.hasProperty("signing.password")
-            && project.hasProperty("signing.secretKeyRingFile")) {
-        sign configurations.archives
-    }
+  if (project.hasProperty("signing.keyId") && project.hasProperty("signing.password")
+      && project.hasProperty("signing.secretKeyRingFile")) {
+    sign configurations.archives
+  }
 }
 
 publishing {
-    repositories {
-        maven {
-            if (project.hasProperty("url.snapshot") && project.hasProperty("url.release")) {
-                url = projectVersion.endsWith("-SNAPSHOT")
-                        ? project.property("url.snapshot")
-                        : project.property("url.release")
+  repositories {
+    maven {
+      if (project.hasProperty("url.snapshot") && project.hasProperty("url.release")) {
+        url = projectVersion.endsWith("-SNAPSHOT")
+            ? project.property("url.snapshot")
+            : project.property("url.release")
 
-                if (project.hasProperty("ossrh.username")
-                        && project.hasProperty("ossrh.password")) {
-                    credentials {
-                        username = project.property("ossrh.username")
-                        password = project.property("ossrh.password")
-                    }
-                }
-            }
+        if (project.hasProperty("ossrh.username") && project.hasProperty("ossrh.password")) {
+          credentials {
+            username = project.property("ossrh.username")
+            password = project.property("ossrh.password")
+          }
         }
+      }
     }
+  }
 
-    publications {
-        mavenJava(MavenPublication) {
-            groupId projectGroup
-            artifactId projectArtifact
+  publications {
+    mavenJava(MavenPublication) {
+      groupId projectGroup
+      artifactId projectArtifact
 
-            version projectVersion
+      version projectVersion
 
-            pom {
-                name = projectArtifact
-                description = projectDescription
+      pom {
+        name = projectArtifact
+        description = projectDescription
 
-                url = projectUrl
+        url = projectUrl
 
-                issueManagement {
-                    system = projectSystem
-                    url = issueUrl
-                }
-
-                licenses {
-                    license {
-                        name = licenseName
-                        url = licenseUrl
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = "DeserRC"
-                        name = "Diego Cruz"
-                        email = "deserrc@gmail.com"
-                        organization = incorporationName
-                        organizationUrl = incorporationUrl
-                    }
-                }
-
-                scm {
-                    url = projectUrl
-                    connection = connectionUrl
-                    developerConnection = developerUrl
-                }
-            }
-
-            from components.java
+        issueManagement {
+          system = projectSystem
+          url = issueUrl
         }
+
+        licenses {
+          license {
+            name = licenseName
+            url = licenseUrl
+          }
+        }
+
+        developers {
+          developer {
+            id = "DeserRC"
+
+            name = "Diego Cruz"
+            email = "deserrc@gmail.com"
+
+            organization = incorporationName
+            organizationUrl = incorporationUrl
+          }
+        }
+
+        scm {
+          url = projectUrl
+
+          connection = connectionUrl
+          developerConnection = developerUrl
+        }
+      }
+
+      from components.java
     }
+  }
 }
 
 artifacts {
-    archives javadocJar, sourcesJar
+  archives javadocJar, sourcesJar
 }
