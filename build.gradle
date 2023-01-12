@@ -33,7 +33,7 @@ subprojects {
         floggerVersion = "0.7.4"
 
         lombokVersion = "1.18.24"
-        jetbrainsVersion = "23.0.0"
+        jetbrainsVersion = "24.0.0"
     }
 
     repositories {
