@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        shadowVersion = "7.1.2"
+        shadowVersion = "8.0.0"
     }
 
     repositories {
